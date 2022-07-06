@@ -32,7 +32,8 @@ const createUser = async (user) => {
             email: user.email,
             password: Buffer.from(user.password, 'base64').toString(),
             isActive: false,
-            cockateil: null
+            cockateil: null,
+            nick: null
         })
         const createdUser = await usersCollection.find({ _id: result.insertedId }).toArray()
         response = {

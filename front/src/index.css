@@ -26,6 +26,10 @@ code {
   border-bottom-color: rgb(255,81,81)
 }
 
+.MuiInputBase-root {
+  width: 100%;
+}
+
 .MuiFormLabel-root {
   font-family: 'MultiTypePixel' !important;
   color: rgba(255,255,255,0.53) !important
@@ -47,4 +51,15 @@ code {
 
 .MuiInputAdornment-root > button {
   color: rgba(255,255,255,0.53)
+}
+
+.MuiTab-root .MuiTab-wrapper {
+  font-family: 'MultiTypePixel';
+  font-size: 18px;
+  color: rgba(255,255,255,0.87);
+}
+
+.MuiTabs-indicator {
+  height: 4px !important;
+  background-color: rgb(180,40,60) !important;
 }

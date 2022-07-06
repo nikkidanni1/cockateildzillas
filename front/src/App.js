@@ -15,9 +15,8 @@ import Account from './pages/Account'
 import SignUp from './pages/SignUp'
 import ActivateAccount from './pages/ActivateAccount'
 import RecoveryPassword from './pages/RecoveryPassword'
-import { setError, setNotifyMessage, setUserInfo, setAppLoading } from './store/actions'
+import { setError, setNotifyMessage, loadAppData } from './store/actions'
 import Layout from './components/Layout'
-import { getUserInfo } from './api'
 
 const useStyles = makeStyles({
     snackError: {
@@ -34,17 +33,9 @@ const App = () => {
     const userInfo = useSelector(state => state.userInfo)
 
     useEffect(() => {
-        getUser()
+        dispatch(loadAppData())
     }, [])
 
-    const getUser = useCallback(async () => {
-        const user = await getUserInfo()
-
-        if (user?.responseBody) {
-            dispatch(setUserInfo(user.responseBody))
-        }
-        dispatch(setAppLoading(false))
-    }, [])
 
     const hideNotifyError = useCallback(() => {
         dispatch(setError(''))
@@ -66,65 +57,64 @@ const App = () => {
             </IconButton>
         </React.Fragment>
     )
-    console.log(userInfo, appLoading)
-    return (
-        <Layout>
-            {appLoading && <LoadingComponent />}
-            <Router>
-                <Switch>
-                    <Route path="/login" >
-                        <Login />
-                    </Route>
-                    <Route path="/signup" >
-                        <SignUp />
-                    </Route>
-                    <Route path="/activate/:id">
-                        <ActivateAccount />
-                    </Route>
-                    <Route path="/recovery" >
-                        <RecoveryPassword />
-                    </Route>
-                    {!appLoading && (
-                        <Route path="/account">
-                            {userInfo ? (
-                                <Account />
-                            ) : (
-                                <Redirect to="/login" />
-                            )}
 
-                        </Route>
+    return (
+        <Router>
+            <Layout>
+                {
+                    appLoading ? (
+                        <LoadingComponent />
+                    ) : (
+                        <Switch>
+                            <Route path="/login" >
+                                <Login />
+                            </Route>
+                            <Route path="/signup" >
+                                <SignUp />
+                            </Route>
+                            <Route path="/activate/:id">
+                                <ActivateAccount />
+                            </Route>
+                            <Route path="/recovery" >
+                                <RecoveryPassword />
+                            </Route>
+                            <Route path="/account">
+                                {userInfo ? (
+                                    <Account />
+                                ) : (
+                                    <Redirect to="/login" />
+                                )}
+                            </Route>
+                            <Route exact path="/">
+                                <Redirect to={userInfo ? "/account" : "/login"} />
+                            </Route>
+                        </Switch>
                     )}
-                    {!appLoading && (
-                        <Route exact path="/">
-                            <Redirect to={userInfo ? "/account" : "/login"} />
-                        </Route>
-                    )}
-                </Switch>
-            </Router>
-            <Snackbar
-                open={error}
-                autoHideDuration={6000}
-                onClose={hideNotifyError}
-            >
-                <SnackbarContent
-                    className={classes.snackError}
-                    action={action('error')}
-                    aria-describedby={"error"}
-                    message={error}
-                />
-            </Snackbar>
-            <Snackbar
-                open={notifyMessage}
-                autoHideDuration={6000}
-                onClose={hideNotifyInfo}
-            >
-                <SnackbarContent
-                    action={action('info')}
-                    aria-describedby={"info"}
-                    message={notifyMessage}
-                />
-            </Snackbar>
-        </Layout>
+                <Snackbar
+                    open={error}
+                    autoHideDuration={6000}
+                    onClose={hideNotifyError}
+                >
+                    <SnackbarContent
+                        className={classes.snackError}
+                        action={action('error')}
+                        aria-describedby={"error"}
+                        message={error}
+                    />
+                </Snackbar>
+                <Snackbar
+                    open={notifyMessage}
+                    autoHideDuration={6000}
+                    onClose={hideNotifyInfo}
+                >
+                    <SnackbarContent
+                        action={action('info')}
+                        aria-describedby={"info"}
+                        message={notifyMessage}
+                    />
+                </Snackbar>
+            </Layout>
+        </Router>
     )
 }
 

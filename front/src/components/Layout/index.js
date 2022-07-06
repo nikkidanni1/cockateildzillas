@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react'
 import { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import MusicOff from '@material-ui/icons/MusicOff'
 import MusicNote from '@material-ui/icons/MusicNote'
+import LogoutIcon from '@material-ui/icons/ExitToApp'
 import HousesBackDecor from '../HousesBackDecor'
 import FlyingBirds from '../FlyingBirds'
 import IconButton from '../IconButton'
@@ -19,7 +21,7 @@ const useStyles = makeStyles({
     },
     rootChildren: {
         position: 'relative',
-        zIndex: 6,
+        zIndex: 7,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -41,7 +43,7 @@ const useStyles = makeStyles({
         display: 'table'
     },
     settings: {
-        zIndex: 6,
+        zIndex: 8,
         position: 'absolute',
         bottom: 0,
         marginBottom: 5,
@@ -55,13 +57,16 @@ const useStyles = makeStyles({
     }
 })
 
-const audioUrl = '/cockateilzillas-main.mp3'
+const audioUrl = '/cockateildzillas-main.mp3'
 
 const Layout = ({ children }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
+    const history = useHistory()
 
     const volume = useSelector(state => state.musicVolume)
+    const appLoading = useSelector(state => state.appLoading)
+    const userInfo = useSelector(state => state.userInfo)
 
     const [audio, setAudio] = useState(null)
 
@@ -81,6 +86,10 @@ const Layout = ({ children }) => {
         dispatch(setMusicVolume(volume !== 0 ? 0 : 0.5))
     }, [volume, dispatch])
 
+    const onLogout = useCallback(() => {
+        history.push('/login')
+    }, [])
+
     return (
         <div className={classes.root}>
             <HousesBackDecor />
@@ -97,7 +106,14 @@ const Layout = ({ children }) => {
                 >
                     {volume === 0 ? <MusicOff /> : <MusicNote />}
                 </IconButton>
-
+                {(!appLoading && userInfo) && (
+                    <IconButton
+                        isActive={volume !== 0}
+                        onClick={onLogout}
+                    >
+                        <LogoutIcon />
+                    </IconButton>
+                )}
             </div>
         </div>
     )

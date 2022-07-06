@@ -149,11 +149,6 @@ const FlyingBirds = () => {
     const classes = useStyles()
     return (
       <div className={classes.root}>
-        <div className={`${classes.houses} ${classes.housesFront}`} />
-        <div className={`${classes.houses} ${classes.frontLight}`} />
-        <div className={`${classes.houses} ${classes.housesBack}`} />
-        <div className={`${classes.houses} ${classes.backLight}`} />
-        <div className={`${classes.houses} ${classes.steam}`} />
         <div className={`${classes.moveAnimationBird} ${classes.moveAnimationBird1}`}>
           <div className={`${classes.flyingBird} `} />
         </div>

@@ -40,6 +40,15 @@ export const recovery = ({ email }) => (
     }).then(res => res.json())
 )
 
+export const getAppContants = async () => (
+    fetch(`${baseUrl}/getAppContants`, {
+        method: 'GET',
+        headers: new Headers({'content-type': 'application/json'}),
+        credentials: 'include',
+        mode: 'cors'
+    }).then(res => res.json())
+)
+
 export const getUserInfo = async () => (
     fetch(`${baseUrl}/api/userInfo`, {
         method: 'GET',

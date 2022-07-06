@@ -1,6 +1,6 @@
 import React from 'react'
-import { useCallback, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useCallback, useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import { TextField, InputAdornment } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -54,6 +54,8 @@ const Login = () => {
     const dispatch = useDispatch()
     const history = useHistory()
 
+    const appContants = useSelector(state => state.appContants)
+
     const [form, setForm] = useState({
         email: '',
         password: ''
@@ -69,31 +71,39 @@ const Login = () => {
     const [isShownPassword, setShownPassword] = useState(false)
     const [loading, setLoading] = useState(false)
 
+    useEffect(() => {
+        console.log(document.cookie)
+        document.cookie = 'auth=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        dispatch(setUserInfo(null))
+    }, [history.location.pathname])
+
     const validate = useCallback((field, value) => {
         const newErrors = { ...errors }
         if (!value) {
             newErrors[field] = getErrors().requiredField
+        } else if (field === 'password' && value.length > appContants.maxPasswordLength) {
+            newErrors[field] = getErrors({ max: appContants.maxPasswordLength }).maxLength
         } else {
             newErrors[field] = ''
         }
         setErrors(newErrors)
-    }, [errors])
+    }, [errors, appContants])
 
     const handleChange = useCallback(field => e => {
         const value = e.target.value
         validate(field, value)
-        setForm({
-            ...form,
+        setForm(prev => ({
+            ...prev,
             [field]: value
-        })
-    }, [form, validate])
+        }))
+    }, [errors, appContants])
 
     const handleBlur = useCallback(field => () => {
-        setTouched({
-            ...touched,
+        setTouched(prev => ({
+            ...prev,
             [field]: true
-        })
-    }, [touched])
+        }))
+    }, [])
 
     const onLogin = useCallback(async () => {
         const newTouched = { ...touched }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useCallback, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import { TextField, InputAdornment } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -40,13 +40,13 @@ const useStyles = makeStyles({
     }
 })
 
-const PASSWORD_MIN_LENGTH = 6
-const PASSWORD_MAX_LENGTH = 32
-
 const SignUp = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
+
+    const appContants = useSelector(state => state.appContants)
+
     const [form, setForm] = useState({
         email: '',
         password: '',
@@ -80,10 +80,10 @@ const SignUp = () => {
             if (repeatPassword !== password && !isShownPassword) {
                 passwordErrors.password = getErrors().passwordIsNotMatch
                 passwordErrors.repeatPassword = getErrors().passwordIsNotMatch
-            } else if (password.length < PASSWORD_MIN_LENGTH) {
-                passwordErrors.password = getErrors({ min: PASSWORD_MIN_LENGTH }).minLength
-            } else if (password.length > PASSWORD_MAX_LENGTH) {
-                passwordErrors.password = getErrors({ max: PASSWORD_MAX_LENGTH }).maxLength
+            } else if (password.length < appContants.minPasswordLength) {
+                passwordErrors.password = getErrors({ min: appContants.minPasswordLength }).minLength
+            } else if (password.length > appContants.maxPasswordLength) {
+                passwordErrors.password = getErrors({ max: appContants.maxPasswordLength }).maxLength
             } else if (password.search(/[0-9]/) === -1) {
                 passwordErrors.password = getErrors().passwordWithNums
             } else if (password.search(/[A-Za-z]/) === -1) {

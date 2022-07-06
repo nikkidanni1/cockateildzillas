@@ -1,4 +1,5 @@
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
 import TYPES from './types'
 
 const initState = {
@@ -7,7 +8,8 @@ const initState = {
     notifyMessage: '',
     musicVolume: 0,
     soundVolume: 0.5,
-    appLoading: true
+    appLoading: true,
+    appContants: null
 }
 
 function reducer (state = initState, action) {
@@ -30,12 +32,15 @@ function reducer (state = initState, action) {
         case TYPES.SET_APP_LOADING: {
             return { ...state, appLoading: action.payload }
         }
+        case TYPES.SET_APP_CONTANTS: {
+            return { ...state, appContants: action.payload }
+        }
         default: {
             return state
         }
     }
 }
 
-const store = createStore(reducer)
+const store = createStore(reducer, applyMiddleware(thunk))
 
 export default store

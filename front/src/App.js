@@ -9,14 +9,15 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Snackbar, IconButton, SnackbarContent } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import { makeStyles } from '@material-ui/core/styles'
-import LoadingComponent from './components/LoadingComponent'
-import Login from './pages/Login'
-import Account from './pages/Account'
-import SignUp from './pages/SignUp'
-import ActivateAccount from './pages/ActivateAccount'
-import RecoveryPassword from './pages/RecoveryPassword'
-import { setError, setNotifyMessage, loadAppData } from './store/actions'
-import Layout from './components/Layout'
+import LoadingComponent from 'components/base/LoadingComponent'
+import Login from 'pages/Login'
+import Account from 'pages/Account'
+import SignUp from 'pages/SignUp'
+import AccountEdit from 'pages/AccountEdit'
+import ActivateAccount from 'pages/ActivateAccount'
+import RecoveryPassword from 'pages/RecoveryPassword'
+import { setError, setNotifyMessage, loadAppData } from 'store/actions'
+import Layout from 'components/partial/Layout'
 
 const useStyles = makeStyles({
     snackError: {
@@ -78,15 +79,26 @@ const App = () => {
                             <Route path="/recovery" >
                                 <RecoveryPassword />
                             </Route>
+                            <Route path="/account/edit">
+                                {userInfo ? (
+                                    <AccountEdit />
+                                ) : (
+                                    <Redirect to="/login" />
+                                )}
+                            </Route>
                             <Route path="/account">
                                 {userInfo ? (
-                                    <Account />
+                                    (userInfo?.cockateil && userInfo?.nick) ? (
+                                        <Account />
+                                    ) : (
+                                        <Redirect to="/account/edit" />
+                                    )
                                 ) : (
                                     <Redirect to="/login" />
                                 )}
                             </Route>
                             <Route exact path="/">
-                                <Redirect to={userInfo ? "/account" : "/login"} />
+                                <Redirect to={userInfo ? '/account' : '/login'} />
                             </Route>
                         </Switch>
                     )}
@@ -98,7 +110,7 @@ const App = () => {
                     <SnackbarContent
                         className={classes.snackError}
                         action={action('error')}
-                        aria-describedby={"error"}
+                        aria-describedby="error"
                         message={error}
                     />
                 </Snackbar>
@@ -109,7 +121,7 @@ const App = () => {
                 >
                     <SnackbarContent
                         action={action('info')}
-                        aria-describedby={"info"}
+                        aria-describedby="info"
                         message={notifyMessage}
                     />
                 </Snackbar>

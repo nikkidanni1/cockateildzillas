@@ -4,16 +4,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import { TextField, InputAdornment } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import Box from '../../components/Box'
+import Box from 'components/base/Box'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Visibility from '@material-ui/icons/Visibility'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-import Button from '../../components/Button'
-import IconButton from '../../components/IconButton'
-import { authenticate } from '../../api'
-import { setUserInfo, setError } from '../../store/actions'
-import { getErrors } from '../../helpers/enums'
+import Button from 'components/base/Button'
+import IconButton from 'components/base/IconButton'
+import { authenticate } from 'api'
+import { setUserInfo, setError } from 'store/actions'
+import { getErrors } from 'helpers/enums'
 
 const useStyles = makeStyles({
     root: {

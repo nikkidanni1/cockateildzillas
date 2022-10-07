@@ -4,11 +4,11 @@ import { useDispatch } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import { TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import Box from '../../components/Box'
-import { getErrors } from '../../helpers/enums'
-import Button from '../../components/Button'
-import { recovery } from '../../api'
-import { setError, setNotifyMessage } from '../../store/actions'
+import Box from 'components/base/Box'
+import { getErrors } from 'helpers/enums'
+import Button from 'components/base/Button'
+import { recovery } from 'api'
+import { setError, setNotifyMessage } from 'store/actions'
 
 const useStyles = makeStyles({
     root: {

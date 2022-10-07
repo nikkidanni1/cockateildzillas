@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Box from 'components/base/Box'
+import AccountEditForm from 'components/partial/AccountEditForm'
 
 const useStyles = makeStyles({
     box: {
@@ -12,18 +13,17 @@ const useStyles = makeStyles({
     }
 })
 
-const Account = () => {
+const AccountEdit = () => {
     const classes = useStyles()
-    const userInfo = useSelector(state => state.userInfo)
     const appLoading = useSelector(state => state.appLoading)
 
     return (
         !appLoading && (
             <Box className={classes.box}>
-                <div>Hello friend!</div>
+                <AccountEditForm />
             </Box>
         )
     )
 }
 
-export default Account
+export default AccountEdit

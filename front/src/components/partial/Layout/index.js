@@ -13,7 +13,7 @@ import IconButton from 'components/base/IconButton'
 import AppSettingsModal from 'components/partial/AppSettingsModal'
 import { setMusicVolume } from 'store/actions'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root: {
         position: 'relative',
         zIndex: 6,
@@ -30,17 +30,29 @@ const useStyles = makeStyles({
     },
     title: {
         position: 'absolute',
-        top: '12%',
+        top: '80px',
         left: '50%',
+        display: 'table',
         fontFamily: 'MultiTypePixel',
         fontSize: '3.75rem',
+        lineHeight: '1.1',
         color: 'rgb(255,255,255)',
         transform: 'translate(-50%)',
-        background: 'linear-gradient(0deg, rgb(80,40,60) 30%, #fff 70%)',
-        '-webkit-background-clip': 'text',
-        '-webkit-text-fill-color': 'transparent',
-        color: '#0B2349',
-        display: 'table'
+        '& span': {
+            color: '#0B2349',
+            textAlign: 'center',
+            background: 'linear-gradient(0deg, rgb(80,40,60) 5%, #fff 95%)',
+            '-webkit-background-clip': 'text',
+            '-webkit-text-fill-color': 'transparent',
+        },
+        [theme.breakpoints.down('xs')]: {
+            top: '20px',
+            letterSpacing: '-0.2rem',
+            '& span': {
+                display: 'block',
+                fontSize: '3.5rem'
+            }
+        }
     },
     settings: {
         zIndex: 8,
@@ -55,7 +67,7 @@ const useStyles = makeStyles({
             color: 'rgba(255,255,255,0.83)'
         }
     }
-})
+}))
 
 const audioUrl = '/cockateildzillas-main.mp3'
 
@@ -94,7 +106,10 @@ const Layout = ({ children }) => {
         <div className={classes.root}>
             <HousesBackDecor />
             <FlyingBirds />
-            <Typography className={classes.title}>COCKATEILDZILLAS</Typography>
+            <Typography className={classes.title}>
+                <span>COCKATEIL</span>
+                <span>DZILLAS</span>
+            </Typography>
             <div className={classes.rootChildren}>
                 {children}
             </div>

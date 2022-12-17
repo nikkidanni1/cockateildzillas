@@ -3,9 +3,8 @@ const mongodb = require('mongodb')
 // const ObjectId = require(mongodb).ObjectID
 
 const authenticate = async (user) => {
-    await client.connect()
+    await client.connect().catch(err => { console.log(err) })
     const userFullInfo = await client.db('cockateildzillas').collection('users').find(user).toArray()
-
     await client.close()
     const response = { error: null, responseBody: null }
     if (userFullInfo.length && userFullInfo[0].isActive) {

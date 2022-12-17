@@ -5,8 +5,8 @@ const useStyles = makeStyles({
     root: {
         position: 'absolute',
         overflow: 'hidden',
-        width: '100vw',
-        height: '100vh',
+        width: '1920px',
+        height: '100vh'
     },
     flyingBird: {
         width: 106,

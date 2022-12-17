@@ -29,12 +29,13 @@ const useStyles = makeStyles({
         width: 400
     },
     input: {
+        display: 'flex',
         width: '100%',
         margin: '4px 0 8px'
     },
     buttonsWrapper: {
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(170px,1fr))',
         columnGap: '8px'
     },
     link: {

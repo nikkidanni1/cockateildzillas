@@ -1,0 +1,21 @@
+.paper {
+    width: 100%;
+    max-width: 350px;
+    background: rgb(40, 50, 70);
+    border-radius: 0;
+    box-shadow: -8px 0 0 0 black, 8px 0 0 0 black, 0 -8px 0 0 black, 0 8px 0 0 black;
+}
+
+.title {
+    font-family: MultiTypePixel;
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.53);
+}
+
+.content {
+    overflow-y: unset;
+}
+
+.actions {
+    padding: 0 24px 16px;
+}

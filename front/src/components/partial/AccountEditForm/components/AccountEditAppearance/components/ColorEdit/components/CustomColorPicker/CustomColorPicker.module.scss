@@ -1,0 +1,16 @@
+.slidersWrapper {
+    padding-right: 12px;
+}
+
+.sliderWrapper {
+    display: grid;
+    grid-template-columns: 55px 200px;
+    align-items: center;
+    width: 100%;
+}
+
+.sliderTitle {
+    font-family: monospace;
+    text-transform: capitalize;
+    color: rgba(255, 255, 255, 0.83);
+}

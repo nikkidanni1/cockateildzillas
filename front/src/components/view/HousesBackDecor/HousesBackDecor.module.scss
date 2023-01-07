@@ -1,0 +1,72 @@
+.root {
+    position: absolute;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(180deg, rgb(45, 50, 70) 20%, rgb(80, 50, 70) 80%);
+}
+
+.houses {
+    position: absolute;
+    background-repeat: repeat-x;
+    background-position: right bottom;
+    width: 100vw;
+    height: 100vh;
+
+    &_front {
+        z-index: 5;
+        background-image: url('/assets/images/houses_front.png');
+    }
+
+    &_back {
+        z-index: 2;
+        background-image: url('/assets/images/houses_back.png');
+    }
+}
+
+.housesLight {
+    &_front {
+        z-index: 3;
+        animation: flickerFront infinite;
+        animation-duration: 7s;
+        animation-fill-mode: forwards;
+    }
+
+    &_back {
+        z-index: 1;
+        animation: flickerBack infinite;
+        animation-duration: 5s;
+        animation-fill-mode: forwards;
+    }
+}
+
+@keyframes flickerFront {
+    0% {
+        background-image: url('/assets/images/front_light.png');
+    }
+
+    50% {
+        background-image: url('/assets/images/front_red.png');
+    }
+
+    100% {
+        background-image: url('/assets/images/front_light.png');
+    }
+}
+
+  @keyframes flickerBack {
+    0% {
+      background-image: url('/assets/images/back_light.png')
+    }
+    50% {
+      background-image: url('/assets/images/back_red.png')
+    }
+    100% {
+      background-image: url('/assets/images/back_light.png')
+    }
+  }
+
+.steam {
+    background-image: url('/assets/images/steam.png');
+    z-index: 4;
+}

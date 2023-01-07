@@ -1,0 +1,22 @@
+.box {
+    position: relative;
+    box-sizing: border-box;
+    min-width: max-content;
+    padding: 24px;
+    background-color: rgba(45, 50, 70, .75);
+    box-shadow: -8px 0 0 0 black,
+        8px 0 0 0 black,
+        0 -8px 0 0 black,
+        0 8px 0 0 black;
+
+    @media screen and (max-width: 480px) {
+        width: calc(95% - 16px) !important;
+    }
+
+    &__title {
+        font-family: MultiTypePixel;
+        color: rgba(255, 255, 255, 0.53);
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+}

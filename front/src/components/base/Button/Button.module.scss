@@ -1,0 +1,25 @@
+.button {
+    box-sizing: border-box;
+    width: 100%;
+    height: 36px;
+    margin: 4px 0 4px;
+    color: rgba(0, 0, 0, 0.87);
+    background: rgb(170, 170, 170);
+
+    &:hover {
+        background: rgb(200, 200, 200);
+    }
+
+    &_large {
+        height: 46px;
+    }
+
+    &_secondary {
+        color: #fff;
+        background: rgb(80, 50, 70);
+
+        &:hover {
+            background: rgb(90, 60, 80);
+        }
+    }
+}

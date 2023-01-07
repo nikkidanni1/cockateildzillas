@@ -2,7 +2,7 @@ const APP_CONSTANTS = {
     maxPasswordLength: 32,
     minPasswordLength: 6,
     maxName: 32,
-    cockateilParts: {
+    cockateilPartInfo: {
         bodyCockateil: {
             name: 'Тулувище воина',
             colorVariants: [
@@ -38,7 +38,7 @@ const APP_CONSTANTS = {
             main_color: '#8c2a05'
         }
     },
-    cockateilAppearanceParts: ['bodyCockateil', 'headCockateil', 'cheeksCockateil']
+    cockateilPartNames: ['bodyCockateil', 'headCockateil', 'cheeksCockateil']
 }
 
 module.exports = APP_CONSTANTS

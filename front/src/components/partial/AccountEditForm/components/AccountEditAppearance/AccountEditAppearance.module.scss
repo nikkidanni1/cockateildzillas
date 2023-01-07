@@ -1,0 +1,9 @@
+.animationFrame {
+    background: linear-gradient(180deg, rgb(45, 50, 70) 10%, rgb(80, 50, 70) 88%, rgb(45, 50, 70)) 2%;
+    margin: 0 -24px;
+
+    & g:hover {
+        cursor: pointer;
+        filter: sepia(50%);
+    }
+}

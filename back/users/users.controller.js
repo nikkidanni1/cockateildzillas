@@ -20,7 +20,7 @@ const signup = async (req, res, next) => {
     userService.createUser(req.body)
         .then(async response => {
             if (response.responseBody) {
-                // сделать отправку письма по регистрации + ссылку активации
+                // сделать отправку письма по регистрации + ссылку активации 
                 const transporter = await emailSender()
                 const activateURL = process.env.NODE_ENV === 'production' ? 'https://cockatieldzillas.vercel.app' : 'http://127.0.0.1:3000'
                 await transporter.sendMail({

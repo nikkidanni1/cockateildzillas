@@ -22,13 +22,14 @@ const signup = async (req, res, next) => {
             if (response.responseBody) {
                 // сделать отправку письма по регистрации + ссылку активации
                 const transporter = await emailSender()
+                const activateURL = process.env.NODE_ENV === 'production' ? 'https://cockatieldzillas.vercel.app' : 'http://127.0.0.1:3000'
                 await transporter.sendMail({
                     from: '"Cockatieldzillas 🦜" <cockatieldzillas@mail.ru>',
                     to: response.responseBody.email,
                     subject: "Активация аккаунта",
                     html: `
-                        <a href=\"http://127.0.0.1:3000/activate/${response.responseBody._id.toString()}\">
-                            http://127.0.0.1:3000/activate/${response.responseBody._id.toString()}
+                        <a href=\"${activateURL}/activate/${response.responseBody._id.toString()}\">
+                            ${activateURL}/activate/${response.responseBody._id.toString()}
                         </a>
                         <br/>
                         <p>

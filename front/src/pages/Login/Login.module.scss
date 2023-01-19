@@ -2,17 +2,6 @@
     width: 400px;
 }
 
-.input {
-    display: flex;
-    width: 100%;
-    margin: 4px 0 8px;
-    & input:autofill {
-        -webkit-box-shadow: 0 0 0 30px rgb(55 60 80) inset !important;
-        border-radius: 0;
-        -webkit-text-fill-color: rgba(255,255,255,0.87);
-    }
-}
-
 .link {
     display: block;
     margin-bottom: 8px;

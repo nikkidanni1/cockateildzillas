@@ -1,12 +1,12 @@
 import React from 'react'
 import { useCallback, useState } from 'react'
-import StandartAnimationCockateil from 'components/view/StandartAnimationCockateil'
+import StandartAnimationCockatiel from 'components/view/StandartAnimationCockatiel'
 import ColorEdit from './components/ColorEdit'
 import styles from './AccountEditAppearance.module.scss'
 
 type Props = {
     isShown: boolean,
-    appearanceData: CockateilAppearanceData | null,
+    appearanceData: CockatielAppearanceData | null,
     onChangePartColor: (part: string, color: string) => void
 }
 
@@ -32,7 +32,7 @@ const AccountEditAppearance: React.FC<Props> = ({ isShown, appearanceData, onCha
         >
             {(isShown && appearanceData) && (
                 <>
-                    <StandartAnimationCockateil
+                    <StandartAnimationCockatiel
                         className={styles.animationFrame}
                         colors={appearanceData}
                         handleClick={handleClickAnimation}

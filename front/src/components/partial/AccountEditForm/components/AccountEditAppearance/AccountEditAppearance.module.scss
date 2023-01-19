@@ -1,9 +1,13 @@
 .animationFrame {
-    background: linear-gradient(180deg, rgb(45, 50, 70) 10%, rgb(80, 50, 70) 88%, rgb(45, 50, 70)) 2%;
-    margin: 0 -24px;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 8%, rgba(45, 50, 70, 0.75) 10%, rgba(80, 50, 70, 0.75) 80%, rgba(45, 50, 70, 0.75)) 2%;
+    margin: 0 -24px -24px;
 
     & g:hover {
         cursor: pointer;
         filter: sepia(50%);
+    }
+
+    @media screen and (max-width: 480px) {
+        margin: 0 -16px -16px;
     }
 }

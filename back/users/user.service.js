@@ -4,7 +4,7 @@ const mongodb = require('mongodb')
 
 const authenticate = async (user) => {
     await client.connect().catch(err => { console.log(err) })
-    const userFullInfo = await client.db('cockateildzillas').collection('users').find(user).toArray()
+    const userFullInfo = await client.db('cockatieldzillas').collection('users').find(user).toArray()
     await client.close()
     const response = { error: null, responseBody: null }
     if (userFullInfo.length && userFullInfo[0].isActive) {
@@ -21,7 +21,7 @@ const authenticate = async (user) => {
 
 const createUser = async (user) => {
     await client.connect()
-    const usersCollection = client.db('cockateildzillas').collection('users')
+    const usersCollection = client.db('cockatieldzillas').collection('users')
     const userFromDB = await usersCollection.find({ email: user.email }).toArray()
     let response = { error: null, responseBody: null }
     if (userFromDB.length) {
@@ -31,7 +31,7 @@ const createUser = async (user) => {
             email: user.email,
             password: Buffer.from(user.password, 'base64').toString(),
             isActive: false,
-            cockateil: null,
+            cockatiel: null,
             nick: null
         })
         const createdUser = await usersCollection.find({ _id: result.insertedId }).toArray()
@@ -49,7 +49,7 @@ const createUser = async (user) => {
 const activateUser = async id => {
     try {
         await client.connect()
-        const usersCollection = client.db('cockateildzillas').collection('users')
+        const usersCollection = client.db('cockatieldzillas').collection('users')
         const res = await usersCollection.updateOne(
             { _id: new mongodb.ObjectId(id) },
             { $set: { "isActive": true } },
@@ -74,7 +74,7 @@ const activateUser = async id => {
 
 const getUser = async email => {
     await client.connect()
-    const usersCollection = client.db('cockateildzillas').collection('users')
+    const usersCollection = client.db('cockatieldzillas').collection('users')
     const response = await usersCollection.findOne(
         { email, isActive: true  }
     )

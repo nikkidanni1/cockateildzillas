@@ -2,8 +2,9 @@ import React from 'react'
 import { useCallback } from 'react'
 import type { RootState } from 'store'
 import { useSelector } from 'react-redux'
-import { TextField, InputAdornment } from '@mui/material'
+import { TextField as MTextField, InputAdornment } from '@mui/material'
 import CopyIcon from '@mui/icons-material/FilterNone'
+import TextField from 'components/base/TextField'
 import IconButton from 'components/base/IconButton'
 import { ButtonVariant } from 'helpers/enums'
 import styles from './AccountEditInfo.module.scss'
@@ -40,14 +41,12 @@ const AccountEditInfo: React.FC<Props> = ({
     return (
         <div style={{ display: isShown ? "block" : "none" }}>
             <TextField
-                className={styles.field}
                 label="ID"
-                variant="filled"
                 disabled
                 value={userInfo?._id}
                 InputProps={{
                     endAdornment: (
-                        <InputAdornment position="end">
+                        <InputAdornment className={styles.inputAdornment} position="end">
                             <IconButton
                                 onClick={onCopyID}
                                 variant={ButtonVariant.Primary}
@@ -60,16 +59,12 @@ const AccountEditInfo: React.FC<Props> = ({
                 }}
             />
             <TextField
-                className={styles.field}
                 label="Email"
-                variant="filled"
                 disabled
                 value={userInfo?.email}
             />
             <TextField
-                className={styles.field}
                 label="Ник"
-                variant="filled"
                 value={formData.nick}
                 onChange={handleChange('nick')}
                 onBlur={handleBlur('nick')}
@@ -77,9 +72,7 @@ const AccountEditInfo: React.FC<Props> = ({
                 helperText={touched.nick && errors.nick}
             />
             <TextField
-                className={styles.field}
                 label="Кличка воина"
-                variant="filled"
                 value={formData.cockatielNick}
                 onChange={handleChange('cockatielNick')}
                 onBlur={handleBlur('cockatielNick')}

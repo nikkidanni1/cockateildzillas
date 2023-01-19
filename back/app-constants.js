@@ -2,43 +2,43 @@ const APP_CONSTANTS = {
     maxPasswordLength: 32,
     minPasswordLength: 6,
     maxName: 32,
-    cockateilPartInfo: {
-        bodyCockateil: {
+    cockatielPartInfo: {
+        bodyCockatiel: {
             name: 'Тулувище воина',
             colorVariants: [
-                '#332525',
-                '#bea638',
-                '#96906c'
+                '#3c2020',
+                '#a79a91',
+                '#675b70'
             ],
             shades: ['main_color', 'color_light1', 'color_dark1', 'color_outline']
         },
-        headCockateil: {
-            name: 'Голова война',
+        headCockatiel: {
+            name: 'Голова воина',
             colorVariants: [
-                '#bea638',
+                '#baa280',
             ],
             shades: ['main_color', 'color_dark1', 'color_outline']
         },
-        cheeksCockateil: {
-            name: 'Щеки война',
+        cheeksCockatiel: {
+            name: 'Щеки воина',
             colorVariants: [
                 '#8c2a05',
             ],
             shades: ['main_color', 'color_dark1']
         }
     },
-    cockateilAppearanceDataDefault: {
-        bodyCockateil: {
-            main_color: '#332525'
+    cockatielAppearanceDataDefault: {
+        bodyCockatiel: {
+            main_color: '#3c2020'
         },
-        headCockateil: {
-            main_color: '#bea638'
+        headCockatiel: {
+            main_color: '#baa280'
         },
-        cheeksCockateil: {
+        cheeksCockatiel: {
             main_color: '#8c2a05'
         }
     },
-    cockateilPartNames: ['bodyCockateil', 'headCockateil', 'cheeksCockateil']
+    cockatielPartNames: ['bodyCockatiel', 'headCockatiel', 'cheeksCockatiel']
 }
 
 module.exports = APP_CONSTANTS

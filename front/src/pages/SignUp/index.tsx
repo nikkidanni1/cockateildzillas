@@ -3,14 +3,12 @@ import { useCallback, useState } from 'react'
 import type { RootState, AppDispatch } from 'store'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
-import { TextField, InputAdornment, CircularProgress } from '@mui/material'
+import { CircularProgress } from '@mui/material'
 import Box from 'components/base/Box'
+import TextField from 'components/base/TextField'
 import { getErrors } from 'helpers/enums'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import Visibility from '@mui/icons-material/Visibility'
 import Button from 'components/base/Button'
 import { ButtonVariant } from 'helpers/enums'
-import IconButton from 'components/base/IconButton'
 import { signUpThunk } from 'store/thunk'
 import styles from './SignUp.module.scss'
 
@@ -161,11 +159,7 @@ const SignUp: React.FC = () => {
         }
     }, [errors, form, touched, dispatch, history])
 
-    const handleMouseDownPassword: React.MouseEventHandler = useCallback((event) => {
-        event.preventDefault()
-    }, [])
-
-    const handleClickShowPassword: React.MouseEventHandler = useCallback(() => {
+    const onClickShowPassword: React.MouseEventHandler = useCallback(() => {
         setShownPassword(prev => !prev)
     }, [])
 
@@ -179,7 +173,6 @@ const SignUp: React.FC = () => {
                     className={styles.input}
                     label="Почта"
                     type="email"
-                    variant="filled"
                     value={form.email}
                     onChange={handleChange('email')}
                     onBlur={handleBlur('email')}
@@ -189,21 +182,10 @@ const SignUp: React.FC = () => {
                 <TextField
                     className={styles.input}
                     label="Пароль"
-                    type={isShownPassword ? 'text' : 'password'}
-                    variant="filled"
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    variant={isShownPassword ? ButtonVariant.Primary : ButtonVariant.Secondary}
-                                    edge="end"
-                                >
-                                    {isShownPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        )
+                    type="password"
+                    passwordDetails={{
+                        isShownPassword,
+                        onClickShowPassword
                     }}
                     value={form.password}
                     onChange={handleChange('password')}

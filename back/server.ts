@@ -1,7 +1,11 @@
-const express = require('express')
+import express from 'express'
+import type { Express, Request, Response } from 'express'
+import dotenv from 'dotenv'
+import cors from 'cors'
 
-const app = express()
-const cors = require('cors')
+dotenv.config()
+
+const app: Express = express()
 const basicAuth = require('./_helpers/basic-auth')
 const credentails = require('./_helpers/credentails')
 const errorHandler = require('./_helpers/error-handler')
@@ -12,7 +16,7 @@ app.use(
     cors({ origin: ["http://127.0.0.1:3000", "http://localhost:3000"], credentials: true,  })
 )
 
-const port = 3001
+const port: string | number = process.env.PORT || 3001
 app.set('port', port)
 
 app.use(require('cookie-parser')(credentails.cookieSecret))

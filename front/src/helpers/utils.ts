@@ -33,13 +33,13 @@ const rgbToHsl = (red: number, green: number, blue: number): [number, number, nu
     return [h, s, l]
 }
 
-export const createSubColors = (main_color: string, shades: Array<CockateilShades>): CockateilAppearancePart => {
+export const createSubColors = (main_color: string, shades: Array<CockatielShades>): CockatielAppearancePart => {
     const red: number = parseInt(main_color.replace(/#(.{2}).{4}/i, '$1'), 16)
     const green: number = parseInt(main_color.replace(/#.{2}(.{2}).{2}/i, '$1'), 16)
     const blue: number = parseInt(main_color.replace(/#.{4}(.{2})/i, '$1'), 16)
     const hsl: [number, number, number] = rgbToHsl(red, green, blue)
 
-    const resultObject: CockateilAppearancePart = { main_color }
+    const resultObject: CockatielAppearancePart = { main_color }
 
     shades.forEach(shade => {
         switch (shade) {

@@ -41,7 +41,7 @@ const AccountEditForm: React.FC = () => {
         nick: getErrors().requiredField,
         cockatielNick: getErrors().requiredField
     })
-    const [appearanceData, setAppearanceData] = useState<CockateilAppearanceData | null>(null)
+    const [appearanceData, setAppearanceData] = useState<CockatielAppearanceData | null>(null)
     const [activeTab, setActiveTab] = useState<TabValue>(tabs[0].value)
 
     useEffect(() => {
@@ -58,11 +58,11 @@ const AccountEditForm: React.FC = () => {
 
     useEffect(() => {
         if (appConstants && !appearanceData) {
-            const processedAppearanceData: CockateilAppearanceData = { ...appConstants.cockateilAppearanceDataDefault }
-            appConstants?.cockateilPartNames.map(part => {
+            const processedAppearanceData: CockatielAppearanceData = { ...appConstants.cockatielAppearanceDataDefault }
+            appConstants?.cockatielPartNames.map(part => {
                 processedAppearanceData[part] = {
                     ...processedAppearanceData[part],
-                    ...createSubColors(appConstants.cockateilAppearanceDataDefault[part].main_color, appConstants.cockateilPartInfo[part].shades)
+                    ...createSubColors(appConstants.cockatielAppearanceDataDefault[part].main_color, appConstants.cockatielPartInfo[part].shades)
                 }
             })
             setAppearanceData(processedAppearanceData)
@@ -103,7 +103,7 @@ const AccountEditForm: React.FC = () => {
 
     const onChangePartColor = useCallback((part: string, color: string): void => {
         if (appConstants) {
-            const colors: CockateilAppearancePart = createSubColors(color, appConstants.cockateilPartInfo[part].shades)
+            const colors: CockatielAppearancePart = createSubColors(color, appConstants.cockatielPartInfo[part].shades)
             setAppearanceData((prev) => (prev ? {
                 ...prev,
                 [part]: {

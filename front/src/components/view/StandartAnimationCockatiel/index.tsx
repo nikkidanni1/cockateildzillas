@@ -1,20 +1,20 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import CockateilStandartAnimationFrame1 from 'assets/images/CockateilStandartAnimationFrame1'
-import CockateilStandartAnimationFrame2 from 'assets/images/CockateilStandartAnimationFrame2'
-import CockateilStandartAnimationFrame3 from 'assets/images/CockateilStandartAnimationFrame3'
-import CockateilStandartAnimationFrame4 from 'assets/images/CockateilStandartAnimationFrame4'
-import styles from './StandartAnimationCockateil.module.scss'
+import CockatielStandartAnimationFrame1 from 'assets/images/CockatielStandartAnimationFrame1'
+import CockatielStandartAnimationFrame2 from 'assets/images/CockatielStandartAnimationFrame2'
+import CockatielStandartAnimationFrame3 from 'assets/images/CockatielStandartAnimationFrame3'
+import CockatielStandartAnimationFrame4 from 'assets/images/CockatielStandartAnimationFrame4'
+import styles from './StandartAnimationCockatiel.module.scss'
 
 type Props = {
-    colors: CockateilAppearanceData,
+    colors: CockatielAppearanceData,
     animationStoped?: boolean,
     handleClick: React.MouseEventHandler
 } & React.HTMLAttributes<HTMLDivElement>
 
 const orderAnimationFrames = [1, 2, 1, 2, 1, 2, 3, 4]
 
-const StandartAnimationCockateil: React.FC<Props> = ({ className, colors, animationStoped = false, handleClick, ...props }) => {
+const StandartAnimationCockatiel: React.FC<Props> = ({ className, colors, animationStoped = false, handleClick, ...props }) => {
     const [activeFrame, setActiveFrame] = useState(0)
 
     useEffect(() => {
@@ -36,22 +36,22 @@ const StandartAnimationCockateil: React.FC<Props> = ({ className, colors, animat
             {...props}
             className={className}
         >
-            <CockateilStandartAnimationFrame1
+            <CockatielStandartAnimationFrame1
                 appearanceData={colors}
                 onClick={handleClick}
                 style={{ display: orderAnimationFrames[activeFrame] === 1 ? 'block' : 'none' }}
             />
-            <CockateilStandartAnimationFrame2
+            <CockatielStandartAnimationFrame2
                 appearanceData={colors}
                 onClick={handleClick}
                 style={{ display: orderAnimationFrames[activeFrame] === 2 ? 'block' : 'none' }}
             />
-            <CockateilStandartAnimationFrame3
+            <CockatielStandartAnimationFrame3
                 appearanceData={colors}
                 onClick={handleClick}
                 style={{ display: orderAnimationFrames[activeFrame] === 3 ? 'block' : 'none' }}
             />
-            <CockateilStandartAnimationFrame4
+            <CockatielStandartAnimationFrame4
                 appearanceData={colors}
                 onClick={handleClick}
                 style={{ display: orderAnimationFrames[activeFrame] === 4 ? 'block' : 'none' }}
@@ -60,4 +60,4 @@ const StandartAnimationCockateil: React.FC<Props> = ({ className, colors, animat
     )
 }
 
-export default StandartAnimationCockateil
+export default StandartAnimationCockatiel

@@ -15,7 +15,7 @@ import AppSettingsModal from 'components/partial/AppSettingsModal'
 import { setMusicVolume } from 'store/actions'
 import styles from './Layout.module.scss'
 
-const audioUrl: string = '/cockateildzillas-main.mp3'
+const audioUrl: string = '/cockatieldzillas-main.mp3'
 
 const Layout: React.FC = ({ children }) => {
     const dispatch = useDispatch()
@@ -52,7 +52,7 @@ const Layout: React.FC = ({ children }) => {
             <HousesBackDecor />
             <FlyingBirds />
             <p className={styles.title}>
-                <span>COCKATEIL</span>
+                <span>COCKATIEL</span>
                 <span>DZILLAS</span>
             </p>
             <div className={styles.root__children}>
@@ -64,7 +64,7 @@ const Layout: React.FC = ({ children }) => {
                     variant={volume !== 0 ? ButtonVariant.Primary : ButtonVariant.Secondary}
                     onClick={toggleMusic}
                 >
-                    {volume === 0 ? <MusicOff /> : <MusicNote />}
+                    {volume === 0 ? <MusicNote /> : <MusicOff />}
                 </IconButton>
                 {(!appLoading && userInfo) && (
                     <IconButton

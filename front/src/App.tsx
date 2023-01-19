@@ -87,7 +87,7 @@ const App: React.FC = () => {
                                 </Route>
                                 <Route path="/account">
                                     {userInfo ? (
-                                        (userInfo?.cockateil && userInfo?.nick) ? (
+                                        (userInfo?.cockatiel && userInfo?.nick) ? (
                                             <Account />
                                         ) : (
                                             <Redirect to="/account/edit" />

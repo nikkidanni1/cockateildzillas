@@ -3,6 +3,7 @@ import { useEffect, useState, useMemo, useCallback } from 'react'
 import type { RootState } from 'store'
 import { useSelector } from 'react-redux'
 import { Tabs as MTabs, Tab } from '@mui/material'
+import styles from './Tabs.module.scss'
 
 type Props = {
     className: string,
@@ -39,6 +40,8 @@ const Tabs: React.FC<Props> = ({ className, value, onChange, tabs = [] }) => {
         >
             {tabs.map(item => (
                 <Tab
+                    key={item.label}
+                    className={styles.tab}
                     onClick={handleClick}
                     value={item.value}
                     label={item.label}

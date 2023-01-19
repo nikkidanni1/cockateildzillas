@@ -15,11 +15,11 @@ type Props = {
     onClose: React.MouseEventHandler,
     onChange: (part: string, color: string) => void,
     anchorPosition: PopoverPosition | null,
-    appearanceData: CockateilAppearanceData | null,
+    appearanceData: CockatielAppearanceData | null,
 }
 
 const ColorEdit: React.FC<Props> = ({ part, onClose, onChange, anchorPosition, appearanceData }) => {
-    const cockateilPartInfo: CockateilPartInfo | undefined = useSelector((state: RootState) => state.appConstants?.cockateilPartInfo)
+    const cockatielPartInfo: CockatielPartInfo | undefined = useSelector((state: RootState) => state.appConstants?.cockatielPartInfo)
 
     const [customColor, setCustomColor] = useState<string>((part && appearanceData) ? appearanceData[part]?.main_color : '')
     const [isOpenCustomColorPicker, setOpenCustomColorPicker] = useState<boolean>(false)
@@ -38,8 +38,8 @@ const ColorEdit: React.FC<Props> = ({ part, onClose, onChange, anchorPosition, a
     }, [onChange])
 
     const colorsArray: Array<string> = useMemo(() => (
-        (part && cockateilPartInfo?.[part]?.colorVariants) ? [...cockateilPartInfo?.[part]?.colorVariants, customColor] : []
-    ), [customColor, cockateilPartInfo, part])
+        (part && cockatielPartInfo?.[part]?.colorVariants) ? [...cockatielPartInfo?.[part]?.colorVariants, customColor] : []
+    ), [customColor, cockatielPartInfo, part])
 
     const handleButtonClick: React.MouseEventHandler = useCallback((e) => {
         if (isOpenCustomColorPicker) {
@@ -54,9 +54,10 @@ const ColorEdit: React.FC<Props> = ({ part, onClose, onChange, anchorPosition, a
             {(part && appearanceData) && (
                 <DraggablePopover
                     open={!!part}
-                    title={cockateilPartInfo?.[part]?.name}
+                    title={cockatielPartInfo?.[part]?.name}
                     onClose={onClose}
                     anchorPosition={anchorPosition}
+                    classNameBox={styles.box}
                 >
                     <div className={styles.content}>
                         {!isOpenCustomColorPicker ? (

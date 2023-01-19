@@ -1,6 +1,10 @@
 .box {
-    width: 100%;
+    width: 95%;
     min-width: 320px;
     max-width: 600px;
     padding: 16px 24px 24px;
+
+    @media screen and (max-width: 480px) {
+        padding: 16px;
+    }
 }

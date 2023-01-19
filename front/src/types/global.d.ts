@@ -3,30 +3,30 @@ declare type ServerResponse<T> = {
     responseBody: T
 }
 
-declare type CockateilPartNames = 'bodyCockateil' | 'headCockateil' | 'cheeksCockateil'
-declare type CockateilShades = 'main_color' | 'color_light1' | 'color_dark1' | 'color_outline'
-declare type CockateilPartInfoItem = {
+declare type CockatielPartNames = 'bodyCockatiel' | 'headCockatiel' | 'cheeksCockatiel'
+declare type CockatielShades = 'main_color' | 'color_light1' | 'color_dark1' | 'color_outline'
+declare type CockatielPartInfoItem = {
     name: string,
     colorVariants: Array<string>,
-    shades: Array<CockateilShades>
+    shades: Array<CockatielShades>
 }
-declare type CockateilPartInfo = Record<CockateilPartNames, CockateilPartInfoItem>
-declare type CockateilAppearancePart = Partial<Omit<Record<CockateilShades, string>, 'main_color'>> & { main_color: string }
-declare type CockateilAppearanceData = (
+declare type CockatielPartInfo = Record<CockatielPartNames, CockatielPartInfoItem>
+declare type CockatielAppearancePart = Partial<Omit<Record<CockatielShades, string>, 'main_color'>> & { main_color: string }
+declare type CockatielAppearanceData = (
     Record<
-        CockateilPartNames, 
-        CockateilAppearancePart
+        CockatielPartNames, 
+        CockatielAppearancePart
     >
 )
-declare type CockateilShades = 'main_color' | 'color_light1' | 'color_dark1' | 'color_outline'
+declare type CockatielShades = 'main_color' | 'color_light1' | 'color_dark1' | 'color_outline'
 
-declare type Cockateil = {
-    appearanceData: CockateilAppearanceData
+declare type Cockatiel = {
+    appearanceData: CockatielAppearanceData
 } | null
 
 declare type UserInfo = {
     _id: string,
-    cockateil: Cockateil,
+    cockatiel: Cockatiel,
     email: string,
     isActive: boolean,
     nick: string | null
@@ -36,9 +36,9 @@ declare type AppConstants = {
     maxPasswordLength: number,
     minPasswordLength: number,
     maxName: number,
-    cockateilPartInfo: CockateilPartInfo,
-    cockateilAppearanceDataDefault: CockateilAppearanceData,
-    cockateilPartNames: Array<CockateilPartsNames>
+    cockatielPartInfo: CockatielPartInfo,
+    cockatielAppearanceDataDefault: CockatielAppearanceData,
+    cockatielPartNames: Array<CockatielPartsNames>
 }
 
 declare type RecoveryResponse = {

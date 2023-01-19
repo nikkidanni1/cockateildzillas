@@ -1,4 +1,4 @@
-const baseUrl: string = 'http://localhost:3001'
+const baseUrl: string = process.env.NODE_ENV === 'production' ? 'https://cockatieldzillas.onrender.com' : 'http://localhost:3001'
 
 type AuthParams = {
     email: string,

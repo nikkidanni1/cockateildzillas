@@ -11,5 +11,5 @@ const transporter = async () => {
         },
     })
 }
-// OklikMortyRick
+
 module.exports = transporter

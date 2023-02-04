@@ -38,7 +38,7 @@ const DraggablePopover: React.FC<Props> = ({
             anchorReference="anchorPosition"
         >
             {open &&
-                <Draggable grid={[8, 8]} handle=".header">
+                <Draggable grid={[6, 6]} handle=".header">
                     <div>
                         <Box
                             ref={onRefBoxChange}

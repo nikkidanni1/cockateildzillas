@@ -4,9 +4,10 @@
     min-height: 0;
     max-width: 0;
     max-height: 0;
-    background: 'none';
-    box-shadow: 'none';
+    background: none;
+    box-shadow: none;
 }
+
 .box {
     padding: 0 0 12px;
     &::after {
@@ -16,7 +17,7 @@
 
 .title {
     padding: 12px 12px;
-    font-family: MultiTypePixel;
+    font-family: MultiTypePixel, sans-serif;
     font-size: 18px;
     color: rgba(255,255,255,0.87);
     margin-bottom: 0;

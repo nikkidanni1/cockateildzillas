@@ -1,5 +1,5 @@
 import type { Dispatch } from 'redux'
-import type { RouteComponentProps } from 'react-router-dom'
+import type { NavigateFunction } from 'react-router-dom'
 import { 
     getUserInfo, getAppContants, authenticate, recovery, signup 
 } from 'api'
@@ -37,16 +37,23 @@ export const loadAppDataThunk = () => async (dispatch: Dispatch) => {
     dispatch(setAppLoading(false))
 }
 
-export const loginThunk = (form: LoginForm, history: RouteComponentProps.history) => async (dispatch: Dispatch) => {
+export const loginThunk = (form: LoginForm, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
     dispatch(setAppLoading(true))
     try {
-        const userResponse: ServerResponse<UserInfo> = await authenticate(form)
-        if (userResponse.error) {
-            dispatch(setError(userResponse.error))
+        const authResponse: ServerResponse<AuthResponse> = await authenticate(form)
+        if (authResponse.error) {
+            dispatch(setError(authResponse.error))
         }
-        if (userResponse.responseBody) {
-            dispatch(setUserInfo(userResponse.responseBody))
-            history.push('/account')
+        if (authResponse.responseBody) {
+            localStorage.setItem('auth', authResponse.responseBody.auth)
+            const userInfoResponse = await getUserInfo()
+            if (userInfoResponse.error) {
+                dispatch(setError(userInfoResponse.error))
+            }
+            if (userInfoResponse.responseBody) {
+                dispatch(setUserInfo(userInfoResponse.responseBody))
+            }
+            navigate('/account')
         }
     } catch (err) {
         if (err instanceof Error) {
@@ -57,7 +64,7 @@ export const loginThunk = (form: LoginForm, history: RouteComponentProps.history
     dispatch(setAppLoading(false))
 }
 
-export const recoveryThunk = (email: string, history: RouteComponentProps.history) => async (dispatch: Dispatch) => {
+export const recoveryThunk = (email: string, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
     dispatch(setAppLoading(true))
     try {
         const res: ServerResponse<RecoveryResponse> = await recovery({ email })
@@ -65,7 +72,7 @@ export const recoveryThunk = (email: string, history: RouteComponentProps.histor
             dispatch(setError(res.error))
         }
         if (res.responseBody) {
-            history.push('/login')
+            navigate('/login')
             dispatch(setNotifyMessage('Пароль выслан, пожалуйста, проверьте свою почту'))
         }
     } catch (err) {
@@ -77,7 +84,7 @@ export const recoveryThunk = (email: string, history: RouteComponentProps.histor
     dispatch(setAppLoading(false))
 }
 
-export const signUpThunk = (form: SignUpForm, history: RouteComponentProps.history) => async (dispatch: Dispatch) => {
+export const signUpThunk = (form: SignUpForm, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
     dispatch(setAppLoading(true))
     try {
         const res = await signup({ email: form.email, password: form.password })
@@ -85,7 +92,7 @@ export const signUpThunk = (form: SignUpForm, history: RouteComponentProps.histo
             dispatch(setError(res.error))
         }
         if (res.responseBody) {
-            history.push('/login')
+            navigate('/login')
             dispatch(setNotifyMessage('Пользователь успешно создан, пожалуйста, проверьте свою почту'))
         }
     } catch (err) {

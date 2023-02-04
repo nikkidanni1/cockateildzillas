@@ -17,7 +17,7 @@ const Tabs: React.FC<Props> = ({ className, value, onChange, tabs = [] }) => {
 
     const volume = useSelector((state: RootState) => state.soundVolume)
     const audioUrl: string = useMemo(() => (
-        '/button-sound-primary.mp3'
+        '/sounds/button-sound-primary.mp3'
     ), [])
 
     useEffect(() => {
@@ -34,7 +34,7 @@ const Tabs: React.FC<Props> = ({ className, value, onChange, tabs = [] }) => {
 
     return (
         <MTabs
-            className={className}
+            className={`${className} ${styles.tabs}`}
             value={value}
             onChange={onChange}
         >

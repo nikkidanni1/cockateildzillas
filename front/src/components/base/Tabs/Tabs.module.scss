@@ -1,5 +1,5 @@
 .tab {
-    font-family: MultiTypePixel;
+    font-family: MultiTypePixel, sans-serif;
     font-size: 18px;
     color: rgba(255, 255, 255, 0.53);
 
@@ -9,5 +9,11 @@
 
     @media screen and (max-width: 480px) {
         font-size: 16px;
+    }
+}
+
+.tabs {
+    @media screen and (max-width: 480px) {
+        margin-top: -16px;
     }
 }

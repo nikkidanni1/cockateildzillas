@@ -57,8 +57,11 @@ export const getAppContants = async () => (
 export const getUserInfo = async () => (
     fetch(`${baseUrl}/api/userInfo`, {
         method: 'GET',
-        headers: new Headers({'content-type': 'application/json'}),
+        headers: new Headers({
+            'content-type': 'application/json', 
+            'authorization': localStorage.getItem('auth') ?? ''
+        }),
         credentials: 'include',
-        mode: 'cors'
+        mode: 'cors',
     }).then(res => res.json())
 )

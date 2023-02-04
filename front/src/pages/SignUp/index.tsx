@@ -2,7 +2,7 @@ import React from 'react'
 import { useCallback, useState } from 'react'
 import type { RootState, AppDispatch } from 'store'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { CircularProgress } from '@mui/material'
 import Box from 'components/base/Box'
 import TextField from 'components/base/TextField'
@@ -29,7 +29,7 @@ type ValidatePassword = (
 
 const SignUp: React.FC = () => {
     const dispatch: AppDispatch = useDispatch()
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const appConstants: AppConstants | null = useSelector((state: RootState) => state.appConstants)
     const appLoading: boolean = useSelector((state: RootState) => state.appLoading)
@@ -155,9 +155,9 @@ const SignUp: React.FC = () => {
 
         setTouched(newTouched)
         if (!errors.email && !errors.password) {
-            dispatch(signUpThunk({ email: form.email, password: form.password }, history))
+            dispatch(signUpThunk({ email: form.email, password: form.password }, navigate))
         }
-    }, [errors, form, touched, dispatch, history])
+    }, [errors, form, touched, dispatch, navigate])
 
     const onClickShowPassword: React.MouseEventHandler = useCallback(() => {
         setShownPassword(prev => !prev)
@@ -207,6 +207,14 @@ const SignUp: React.FC = () => {
                     />
                 )}
                 <div className={styles.buttonsWrapper}>
+                    <Button
+                        variant={ButtonVariant.Primary}
+                        onClick={onSignUp}
+                        disabled={appLoading}
+                        startIcon={appLoading ? <CircularProgress size={16} /> : ''}
+                    >
+                        Регистрация
+                    </Button>
                     <Link
                         className={styles.hideUnderLine}
                         to="/login"
@@ -219,14 +227,6 @@ const SignUp: React.FC = () => {
                             Назад
                         </Button>
                     </Link>
-                    <Button
-                        variant={ButtonVariant.Primary}
-                        onClick={onSignUp}
-                        disabled={appLoading}
-                        startIcon={appLoading ? <CircularProgress size={16} /> : ''}
-                    >
-                        Регистрация
-                    </Button>
                 </div>
             </div>
         </Box>

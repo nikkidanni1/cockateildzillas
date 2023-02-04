@@ -13,6 +13,10 @@ code {
     monospace;
 }
 
+p {
+  margin: 0;
+}
+
 .MuiTextField-root > .MuiFilledInput-underline:before, .MuiTextField-root > .MuiFilledInput-underline:after {
   border-bottom-width: 4px !important
 }
@@ -31,7 +35,7 @@ code {
 }
 
 .MuiFormLabel-root {
-  font-family: 'MultiTypePixel' !important;
+  font-family: 'MultiTypePixel', sans-serif !important;
   color: rgba(255,255,255,0.53) !important
 }
 
@@ -46,7 +50,7 @@ code {
 .MuiButton-contained {
   box-sizing: border-box;
   height: 46px;
-  font-family: 'MultiTypePixel' !important;
+  font-family: 'MultiTypePixel', sans-serif !important;
 }
 
 .MuiInputAdornment-root > button {
@@ -54,12 +58,16 @@ code {
 }
 
 .MuiTab-root .MuiTab-wrapper {
-  font-family: 'MultiTypePixel';
+  font-family: 'MultiTypePixel', sans-serif;
   font-size: 18px;
   color: rgba(255,255,255,0.87);
 }
 
 .MuiTabs-indicator {
-  height: 4px !important;
+  height: calc(var(--border-width) / 2) !important;
   background-color: rgb(180,40,60) !important;
+}
+
+:root {
+  --border-width: 6px;
 }

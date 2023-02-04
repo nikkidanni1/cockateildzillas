@@ -1,0 +1,7 @@
+.notFound {
+    padding: 0 8px;
+    font-family: MatrixSans-Screen, sans-serif;
+    font-size: 44px;
+    color: rgba(255,255,255,0.87);
+    background: rgba(0, 0, 0, 0.7);
+}

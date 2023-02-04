@@ -1,6 +1,39 @@
 @font-face {
-    font-family: "MultiTypePixel"; 
-    src: url("./assets/fonts/MultiTypePixel Regular.otf") format("opentype"); 
+    font-family: 'MultiTypePixel'; 
+    src: url('./assets/fonts/MultiTypePixel/MultiTypePixel Regular.woff2') format('woff2'),
+        url('./assets/fonts/MultiTypePixel/MultiTypePixel Regular.woff')  format('woff'); 
+    font-style: normal; 
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'MatrixSans'; 
+    src: url('./assets/fonts/MatrixSans/MatrixSans-Regular.woff2') format('woff2'),
+        url('./assets/fonts/MatrixSans/MatrixSans-Regular.woff')  format('woff'); 
+    font-style: normal; 
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'MatrixSans-Print'; 
+    src: url('./assets/fonts/MatrixSans/MatrixSans-Print/MatrixSans-Print.woff2') format('woff2'),
+        url('./assets/fonts/MatrixSans/MatrixSans-Print/MatrixSans-Print.woff')  format('woff'); 
+    font-style: normal; 
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'MatrixSans-Screen'; 
+    src: url('./assets/fonts/MatrixSans/MatrixSans-Screen/MatrixSans-Screen.woff2') format('woff2'),
+        url('./assets/fonts/MatrixSans/MatrixSans-Screen/MatrixSans-Screen.woff')  format('woff'); 
+    font-style: normal; 
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'MatrixSans-Video'; 
+    src: url('./assets/fonts/MatrixSans/MatrixSans-Video/MatrixSans-Video.woff2') format('woff2'),
+        url('./assets/fonts/MatrixSans/MatrixSans-Video/MatrixSans-Video.woff')  format('woff'); 
     font-style: normal; 
     font-weight: 600;
 }

@@ -7,13 +7,18 @@ const authenticate = async (req, res, next) => {
     userService.authenticate(user)
         .then(response => {
             if (response.responseBody) {
-                res.cookie('auth', req.body.auth, { signed: true, maxAge: 43200000 })
                 res.json(response)
             } else {
                 res.status(403).json(response)
             }
         })
         .catch(err => next(err))
+}
+
+const getUserInfo = async (req, res, next) => {
+    const user = utils.getUserByAuth(req.headers.authorization)
+    const userInfo = await userService.getUser(user.email)
+    res.json({error: null, responseBody: userInfo})
 }
 
 const signup = async (req, res, next) => {
@@ -80,4 +85,4 @@ const recovery = async (req, res, next) => {
     })
 }
 
-module.exports = { authenticate, signup, activateUser, recovery }
+module.exports = { authenticate, signup, activateUser, recovery, getUserInfo }

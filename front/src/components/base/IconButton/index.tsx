@@ -11,7 +11,7 @@ type Props = {
 
 const CustomIconButton: React.FC<Props> = ({ children, onClick, variant = ButtonVariant.Secondary, ...props }) => {
     const audioUrl = useMemo(() => (
-        variant === ButtonVariant.Secondary ? '/button-sound-secondary.mp3' : '/button-sound-primary.mp3'
+        variant === ButtonVariant.Secondary ? '/sounds/button-sound-secondary.mp3' : '/sounds/button-sound-primary.mp3'
     ), [variant])
 
     const volume = useSelector((state: RootState) => state.soundVolume)

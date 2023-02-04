@@ -14,7 +14,7 @@ import ModalBase from 'components/view/ModalBase'
 import { setMusicVolume, setSoundVolume } from 'store/actions'
 import styles from './AppSettingsModal.module.scss'
 
-const audioUrl = '/button-sound-primary.mp3'
+const audioUrl = '/sounds/button-sound-primary.mp3'
 
 const AppSettingsModal: React.FC = () => {
     const dispatch = useDispatch()

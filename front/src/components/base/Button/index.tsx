@@ -21,7 +21,7 @@ const CustomButton: React.FC<Props> = ({
     ...props 
 }) => {
     const audioUrl: string = useMemo(() => (
-        (variant === ButtonVariant.Primary) ? '/button-sound-primary.mp3' : '/button-sound-secondary.mp3'
+        (variant === ButtonVariant.Primary) ? '/sounds/button-sound-primary.mp3' : '/sounds/button-sound-secondary.mp3'
     ), [variant])
 
     const volume: number = useSelector((state: RootState) => state.soundVolume)

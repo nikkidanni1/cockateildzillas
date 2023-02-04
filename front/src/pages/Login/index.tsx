@@ -1,14 +1,12 @@
 import React from 'react'
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState } from 'react'
 import type { RootState, AppDispatch } from 'store'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
-import { CircularProgress } from '@mui/material'
+import { Link, useNavigate } from 'react-router-dom'
 import Box from 'components/base/Box'
 
 import TextField from 'components/base/TextField'
 import Button from 'components/base/Button'
-import { setUserInfo } from 'store/actions'
 import { loginThunk } from 'store/thunk'
 import { getErrors, ButtonVariant } from 'helpers/enums'
 import styles from './Login.module.scss'
@@ -19,7 +17,7 @@ type LoginErrors = Record<Fields, string>
 
 const Login: React.FC = () => {
     const dispatch: AppDispatch = useDispatch()
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const appConstants: AppConstants | null = useSelector((state: RootState) => state.appConstants)
     const appLoading = useSelector((state: RootState) => state.appLoading)
@@ -37,11 +35,6 @@ const Login: React.FC = () => {
         password: getErrors().requiredField
     })
     const [isShownPassword, setShownPassword] = useState<boolean>(false)
-
-    useEffect(() => {
-        document.cookie = 'auth=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        dispatch(setUserInfo(null))
-    }, [history.location.pathname])
 
     const validate = useCallback((field: string, value: string): void => {
         const newErrors: LoginErrors = { ...errors }
@@ -89,9 +82,13 @@ const Login: React.FC = () => {
         })
 
         if (isValidForm && appConstants) {
-            dispatch(loginThunk(form, history))
+            dispatch(loginThunk(form, navigate))
         }
-    }, [errors, form, touched, dispatch, history, appConstants])
+    }, [errors, form, touched, dispatch, navigate, appConstants])
+
+    const onSignUp = useCallback(() => {
+        navigate('/signup')
+    }, [])
 
     const onClickShowPassword: React.MouseEventHandler = useCallback(() => {
         setShownPassword(prev => !prev)
@@ -135,25 +132,19 @@ const Login: React.FC = () => {
                     Восстановить пароль
                 </Link>
                 <div className={styles.buttonsWrapper}>
-                    <Link
-                        className={styles.hideUnderLine}
-                        to="/signup"
-                    >
-                        <Button
-                            variant={ButtonVariant.Secondary}
-                            disabled={appLoading}
-                            startIcon={appLoading ? <CircularProgress size={16} /> : ''}
-                        >
-                            Регистрация
-                        </Button>
-                    </Link>
                     <Button
                         variant={ButtonVariant.Primary}
                         onClick={onLogin}
                         disabled={appLoading}
-                        startIcon={appLoading ? <CircularProgress size={16} /> : ''}
                     >
                         Войти
+                    </Button>
+                    <Button
+                        variant={ButtonVariant.Secondary}
+                        onClick={onSignUp}
+                        disabled={appLoading}
+                    >
+                        Регистрация
                     </Button>
                 </div>
             </div>

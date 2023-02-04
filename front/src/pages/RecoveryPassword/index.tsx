@@ -2,7 +2,7 @@ import React from 'react'
 import { useCallback, useState } from 'react'
 import type { AppDispatch } from 'store'
 import { useDispatch } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import TextField from 'components/base/TextField'
 import Box from 'components/base/Box'
 import { getErrors } from 'helpers/enums'
@@ -17,7 +17,7 @@ type RecoveryPasswordErrors = Record<'email', string>
 
 const RecoveryPassword: React.FC = () => {
     const dispatch: AppDispatch = useDispatch()
-    const history = useHistory()
+    const navigate = useNavigate()
     const [form, setForm] = useState<RecoveryPasswordForm>({
         email: '',
     })
@@ -66,9 +66,9 @@ const RecoveryPassword: React.FC = () => {
         setTouched(newTouched)
 
         if (!errors.email) {
-            dispatch(recoveryThunk(form.email, history))
+            dispatch(recoveryThunk(form.email, navigate))
         }
-    }, [errors, form, touched, dispatch, history])
+    }, [errors, form, touched, dispatch, navigate])
 
     return (
         <Box
@@ -88,6 +88,12 @@ const RecoveryPassword: React.FC = () => {
                     helperText={touched.email && errors.email}
                 />
                 <div className={styles.buttonsWrapper}>
+                    <Button
+                        variant={ButtonVariant.Primary}
+                        onClick={onRecovery}
+                    >
+                        Восстановить
+                    </Button>
                     <Link
                         className={styles.hideUnderLine}
                         to="/login"
@@ -98,12 +104,6 @@ const RecoveryPassword: React.FC = () => {
                             Назад
                         </Button>
                     </Link>
-                    <Button
-                        variant={ButtonVariant.Primary}
-                        onClick={onRecovery}
-                    >
-                        Восстановить
-                    </Button>
                 </div>
             </div>
         </Box>

@@ -3,11 +3,14 @@
     max-width: 350px;
     background: rgb(40, 50, 70);
     border-radius: 0;
-    box-shadow: -8px 0 0 0 black, 8px 0 0 0 black, 0 -8px 0 0 black, 0 8px 0 0 black;
+    box-shadow: calc(-1 * var(--border-width)) 0 0 0 black,
+        var(--border-width) 0 0 0 black,
+        0 calc(-1 * var(--border-width)) 0 0 black,
+        0 var(--border-width) 0 0 black;
 }
 
 .title {
-    font-family: MultiTypePixel;
+    font-family: MultiTypePixel, sans-serif;
     font-size: 2rem;
     color: rgba(255, 255, 255, 0.53);
 }

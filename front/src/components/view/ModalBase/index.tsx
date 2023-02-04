@@ -7,7 +7,8 @@ import styles from './ModalBase.module.scss'
 type Props = {
     isOpen: boolean,
     onClose: React.MouseEventHandler,
-    title?: string
+    title?: string,
+    children: React.ReactNode
 }
 
 const ModalBase: React.FC<Props> = ({ isOpen, onClose, children, title }) => {

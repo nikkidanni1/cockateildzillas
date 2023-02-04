@@ -1,132 +1,72 @@
 import React from 'react'
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 import {
-    BrowserRouter as Router,
-    Switch,
+    BrowserRouter,
+    Routes,
     Route,
-    Redirect,
+    Navigate,
 } from 'react-router-dom'
 import type { RootState, AppDispatch } from 'store'
 import { useSelector, useDispatch } from 'react-redux'
-import { Snackbar, IconButton, SnackbarContent } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
-import LoadingComponent from 'components/base/LoadingComponent'
 import Login from 'pages/Login'
 import SignUp from 'pages/SignUp'
 import ActivateAccount from 'pages/ActivateAccount'
 import RecoveryPassword from 'pages/RecoveryPassword'
 import Account from 'pages/Account'
 import AccountEdit from 'pages/AccountEdit'
-import { setError, setNotifyMessage } from 'store/actions'
+import NotFound from 'pages/NotFound'
 import { loadAppDataThunk } from 'store/thunk'
 import Layout from 'components/partial/Layout'
-import styles from './App.module.scss'
-
-enum ActionType {
-    Error,
-    Info
-}
 
 const App: React.FC = () => {
     const dispatch: AppDispatch = useDispatch()
-    const error: string = useSelector((state: RootState) => state.error)
-    const notifyMessage: string = useSelector((state: RootState) => state.notifyMessage)
-    const appLoading: boolean = useSelector((state: RootState) => state.appLoading)
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
+    const appLoading: boolean = useSelector((state: RootState) => state.appLoading)
 
     useEffect(() => {
         dispatch(loadAppDataThunk())
     }, [])
 
-    const hideNotifyError = useCallback(() => {
-        dispatch(setError(''))
-    }, [dispatch])
-
-    const hideNotifyInfo = useCallback(() => {
-        dispatch(setNotifyMessage(''))
-    }, [dispatch])
-
-    const action: React.FC<ActionType> = (type) => (
-        <IconButton
-            size="small"
-            aria-label="close"
-            color="inherit"
-            onClick={type === ActionType.Error ? hideNotifyError : hideNotifyInfo}
-        >
-            <CloseIcon fontSize="small" />
-        </IconButton>
-    )
-
     return (
-        <Router>
-            <Layout>
-                <>
-                    {
-                        appLoading ? (
-                            <LoadingComponent />
-                        ) : (
-                            <Switch>
-                                <Route path="/login" >
-                                    <Login />
-                                </Route>
-                                <Route path="/signup" >
-                                    <SignUp />
-                                </Route>
-                                <Route path="/activate/:id">
-                                    <ActivateAccount />
-                                </Route>
-                                <Route path="/recovery" >
-                                    <RecoveryPassword />
-                                </Route>
-                                <Route path="/account/edit">
-                                    {userInfo ? (
-                                        <AccountEdit />
-                                    ) : (
-                                        <Redirect to="/login" />
-                                    )}
-                                </Route>
-                                <Route path="/account">
-                                    {userInfo ? (
-                                        (userInfo?.cockatiel && userInfo?.nick) ? (
-                                            <Account />
-                                        ) : (
-                                            <Redirect to="/account/edit" />
-                                        )
-                                    ) : (
-                                        <Redirect to="/login" />
-                                    )}
-                                </Route>
-                                <Route exact path="/">
-                                    <Redirect to={userInfo ? '/account' : '/login'} />
-                                </Route>
-                            </Switch>
-                        )}
-                    <Snackbar
-                        open={!!error}
-                        autoHideDuration={6000}
-                        onClose={hideNotifyError}
-                    >
-                        <SnackbarContent
-                            className={styles.snackError}
-                            action={action(ActionType.Error)}
-                            aria-describedby="error"
-                            message={error}
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Layout />}>
+                    <Route path="login" element={<Login />} />
+                    <Route path="signup" element={<SignUp />} />
+                    <Route path="activate/:id" element={<ActivateAccount />} />
+                    <Route path="recovery" element={<RecoveryPassword />} />
+                    {userInfo && <>
+                        <Route
+                            path="account/edit"
+                            element={userInfo ? (
+                                <AccountEdit />
+                            ) : (
+                                <Navigate to="/login" />
+                            )}
                         />
-                    </Snackbar>
-                    <Snackbar
-                        open={!!notifyMessage}
-                        autoHideDuration={6000}
-                        onClose={hideNotifyInfo}
-                    >
-                        <SnackbarContent
-                            action={action(ActionType.Info)}
-                            aria-describedby="info"
-                            message={notifyMessage}
+                        <Route
+                            path="account"
+                            element={userInfo ? (
+                                (userInfo?.cockatiel && userInfo?.nick) ? (
+                                    <Account />
+                                ) : (
+                                    <Navigate to="/account/edit" />
+                                )
+                            ) : (
+                                <Navigate to="/login" />
+                            )}
                         />
-                    </Snackbar>
-                </>
-            </Layout>
-        </Router>
+                    </>}
+                    {!appLoading && (
+                        <Route
+                            path="/"
+                            element={<Navigate to={userInfo ? '/account' : '/login'} />}
+                        />
+                    )}
+                    <Route path='*' element={<NotFound />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
     )
 }
 

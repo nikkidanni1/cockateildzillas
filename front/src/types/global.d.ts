@@ -44,3 +44,8 @@ declare type AppConstants = {
 declare type RecoveryResponse = {
     _id: string
 }
+
+declare type AuthResponse = {
+    _id: string,
+    auth: string
+}

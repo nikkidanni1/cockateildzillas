@@ -41,4 +41,4 @@ const APP_CONSTANTS = {
     cockatielPartNames: ['bodyCockatiel', 'headCockatiel', 'cheeksCockatiel']
 }
 
-module.exports = APP_CONSTANTS
+export default APP_CONSTANTS

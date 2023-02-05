@@ -1,6 +1,6 @@
-module.exports = errorHandler
+import type { Request, Response, NextFunction } from 'express'
 
-function errorHandler(err, req, res, next) {
+const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
     if (typeof (err) === 'string') {
         // custom application error
         return res.status(400).json({ responseBody: null, error: err });
@@ -9,3 +9,5 @@ function errorHandler(err, req, res, next) {
     // default to 500 server error
     return res.status(500).json({ responseBody: null, error: err.message });
 }
+
+export default errorHandler

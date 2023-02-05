@@ -2,20 +2,20 @@
   "name": "cockatieldzillad-back",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "src/server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon server.ts"
+    "start": "npx nodemon server.ts",
+    "build": "ts-node ./src/server.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.17.0",
     "mongodb": "^4.1.0",
-    "nodemailer": "^6.7.2"
+    "nodemailer": "^6.9.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
@@ -23,6 +23,7 @@
     "@types/node": "^18.11.18",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.2",
     "typescript": "^4.9.4"
   }
 }

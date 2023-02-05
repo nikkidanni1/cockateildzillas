@@ -12,4 +12,4 @@ const transporter = async () => {
     })
 }
 
-module.exports = transporter
+export default transporter

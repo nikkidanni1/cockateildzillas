@@ -1,10 +1,17 @@
-const userService = require('./user.service')
-const utils = require('../_helpers/utils')
-const emailSender = require('../_helpers/email-sender')
+import type { WithId } from 'mongodb'
+import type { Request, Response, NextFunction } from 'express'
+import { 
+        authenticate as authenticateService, 
+        createUser,
+        activateUser as activateUserService,
+        getUser as getUserService
+} from 'users/user.service'
+import { getUserByAuth } from '_helpers/utils'
+import emailSender from '_helpers/email-sender'
 
-const authenticate = async (req, res, next) => {
-    const user = utils.getUserByAuth(req.body.auth)
-    userService.authenticate(user)
+export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+    const user: UserByAuth = getUserByAuth(req.body.auth)
+    authenticateService(user)
         .then(response => {
             if (response.responseBody) {
                 res.json(response)
@@ -15,19 +22,27 @@ const authenticate = async (req, res, next) => {
         .catch(err => next(err))
 }
 
-const getUserInfo = async (req, res, next) => {
-    const user = utils.getUserByAuth(req.headers.authorization)
-    const userInfo = await userService.getUser(user.email)
-    res.json({error: null, responseBody: userInfo})
+export const getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
+    const user: UserByAuth = getUserByAuth(req.headers.authorization ?? '')
+    const userInfo: WithId<UserInfo> | null | undefined = await getUserService(user.email)
+    const response: ServerResponse<WithId<UserInfo> | null> = { responseBody: null, error: null }
+
+    if (userInfo) {
+        response.responseBody = userInfo
+    } else {
+        response.error = 'Пользователь не найден'
+    }
+
+    res.json(response)
 }
 
-const signup = async (req, res, next) => {
-    userService.createUser(req.body)
+export const signup = async (req: Request, res: Response, next: NextFunction) => {
+    createUser(req.body)
         .then(async response => {
-            if (response.responseBody) {
+            if (response && response.responseBody) {
                 // сделать отправку письма по регистрации + ссылку активации 
-                const transporter = await emailSender()
-                const activateURL = process.env.APP_MODE === 'production' ? 'https://cockatieldzillas.vercel.app' : 'http://127.0.0.1:3000'
+                const transporter: any = await emailSender()
+                const activateURL: string = process.env.APP_MODE === 'production' ? 'https://cockatieldzillas.vercel.app' : 'http://127.0.0.1:3000'
                 await transporter.sendMail({
                     from: '"Cockatieldzillas 🦜" <cockatieldzillas@mail.ru>',
                     to: response.responseBody.email,
@@ -50,8 +65,8 @@ const signup = async (req, res, next) => {
         ).catch(err => next(err))
 }
 
-const activateUser = async (req, res, next) => {
-    userService.activateUser(req.params.id).then(async response => {
+export const activateUser = async (req: Request, res: Response, next: NextFunction) => {
+    activateUserService(req.params.id).then(async () => {
         res.json({
             error: null, 
             responseBody: {
@@ -61,9 +76,9 @@ const activateUser = async (req, res, next) => {
     }).catch(err => next(err.message))
 }
 
-const recovery = async (req, res, next) => {
-    userService.getUser(req.body.email).then(async response => {
-        if (response._id) {
+export const recovery = async (req: Request, res: Response, next: NextFunction) => {
+    getUserService(req.body.email).then(async response => {
+        if (response && response._id) {
             const transporter = await emailSender()
             await transporter.sendMail({
                 from: '"Cockatieldzillas 🦜" <cockatieldzillas@mail.ru>',
@@ -84,5 +99,3 @@ const recovery = async (req, res, next) => {
         }
     })
 }
-
-module.exports = { authenticate, signup, activateUser, recovery, getUserInfo }

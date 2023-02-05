@@ -38,6 +38,7 @@ const AccountEditAppearance: React.FC<Props> = ({ isShown, appearanceData, onCha
                         handleClick={handleClickAnimation}
                     />
                     <ColorEdit
+                        key="colorEdit"
                         part={selectedPart}
                         appearanceData={appearanceData}
                         anchorPosition={anchorPosition}

@@ -36,11 +36,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <Provider store={store}>
-    <React.StrictMode>
-      <StyledEngineProvider injectFirst>
-        <App />
-      </StyledEngineProvider>
-    </React.StrictMode>
+    <StyledEngineProvider injectFirst>
+      <App />
+    </StyledEngineProvider>
   </Provider>
 )
 

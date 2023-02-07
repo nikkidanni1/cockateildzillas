@@ -1,0 +1,27 @@
+.notification {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    margin-bottom: calc(2 * var(--border-width));
+}
+
+.notification__content {
+    box-sizing: border-box;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    width: 600px;
+    border-radius: 0;
+    box-shadow: calc(-1 * var(--border-width) / 2) 0 0 0 rgba(255, 255, 255, 0.87),
+        calc(var(--border-width) / 3) 0 0 0 rgba(255, 255, 255, 0.87),
+        0 calc(-1 * var(--border-width) / 2) 0 0 rgba(255, 255, 255, 0.87),
+        0 calc(var(--border-width) / 2) 0 0 rgba(255, 255, 255, 0.87);
+    font-family: 'Fifaks10Dev1', sans-serif;
+    font-size: 18px;
+    @media screen and (max-width: 720px) {
+        width: calc(95vw - var(--border-width));
+    }
+}
+
+.notification__content_error {
+    background-color: rgb(255, 81, 81, 0.83);
+}

@@ -2,7 +2,7 @@ import React from 'react'
 import { useLocation } from 'react-router-dom'
 import type { RootState } from 'store'
 import { useSelector } from 'react-redux'
-import styles from './NotFound.module.css'
+import styles from './NotFound.module.scss'
 
 const NotFound: React.FC = () => {
     const location = useLocation()

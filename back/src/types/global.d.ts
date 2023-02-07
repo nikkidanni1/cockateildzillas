@@ -15,7 +15,7 @@ declare type AuthResponse = {
 declare type UserInfo = {
     cockatiel: Cockatiel,
     email: string,
-    password: string,
+    password?: string,
     isActive: boolean,
     nick: string | null
 }

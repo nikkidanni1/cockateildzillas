@@ -1,10 +1,11 @@
 import type { Dispatch } from 'redux'
 import type { NavigateFunction } from 'react-router-dom'
+import _ from 'lodash'
 import { 
     getUserInfo, getAppContants, authenticate, recovery, signup 
 } from 'api'
 import {
-    setAppLoading, setError, setUserInfo, setAppContants, setNotifyMessage
+    setAppLoading, setUserInfo, setAppContants, addNotification
 } from './actions'
 
 export const loadAppDataThunk = () => async (dispatch: Dispatch) => {
@@ -23,7 +24,11 @@ export const loadAppDataThunk = () => async (dispatch: Dispatch) => {
     )
 
     if (appContantsResponse.status === 'rejected' || appContantsResponse.value?.error) {
-        dispatch(setError('Fetch AppConstants failed'))
+        dispatch(addNotification({
+            id: _.uniqueId(),
+            text: 'Fetch AppConstants failed',
+            mode: 'error'
+        }))
     }
     const user: UserInfo | undefined = userResponse.status === 'rejected' ? undefined : userResponse.value?.responseBody
 
@@ -42,13 +47,21 @@ export const loginThunk = (form: LoginForm, navigate: NavigateFunction) => async
     try {
         const authResponse: ServerResponse<AuthResponse> = await authenticate(form)
         if (authResponse.error) {
-            dispatch(setError(authResponse.error))
+            dispatch(addNotification({ 
+                id: _.uniqueId(), 
+                text: authResponse.error,
+                mode: 'error'
+            }))
         }
         if (authResponse.responseBody) {
             localStorage.setItem('auth', authResponse.responseBody.auth)
             const userInfoResponse = await getUserInfo()
             if (userInfoResponse.error) {
-                dispatch(setError(userInfoResponse.error))
+                dispatch(addNotification({
+                    id: _.uniqueId(),
+                    text: userInfoResponse.error,
+                    mode: 'error'
+                }))
             }
             if (userInfoResponse.responseBody) {
                 dispatch(setUserInfo(userInfoResponse.responseBody))
@@ -57,7 +70,11 @@ export const loginThunk = (form: LoginForm, navigate: NavigateFunction) => async
         }
     } catch (err) {
         if (err instanceof Error) {
-            dispatch(setError(err.message))
+            dispatch(addNotification({
+                id: _.uniqueId(),
+                text: err.message,
+                mode: 'error'
+            }))
             console.log(err)
         }
     }
@@ -69,15 +86,27 @@ export const recoveryThunk = (email: string, navigate: NavigateFunction) => asyn
     try {
         const res: ServerResponse<RecoveryResponse> = await recovery({ email })
         if (res.error) {
-            dispatch(setError(res.error))
+            dispatch(addNotification({
+                id: _.uniqueId(),
+                text: res.error,
+                mode: 'error'
+            }))
         }
         if (res.responseBody) {
             navigate('/login')
-            dispatch(setNotifyMessage('Пароль выслан, пожалуйста, проверьте свою почту'))
+            dispatch(addNotification({
+                id: _.uniqueId(),
+                text: 'Пароль выслан, пожалуйста, проверьте свою почту',
+                mode: 'info'
+            }))
         }
     } catch (err) {
         if (err instanceof Error) {
-            dispatch(setError(err.message))
+            dispatch(addNotification({
+                id: _.uniqueId(),
+                text: err.message,
+                mode: 'error'
+            }))
             console.log(err)
         }
     }
@@ -89,16 +118,27 @@ export const signUpThunk = (form: SignUpForm, navigate: NavigateFunction) => asy
     try {
         const res = await signup({ email: form.email, password: form.password })
         if (res.error) {
-            dispatch(setError(res.error))
+            dispatch(addNotification({
+                id: _.uniqueId(),
+                text: res.error,
+                mode: 'error'
+            }))
         }
         if (res.responseBody) {
             navigate('/login')
-            dispatch(setNotifyMessage('Пользователь успешно создан, пожалуйста, проверьте свою почту'))
+            dispatch(addNotification({
+                id: _.uniqueId(),
+                text: 'Пользователь успешно создан, пожалуйста, проверьте свою почту',
+                mode: 'info'
+            }))
         }
     } catch (err) {
         if (err instanceof Error) {
-            dispatch(setError(err.message))
-            console.log(err)
+            dispatch(addNotification({
+                id: _.uniqueId(),
+                text: err.message,
+                mode: 'error'
+            }))
         }
     }
     dispatch(setAppLoading(false))

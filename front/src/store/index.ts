@@ -4,8 +4,7 @@ import TYPES from './types'
 
 const initState: IReducerState = {
     userInfo: null,
-    error: '',
-    notifyMessage: '',
+    notifications: [],
     musicVolume: 0,
     soundVolume: 0.5,
     appLoading: true,
@@ -17,11 +16,14 @@ function reducer(state: IReducerState = initState, action) {
         case TYPES.SET_USER_INFO: {
             return { ...state, userInfo: action.payload }
         }
-        case TYPES.SET_ERROR: {
-            return { ...state, error: action.payload }
+        case TYPES.ADD_NOTIFICATION: {
+            const notifications = [ ...state.notifications ]
+            notifications.push(action.payload)
+            return { ...state, notifications }
         }
-        case TYPES.SET_NOTIFY_MESSAGE: {
-            return { ...state, notifyMessage: action.payload }
+        case TYPES.REMOVE_NOTIFICATION: {
+            const notifications = state.notifications.filter(notification => notification.id !== action.payload)
+            return { ...state, notifications }
         }
         case TYPES.SET_MUSIC_VOLUME: {
             return { ...state, musicVolume: action.payload }

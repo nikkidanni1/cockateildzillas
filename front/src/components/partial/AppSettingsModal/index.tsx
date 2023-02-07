@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useCallback, useEffect } from 'react'
-import type { RootState } from 'store'
+import type { AppDispatch, RootState } from 'store'
 import { useDispatch, useSelector } from 'react-redux'
 import Slider from 'components/base/Slider'
 import Settings from '@mui/icons-material/Settings'
@@ -17,7 +17,7 @@ import styles from './AppSettingsModal.module.scss'
 const audioUrl = '/sounds/button-sound-primary.mp3'
 
 const AppSettingsModal: React.FC = () => {
-    const dispatch = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
 
     const musicVolume: number = useSelector((state: RootState) => state.musicVolume)
     const soundVolume: number = useSelector((state: RootState) => state.soundVolume)

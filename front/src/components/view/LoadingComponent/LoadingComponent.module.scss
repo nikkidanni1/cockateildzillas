@@ -37,7 +37,8 @@
 }
 
 .loading__text {
-    font-family: MatrixSans, sans-serif;
+    margin-top: 4px;
+    font-family: 'Fifaks10Dev1', sans-serif;
     font-size: 24px;
     color: rgba(255, 255, 255, 0.87);
 }
@@ -46,4 +47,5 @@
     display: inline-block;
     width: 0;
     white-space: nowrap;
+    font-size: 20px;
 }

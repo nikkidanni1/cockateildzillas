@@ -1,38 +1,31 @@
 import React from 'react'
 import { useEffect, useState, useCallback } from 'react'
 import { useNavigate, Outlet } from 'react-router-dom'
-import type { RootState } from 'store'
+import type { RootState, AppDispatch } from 'store'
 import { useDispatch, useSelector } from 'react-redux'
 import MusicOff from '@mui/icons-material/MusicOff'
 import MusicNote from '@mui/icons-material/MusicNote'
 import LogoutIcon from '@mui/icons-material/ExitToApp'
-import CloseIcon from '@mui/icons-material/Close'
-import { Snackbar, SnackbarContent } from '@mui/material'
 import HousesBackDecor from 'components/view/HousesBackDecor'
 import FlyingBirds from 'components/view/FlyingBirds'
 import IconButton from 'components/base/IconButton'
 import { ButtonVariant } from 'helpers/enums'
 import AppSettingsModal from 'components/partial/AppSettingsModal'
-import { setMusicVolume, setUserInfo, setError, setNotifyMessage } from 'store/actions'
+import { setMusicVolume, setUserInfo } from 'store/actions'
 import LoadingComponent from 'components/view/LoadingComponent'
-import styles from './Layout.module.scss'
+import Notifications from 'components/partial/Notifications'
 
-enum ActionType {
-    Error,
-    Info
-}
+import styles from './Layout.module.scss'
 
 const audioUrl: string = '/sounds/cockatieldzillas-main.mp3'
 
 const Layout: React.FC = () => {
-    const dispatch = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
     const navigate = useNavigate()
 
     const volume: number = useSelector((state: RootState) => state.musicVolume)
     const appLoading: boolean = useSelector((state: RootState) => state.appLoading)
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
-    const error: string = useSelector((state: RootState) => state.error)
-    const notifyMessage: string = useSelector((state: RootState) => state.notifyMessage)
 
     const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
 
@@ -58,28 +51,9 @@ const Layout: React.FC = () => {
         navigate('/login')
     }, [])
 
-    const hideNotifyError = useCallback(() => {
-        dispatch(setError(''))
-    }, [dispatch])
-
-    const hideNotifyInfo = useCallback(() => {
-        dispatch(setNotifyMessage(''))
-    }, [dispatch])
-
-    const action: React.FC<ActionType> = (type) => (
-        <IconButton
-            size="small"
-            aria-label="close"
-            color="inherit"
-            onClick={type === ActionType.Error ? hideNotifyError : hideNotifyInfo}
-        >
-            <CloseIcon fontSize="small" />
-        </IconButton>
-    )
-
     return (
         <div className={styles.root}>
-            {(appLoading) && (
+            {appLoading && (
                 <LoadingComponent />
             )}
             <HousesBackDecor />
@@ -108,29 +82,7 @@ const Layout: React.FC = () => {
                     </IconButton>
                 )}
             </div>
-            <Snackbar
-                open={!!error}
-                autoHideDuration={6000}
-                onClose={hideNotifyError}
-            >
-                <SnackbarContent
-                    className={styles.snackError}
-                    action={action(ActionType.Error)}
-                    aria-describedby="error"
-                    message={error}
-                />
-            </Snackbar>
-            <Snackbar
-                open={!!notifyMessage}
-                autoHideDuration={6000}
-                onClose={hideNotifyInfo}
-            >
-                <SnackbarContent
-                    action={action(ActionType.Info)}
-                    aria-describedby="info"
-                    message={notifyMessage}
-                />
-            </Snackbar>
+            <Notifications />
         </div>
     )
 }

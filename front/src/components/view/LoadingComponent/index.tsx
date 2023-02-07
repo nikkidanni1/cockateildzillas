@@ -67,7 +67,7 @@ const LoadingComponent: React.FC = () => {
             return
         }
         const dotsQuantity: number = 3
-        loadingDotsRef.current.textContent = '.\u202f'.repeat(Math.round(dotsQuantity * timeFraction))
+        loadingDotsRef.current.textContent = '.'.repeat(Math.round(dotsQuantity * timeFraction))
     }, [loadingDotsRef.current])
 
     useEffect(() => {

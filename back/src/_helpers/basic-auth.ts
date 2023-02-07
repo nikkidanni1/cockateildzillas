@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { getUserByAuth } from '_helpers/utils'
+import { getUser } from 'users/user.service'
 
-
-const userService = require('../users/user.service')
 
 const basicAuth = async(req: Request, res: Response, next: NextFunction) => {
     // make authenticate path public
@@ -16,11 +15,11 @@ const basicAuth = async(req: Request, res: Response, next: NextFunction) => {
     }
 
     // verify auth credentials
-    const user = getUserByAuth(req.headers.authorization)
+    const userAuth = getUserByAuth(req.headers.authorization)
 
-    const userAuth = await (await userService.authenticate(user)).responseBody
+    const user = await getUser(userAuth)
     
-    if (!userAuth) {
+    if (!user) {
         return res.status(401).json({ responseBody: null, error: 'Invalid Authentication Credentials' })
     }
 

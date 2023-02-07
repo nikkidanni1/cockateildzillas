@@ -22,3 +22,9 @@ declare type ErrorParams = {
     min?: number,
     max?: number
 }
+
+interface NotificationMessage {
+    id: string,
+    text: string,
+    mode: 'error' | 'info'
+}

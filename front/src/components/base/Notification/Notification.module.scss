@@ -12,11 +12,12 @@
     width: 600px;
     border-radius: 0;
     box-shadow: calc(-1 * var(--border-width) / 2) 0 0 0 rgba(255, 255, 255, 0.87),
-        calc(var(--border-width) / 3) 0 0 0 rgba(255, 255, 255, 0.87),
+        calc(var(--border-width) / 2) 0 0 0 rgba(255, 255, 255, 0.87),
         0 calc(-1 * var(--border-width) / 2) 0 0 rgba(255, 255, 255, 0.87),
         0 calc(var(--border-width) / 2) 0 0 rgba(255, 255, 255, 0.87);
     font-family: 'Fifaks10Dev1', sans-serif;
     font-size: 18px;
+    background-color: rgba(45, 50, 70, 0.87);
     @media screen and (max-width: 720px) {
         width: calc(95vw - var(--border-width));
     }
@@ -24,4 +25,8 @@
 
 .notification__content_error {
     background-color: rgb(255, 81, 81, 0.83);
+}
+
+.closeButton {
+    padding: 8px;
 }

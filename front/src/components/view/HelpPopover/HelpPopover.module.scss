@@ -1,0 +1,14 @@
+.paper {
+    padding: 8px;
+    margin-top: calc(var(--border-width) / 2);
+    margin-right: calc(var(--border-width));
+    border-radius: 0;
+    box-shadow: calc(-1 * var(--border-width) / 2) 0 0 0 rgba(255, 255, 255, 0.87),
+        calc(var(--border-width) / 2) 0 0 0 rgba(255, 255, 255, 0.87),
+        0 calc(-1 * var(--border-width) / 2) 0 0 rgba(255, 255, 255, 0.87),
+        0 calc(var(--border-width) / 2) 0 0 rgba(255, 255, 255, 0.87);
+    font-family: monospace;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.87);
+    background: rgba(45, 50, 70, 0.87);
+}

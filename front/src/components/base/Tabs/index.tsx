@@ -7,7 +7,7 @@ import styles from './Tabs.module.scss'
 
 type Props = {
     className: string,
-    value: string,
+    value: string | HTMLElement,
     onChange: (e: React.SyntheticEvent, value: any) => void,
     tabs: Array<TabItem<any>>
 }
@@ -40,7 +40,7 @@ const Tabs: React.FC<Props> = ({ className, value, onChange, tabs = [] }) => {
         >
             {tabs.map(item => (
                 <Tab
-                    key={item.label}
+                    key={item.value.toString()}
                     className={styles.tab}
                     onClick={handleClick}
                     value={item.value}

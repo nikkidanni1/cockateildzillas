@@ -14,7 +14,7 @@ declare type AccountEditFormFields = {
 }
 
 declare type TabItem<T> = {
-    label: string,
+    label: string | React.ReactNode,
     value: T
 }
 

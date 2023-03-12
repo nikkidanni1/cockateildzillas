@@ -40,6 +40,9 @@ const TextField: React.FC<Props> = ({ className, type = 'text', passwordDetails,
             {...props}
             className={`${styles.input} ${className ?? ''}`}
             type={(type === 'password') ? (passwordDetails?.isShownPassword ? 'text' : 'password') : type}
+            FormHelperTextProps={{
+                className: styles.helperText
+            }}
         />
     )
 }

@@ -49,6 +49,8 @@ const ColorEdit: React.FC<Props> = ({ part, onClose, onChange, anchorPosition, a
         }
     }, [isOpenCustomColorPicker, onClose])
 
+    let activeColorCounter = 0
+
     return (
         <>
             {(part && appearanceData) && (
@@ -62,15 +64,22 @@ const ColorEdit: React.FC<Props> = ({ part, onClose, onChange, anchorPosition, a
                     <div className={styles.content}>
                         {!isOpenCustomColorPicker ? (
                             <div className={styles.colorPaletteWrapper}>
-                                {colorsArray.map((color, index) => (
-                                    <ColorPaletteItem
-                                        isActive={appearanceData[part].main_color === color}
-                                        isCustom={index === colorsArray.length - 1}
-                                        onClick={onChangeColor(part, color, index === colorsArray.length - 1)}
-                                        className={styles.colorPaletteItem}
-                                        color={color}
-                                    />
-                                ))}
+                                {colorsArray.map((color, index) => {
+                                    if (appearanceData[part].main_color === color) {
+                                        activeColorCounter++
+                                    }
+                                    
+                                    return (
+                                        <ColorPaletteItem
+                                            key={color}
+                                            isActive={activeColorCounter === 1 && appearanceData[part].main_color === color}
+                                            isCustom={index === colorsArray.length - 1}
+                                            onClick={onChangeColor(part, color, index === colorsArray.length - 1)}
+                                            className={styles.colorPaletteItem}
+                                            color={color}
+                                        />
+                                    )
+                                })}
                             </div>
                         ) : (
                             <CustomColorPicker

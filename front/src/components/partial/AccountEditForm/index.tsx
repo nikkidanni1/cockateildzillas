@@ -9,6 +9,7 @@ import { getErrors } from 'helpers/enums'
 import AccountEditInfo from './components/AccountEditInfo'
 import AccountEditAppearance from './components/AccountEditAppearance'
 import Button from 'components/base/Button'
+import HelpPopover from 'components/view/HelpPopover'
 import { ButtonVariant } from 'helpers/enums'
 import styles from './AccountEditForm.module.scss'
 
@@ -21,8 +22,42 @@ enum TabValue {
 }
 
 const tabs: Array<TabItem<TabValue>> = [
-    { value: TabValue.Info, label: "Информация" },
-    { value: TabValue.Appearance, label: "Внешность" }
+    {
+        value: TabValue.Info,
+        label: "Информация"
+    },
+    {
+        value: TabValue.Appearance,
+        label: (
+            <span className={styles.tab_withIcon}>
+                Внешность
+                <HelpPopover
+                    popoverProps={{
+                        anchorOrigin: {
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }
+                    }}
+                    paperClassName={styles.info__paper}
+                >
+                    <p className={styles.info__p}>
+                        Для изменения цвета клинуть на соответствующую часть тела.
+                    </p>
+                    <p className={styles.info__p}>
+                        Доступно к изменению: 
+                    </p>
+                    <ul className={styles.info__list}>
+                        <li>Голова</li>
+                        <li>Щёки</li>
+                        <li>Туловище</li>
+                    </ul>
+                    <p className={styles.info__p}>
+                        Можно использовать цвет из палитры предложенных, либо нажать на элемент палитры "c" и выбрать любой другой.
+                    </p>
+                </HelpPopover>
+            </span>
+        )
+    }
 ]
 
 const AccountEditForm: React.FC = () => {

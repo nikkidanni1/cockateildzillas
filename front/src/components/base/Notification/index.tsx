@@ -15,6 +15,7 @@ interface IPropsAction {
 
 const Action: React.FC<IPropsAction> = ({ onClick }) => (
     <IconButton
+        className={styles.closeButton}
         size="small"
         aria-label="close"
         color="inherit"
@@ -33,7 +34,7 @@ const Notification: React.FC<IProps> = ({ notification }) => {
     const hideNotification = useCallback((id: string) => () => {
         dispatch(removeNotification(id))
     }, [])
-    
+
     return (
         <Snackbar
             className={styles.notification}

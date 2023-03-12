@@ -71,7 +71,7 @@ const Layout: React.FC = () => {
                     variant={volume !== 0 ? ButtonVariant.Primary : ButtonVariant.Secondary}
                     onClick={toggleMusic}
                 >
-                    {volume === 0 ? <MusicNote /> : <MusicOff />}
+                    {volume === 0 ? <MusicOff /> : <MusicNote />}
                 </IconButton>
                 {((appLoading === 0) && userInfo) && (
                     <IconButton

@@ -51,12 +51,17 @@ const Router: React.FC = () => {
                     <Route path="signup" element={suspenseHOC(SignUp)} />
                     <Route path="activate/:id" element={suspenseHOC(ActivateAccount)} />
                     <Route path="recovery" element={suspenseHOC(RecoveryPassword)} />
-                    <PrivateRoute path="account/edit" element={suspenseHOC(AccountEdit)} />
-                    <PrivateRoute
+                    <Route
+                        path="account/edit"
+                        element={
+                            <PrivateRoute element={suspenseHOC(AccountEdit)} />
+                        }
+                    />
+                    <Route
                         path="account"
                         element={
                             (userInfo?.cockatiel && userInfo?.nick) ? (
-                                suspenseHOC(Account)
+                                <PrivateRoute element={suspenseHOC(Account)} />
                             ) : (
                                 <Navigate to="/account/edit" />
                             )

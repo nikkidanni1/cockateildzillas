@@ -24,7 +24,7 @@ const Layout: React.FC = () => {
     const navigate = useNavigate()
 
     const volume: number = useSelector((state: RootState) => state.musicVolume)
-    const appLoading: boolean = useSelector((state: RootState) => state.appLoading)
+    const appLoading: number = useSelector((state: RootState) => state.appLoading)
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
 
     const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
@@ -53,7 +53,7 @@ const Layout: React.FC = () => {
 
     return (
         <div className={styles.root}>
-            {appLoading && (
+            {appLoading !== 0 && (
                 <LoadingComponent />
             )}
             <HousesBackDecor />
@@ -73,7 +73,7 @@ const Layout: React.FC = () => {
                 >
                     {volume === 0 ? <MusicNote /> : <MusicOff />}
                 </IconButton>
-                {(!appLoading && userInfo) && (
+                {((appLoading === 0) && userInfo) && (
                     <IconButton
                         variant={ButtonVariant.Secondary}
                         onClick={onLogout}

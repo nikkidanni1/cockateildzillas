@@ -7,7 +7,7 @@ const initState: IReducerState = {
     notifications: [],
     musicVolume: 0,
     soundVolume: 0.5,
-    appLoading: true,
+    appLoading: 0,
     appConstants: null
 }
 
@@ -31,8 +31,11 @@ function reducer(state: IReducerState = initState, action) {
         case TYPES.SET_SOUND_VOLUME: {
             return { ...state, soundVolume: action.payload }
         }
-        case TYPES.SET_APP_LOADING: {
-            return { ...state, appLoading: action.payload }
+        case TYPES.ADD_APP_LOADING: {
+            return { ...state, appLoading: ++state.appLoading }
+        }
+        case TYPES.REMOVE_APP_LOADING: {
+            return { ...state, appLoading: --state.appLoading }
         }
         case TYPES.SET_APP_CONTANTS: {
             return { ...state, appConstants: action.payload }

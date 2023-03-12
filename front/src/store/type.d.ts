@@ -3,11 +3,15 @@ interface IReducerState {
     notifications: Array<NotificationMessage>,
     musicVolume: number,
     soundVolume: number,
-    appLoading: boolean,
+    appLoading: number,
     appConstants: AppConstants | null
 }
 
-type Action<T> = {
+type ActionWithPayload<T> = {
     type: string,
     payload: T
+}
+
+type Action = {
+    type: string
 }

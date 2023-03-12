@@ -5,11 +5,11 @@ import {
     getUserInfo, getAppContants, authenticate, recovery, signup 
 } from 'api'
 import {
-    setAppLoading, setUserInfo, setAppContants, addNotification
+    addAppLoading, removeAppLoading, setUserInfo, setAppContants, addNotification
 } from './actions'
 
 export const loadAppDataThunk = () => async (dispatch: Dispatch) => {
-    dispatch(setAppLoading(true))
+    dispatch(addAppLoading())
 
     type ResponseItem<T> = PromiseFulfilledResult<ServerResponse<T | undefined>> | PromiseRejectedResult
 
@@ -39,11 +39,11 @@ export const loadAppDataThunk = () => async (dispatch: Dispatch) => {
     if (appConstants) {
         dispatch(setAppContants(appConstants))
     }
-    dispatch(setAppLoading(false))
+    dispatch(removeAppLoading())
 }
 
 export const loginThunk = (form: LoginForm, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
-    dispatch(setAppLoading(true))
+    dispatch(addAppLoading())
     try {
         const authResponse: ServerResponse<AuthResponse> = await authenticate(form)
         if (authResponse.error) {
@@ -78,11 +78,11 @@ export const loginThunk = (form: LoginForm, navigate: NavigateFunction) => async
             console.log(err)
         }
     }
-    dispatch(setAppLoading(false))
+    dispatch(removeAppLoading())
 }
 
 export const recoveryThunk = (email: string, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
-    dispatch(setAppLoading(true))
+    dispatch(addAppLoading())
     try {
         const res: ServerResponse<RecoveryResponse> = await recovery({ email })
         if (res.error) {
@@ -110,11 +110,11 @@ export const recoveryThunk = (email: string, navigate: NavigateFunction) => asyn
             console.log(err)
         }
     }
-    dispatch(setAppLoading(false))
+    dispatch(removeAppLoading())
 }
 
 export const signUpThunk = (form: SignUpForm, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
-    dispatch(setAppLoading(true))
+    dispatch(addAppLoading())
     try {
         const res = await signup({ email: form.email, password: form.password })
         if (res.error) {
@@ -141,5 +141,5 @@ export const signUpThunk = (form: SignUpForm, navigate: NavigateFunction) => asy
             }))
         }
     }
-    dispatch(setAppLoading(false))
+    dispatch(removeAppLoading())
 }

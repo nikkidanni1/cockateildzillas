@@ -32,7 +32,7 @@ const SignUp: React.FC = () => {
     const navigate = useNavigate()
 
     const appConstants: AppConstants | null = useSelector((state: RootState) => state.appConstants)
-    const appLoading: boolean = useSelector((state: RootState) => state.appLoading)
+    const appLoading: number = useSelector((state: RootState) => state.appLoading)
 
     const [form, setForm] = useState<SignUpFormWithChecking>({
         email: '',
@@ -210,8 +210,8 @@ const SignUp: React.FC = () => {
                     <Button
                         variant={ButtonVariant.Primary}
                         onClick={onSignUp}
-                        disabled={appLoading}
-                        startIcon={appLoading ? <CircularProgress size={16} /> : ''}
+                        disabled={appLoading !== 0}
+                        startIcon={appLoading !== 0 ? <CircularProgress size={16} /> : ''}
                     >
                         Регистрация
                     </Button>
@@ -221,8 +221,8 @@ const SignUp: React.FC = () => {
                     >
                         <Button
                             variant={ButtonVariant.Secondary}
-                            disabled={appLoading}
-                            startIcon={appLoading ? <CircularProgress size={16} /> : ''}
+                            disabled={appLoading !== 0}
+                            startIcon={appLoading !== 0 ? <CircularProgress size={16} /> : ''}
                         >
                             Назад
                         </Button>

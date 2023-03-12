@@ -6,12 +6,12 @@ import AccountEditForm from 'components/partial/AccountEditForm'
 import styles from './AccountEdit.module.scss'
 
 const AccountEdit: React.FC = () => {
-    const appLoading = useSelector((state: RootState) => state.appLoading)
+    const appLoading: number = useSelector((state: RootState) => state.appLoading)
 
     return (
         <>
             {
-                !appLoading && (
+                appLoading === 0 && (
                     <Box className={styles.box}>
                         <div>
                             <AccountEditForm />

@@ -20,7 +20,7 @@ const Login: React.FC = () => {
     const navigate = useNavigate()
 
     const appConstants: AppConstants | null = useSelector((state: RootState) => state.appConstants)
-    const appLoading = useSelector((state: RootState) => state.appLoading)
+    const appLoading: number = useSelector((state: RootState) => state.appLoading)
 
     const [form, setForm] = useState<LoginForm>({
         email: '',
@@ -135,14 +135,14 @@ const Login: React.FC = () => {
                     <Button
                         variant={ButtonVariant.Primary}
                         onClick={onLogin}
-                        disabled={appLoading}
+                        disabled={appLoading !== 0}
                     >
                         Войти
                     </Button>
                     <Button
                         variant={ButtonVariant.Secondary}
                         onClick={onSignUp}
-                        disabled={appLoading}
+                        disabled={appLoading !== 0}
                     >
                         Регистрация
                     </Button>

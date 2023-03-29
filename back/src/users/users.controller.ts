@@ -1,17 +1,18 @@
-import type { WithId } from 'mongodb'
+import { ObjectId, WithId } from 'mongodb'
 import type { Request, Response, NextFunction } from 'express'
 import {
     addUser,
     activateUser as activateUserService,
     getUser
 } from 'users/user.service'
+import { getCockatiel } from 'cockatiels/cockatiel.service'
 import { getUserByAuth } from '_helpers/utils'
 import emailSender from '_helpers/email-sender'
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: UserByAuth = getUserByAuth(req.body.auth)
-        const userFullInfo: WithId<UserInfo> | null | undefined = await getUser({ email: user.email })
+        const userFullInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email })
 
         const response: ServerResponse<WithId<AuthResponse> | null> = { error: null, responseBody: null }
         if (userFullInfo) {
@@ -36,11 +37,14 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 export const getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: UserByAuth = getUserByAuth(req.headers.authorization ?? '')
-        const userInfo: WithId<UserInfo> | null | undefined = await getUser({ email: user.email })
+        const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email })
         const response: ServerResponse<WithId<UserInfo> | null> = { responseBody: null, error: null }
 
         if (userInfo && userInfo.isActive) {
-            response.responseBody = userInfo
+            const { cockatielId, password, ...restUserInfo } = userInfo
+            const cockatiel: Cockatiel | null = cockatielId ? await getCockatiel({ _id: cockatielId }) : null
+            const resposeUserInfo: WithId<UserInfo> = { ...restUserInfo, cockatiel }
+            response.responseBody = resposeUserInfo
         } else if (userInfo && !userInfo.isActive) {
             response.error = 'Пользователь неактивеный'
         } else {
@@ -55,7 +59,7 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userInfo: WithId<UserInfo> | null | undefined = await getUser({ email: req.body.email })
+        const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: req.body.email })
         let response: ServerResponse<string | null> = { error: null, responseBody: null }
 
         if (userInfo) {
@@ -63,7 +67,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
             res.json(response)
         }
 
-        const createdUser: WithId<UserInfo> | null | undefined = await addUser(req.body)
+        const createdUser: WithId<UserInfoDB> | null | undefined = await addUser(req.body)
 
         if (createdUser) {
             const transporter: any = await emailSender()
@@ -112,7 +116,7 @@ export const activateUser = async (req: Request, res: Response, next: NextFuncti
 }
 
 export const recovery = async (req: Request, res: Response, next: NextFunction) => {
-    const user: WithId<UserInfo> | null | undefined = await getUser({ email: req.body.email })
+    const user: WithId<UserInfoDB> | null | undefined = await getUser({ email: req.body.email })
     const response: ServerResponse<{ _id: string } | null> = { responseBody: null, error: null }
     if (user) {
         const transporter = await emailSender()

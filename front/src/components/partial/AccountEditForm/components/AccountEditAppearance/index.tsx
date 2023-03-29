@@ -6,7 +6,7 @@ import styles from './AccountEditAppearance.module.scss'
 
 type Props = {
     isShown: boolean,
-    appearanceData: CockatielAppearanceData | null,
+    appearanceData: CockatielAppearanceData | null | undefined,
     onChangePartColor: (part: string, color: string) => void
 }
 

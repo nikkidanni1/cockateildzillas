@@ -2,11 +2,11 @@ import type { Collection, WithId, InsertOneResult, UpdateResult, OptionalId } fr
 import { ObjectId } from 'mongodb'
 import client from '_helpers/get-mongo'
 
-export const getUser = async (filter: Partial<UserInfo>) => {
+export const getUser = async (filter: Partial<UserInfoDB>) => {
     try {
         await client.connect()
-        const usersCollection: Collection<WithId<UserInfo>> = client.db('cockatieldzillas').collection('users')
-        const response: WithId<UserInfo> | null = await usersCollection.findOne(filter)
+        const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
+        const response: WithId<UserInfoDB> | null = await usersCollection.findOne(filter)
         return response
     } catch (err) {
         console.log(err)
@@ -18,16 +18,16 @@ export const getUser = async (filter: Partial<UserInfo>) => {
 export const addUser = async (user: UserByAuth) => {
     try {
         await client.connect()
-        const usersCollection: Collection<WithId<UserInfo> | OptionalId<UserInfo>> = client.db('cockatieldzillas').collection('users')
-        const result: InsertOneResult<OptionalId<UserInfo>> = await usersCollection.insertOne({
+        const usersCollection: Collection<WithId<UserInfoDB> | OptionalId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
+        const result: InsertOneResult<OptionalId<UserInfoDB>> = await usersCollection.insertOne({
             email: user.email,
             password: Buffer.from(user.password, 'base64').toString(),
             isActive: false,
-            cockatiel: null,
+            cockatielId: null,
             nick: null
         })
 
-        const createdUser: WithId<UserInfo> | null = await usersCollection.findOne({ _id: result.insertedId })
+        const createdUser: WithId<UserInfoDB> | null = await usersCollection.findOne({ _id: result.insertedId })
         return createdUser
     } catch (err) {
         console.log(err)
@@ -39,7 +39,7 @@ export const addUser = async (user: UserByAuth) => {
 export const activateUser = async (id: string) => {
     try {
         await client.connect()
-        const usersCollection: Collection<WithId<UserInfo>> = client.db('cockatieldzillas').collection('users')
+        const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
         const updateResult: UpdateResult = await usersCollection.updateOne(
             { _id: new ObjectId(id) },
             { $set: { "isActive": true } },

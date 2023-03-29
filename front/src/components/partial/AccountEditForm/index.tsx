@@ -44,7 +44,7 @@ const tabs: Array<TabItem<TabValue>> = [
                         Для изменения цвета клинуть на соответствующую часть тела.
                     </p>
                     <p className={styles.info__p}>
-                        Доступно к изменению: 
+                        Доступно к изменению:
                     </p>
                     <ul className={styles.info__list}>
                         <li>Голова</li>
@@ -76,25 +76,72 @@ const AccountEditForm: React.FC = () => {
         nick: getErrors().requiredField,
         cockatielNick: getErrors().requiredField
     })
-    const [appearanceData, setAppearanceData] = useState<CockatielAppearanceData | null>(null)
+    const [appearanceData, setAppearanceData] = useState<CockatielAppearanceData | null | undefined>()
     const [activeTab, setActiveTab] = useState<TabValue>(tabs[0].value)
 
+    const reset = useCallback(() => {
+        setAppearanceData(undefined)
+        setFormData({
+            nick: "",
+            cockatielNick: ""
+        })
+        setErrors({
+            nick: getErrors().requiredField,
+            cockatielNick: getErrors().requiredField
+        })
+        setTouched({
+            nick: false,
+            cockatielNick: false
+        })
+    }, [])
+
     useEffect(() => {
-        let nick: string = ""
-        if (userInfo?.nick) {
-            nick = userInfo.nick
+        return () => {
+            reset()
         }
-
-        setFormData(prev => ({
-            ...prev,
-            nick
-        }))
-    }, [userInfo])
+    }, [])
 
     useEffect(() => {
-        if (appConstants && !appearanceData) {
+        if (appConstants) {
+            const formData: AccountEditFormFields = {
+                nick: "",
+                cockatielNick: ""
+            }
+            
+            let appearanceData: CockatielAppearanceData | null = null
+
+            if (userInfo?.nick) {
+                formData.nick = userInfo.nick
+            }
+
+            if (userInfo?.cockatiel) {
+                formData.cockatielNick = userInfo.cockatiel.name
+
+                appearanceData = appConstants.cockatielPartNames.reduce((result, part) => ({
+                    ...result,
+                    [part]: {
+                        ...createSubColors(userInfo.cockatiel?.appearanceData[part].main_color, appConstants.cockatielPartInfo[part].shades),
+                        main_color: userInfo.cockatiel?.appearanceData[part].main_color
+                    }
+                }), {})
+            }
+
+            Object.keys(formData).forEach(key => {
+                validate(key, formData[key])
+            })
+
+            setAppearanceData(appearanceData)
+            setFormData(prev => ({
+                ...prev,
+                ...formData
+            }))
+        }
+    }, [userInfo, appConstants])
+
+    useEffect(() => {
+        if (appConstants && appearanceData === null) {
             const processedAppearanceData: CockatielAppearanceData = { ...appConstants.cockatielAppearanceDataDefault }
-            appConstants?.cockatielPartNames.map(part => {
+            appConstants?.cockatielPartNames.forEach(part => {
                 processedAppearanceData[part] = {
                     ...processedAppearanceData[part],
                     ...createSubColors(appConstants.cockatielAppearanceDataDefault[part].main_color, appConstants.cockatielPartInfo[part].shades)

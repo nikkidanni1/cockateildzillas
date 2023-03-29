@@ -12,8 +12,29 @@ declare type AuthResponse = {
     auth: string
 }
 
+declare type CockatielPartNames = 'bodyCockatiel' | 'headCockatiel' | 'cheeksCockatiel'
+declare type CockatielAppearancePart = { main_color: string }
+declare type CockatielAppearanceData = (
+    Record<
+        CockatielPartNames, 
+        CockatielAppearancePart
+    >
+)
+
+declare type Cockatiel = {
+    appearanceData: CockatielAppearanceData,
+    name: string
+}
+
 declare type UserInfo = {
-    cockatiel: Cockatiel,
+    cockatiel: Cockatiel | null,
+    email: string,
+    isActive: boolean,
+    nick: string | null
+}
+
+declare type UserInfoDB = {
+    cockatielId: ObjectId | null,
     email: string,
     password?: string,
     isActive: boolean,

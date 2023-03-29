@@ -5,12 +5,6 @@ declare type ServerResponse<T> = {
 
 declare type CockatielPartNames = 'bodyCockatiel' | 'headCockatiel' | 'cheeksCockatiel'
 declare type CockatielShades = 'main_color' | 'color_light1' | 'color_dark1' | 'color_outline'
-declare type CockatielPartInfoItem = {
-    name: string,
-    colorVariants: Array<string>,
-    shades: Array<CockatielShades>
-}
-declare type CockatielPartInfo = Record<CockatielPartNames, CockatielPartInfoItem>
 declare type CockatielAppearancePart = Partial<Omit<Record<CockatielShades, string>, 'main_color'>> & { main_color: string }
 declare type CockatielAppearanceData = (
     Record<
@@ -18,10 +12,10 @@ declare type CockatielAppearanceData = (
         CockatielAppearancePart
     >
 )
-declare type CockatielShades = 'main_color' | 'color_light1' | 'color_dark1' | 'color_outline'
 
 declare type Cockatiel = {
-    appearanceData: CockatielAppearanceData
+    appearanceData: CockatielAppearanceData,
+    name: string
 } | null
 
 declare type UserInfo = {
@@ -31,6 +25,13 @@ declare type UserInfo = {
     isActive: boolean,
     nick: string | null
 } | null
+
+declare type CockatielPartInfoItem = {
+    name: string,
+    colorVariants: Array<string>,
+    shades: Array<CockatielShades>
+}
+declare type CockatielPartInfo = Record<CockatielPartNames, CockatielPartInfoItem>
 
 declare type AppConstants = {
     maxPasswordLength: number,

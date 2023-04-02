@@ -1,4 +1,4 @@
-import type { Collection, WithId, InsertOneResult, UpdateResult, OptionalId } from 'mongodb'
+import type { Collection, WithId, UpdateResult, InsertOneResult } from 'mongodb'
 import { ObjectId } from 'mongodb'
 import client from '_helpers/get-mongo'
 
@@ -18,8 +18,8 @@ export const getUser = async (filter: Partial<UserInfoDB>) => {
 export const addUser = async (user: UserByAuth) => {
     try {
         await client.connect()
-        const usersCollection: Collection<WithId<UserInfoDB> | OptionalId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
-        const result: InsertOneResult<OptionalId<UserInfoDB>> = await usersCollection.insertOne({
+        const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
+        const result: InsertOneResult = await client.db('cockatieldzillas').collection('users').insertOne({
             email: user.email,
             password: Buffer.from(user.password, 'base64').toString(),
             isActive: false,

@@ -139,17 +139,24 @@ const AccountEditForm: React.FC = () => {
     }, [])
 
     const validate = useCallback((field: string, value: string): string => {
-        const newErrors: AccountEditErrors = { ...errors }
+        let error: string
+
         if (!value) {
-            newErrors[field] = getErrors().requiredField
+            error = getErrors().requiredField
         } else if (appConstants && (value.length > appConstants.maxName)) {
-            newErrors[field] = getErrors({ max: appConstants.maxName }).maxLength
+            error = getErrors({ max: appConstants.maxName }).maxLength
         } else {
-            newErrors[field] = ''
+            error = ''
         }
-        setErrors(newErrors)
-        return newErrors[field]
-    }, [errors, appConstants])
+
+        setErrors(errors => {
+            const newErrors: AccountEditErrors = { ...errors }
+            newErrors[field] = error
+            return newErrors
+        })
+
+        return error
+    }, [appConstants])
 
     const handleChange = useCallback((field: string): React.ChangeEventHandler<HTMLInputElement> => (e) => {
         const value = e.target.value

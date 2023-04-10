@@ -8,7 +8,7 @@ import {
     Navigate,
 } from 'react-router-dom'
 import type { RootState, AppDispatch } from 'store'
-import { addAppLoading, removeAppLoading } from 'store/actions'
+import { addAppLoading, removeAppLoading, disableInitLoading } from 'store/actions'
 import Layout from 'components/partial/Layout'
 import PrivateRoute from './components/PrivateRoute'
 
@@ -41,8 +41,16 @@ const suspenseHOC = (Component: React.FC) => {
 }
 
 const Router: React.FC = () => {
+    const dispatch: AppDispatch = useDispatch()
+
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
     const appLoading: number = useSelector((state: RootState) => state.appLoading)
+    const initLoading: boolean = useSelector((state: RootState) => state.initLoading)
+
+    useEffect(() => {
+        dispatch(disableInitLoading())
+    }, [])
+
     return (
         <BrowserRouter>
             <Routes>
@@ -60,14 +68,10 @@ const Router: React.FC = () => {
                     <Route
                         path="account"
                         element={
-                            (userInfo?.cockatiel && userInfo?.nick) ? (
-                                <PrivateRoute element={suspenseHOC(Account)} />
-                            ) : (
-                                <Navigate to="/account/edit" />
-                            )
+                            <PrivateRoute element={suspenseHOC(Account)} />
                         }
                     />
-                    {appLoading === 0 && (
+                    {(!initLoading && appLoading === 0) && (
                         <Route
                             path="/"
                             element={

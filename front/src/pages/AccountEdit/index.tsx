@@ -7,11 +7,12 @@ import styles from './AccountEdit.module.scss'
 
 const AccountEdit: React.FC = () => {
     const appLoading: number = useSelector((state: RootState) => state.appLoading)
+    const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
 
     return (
         <>
             {
-                appLoading === 0 && (
+                (appLoading === 0 || userInfo) && (
                     <Box className={styles.box}>
                         <div>
                             <AccountEditForm />

@@ -24,11 +24,30 @@ export const addUser = async (user: UserByAuth) => {
             password: Buffer.from(user.password, 'base64').toString(),
             isActive: false,
             cockatielId: null,
-            nick: null
+            nickname: null
         })
 
         const createdUser: WithId<UserInfoDB> | null = await usersCollection.findOne({ _id: result.insertedId })
         return createdUser
+    } catch (err) {
+        console.log(err)
+    } finally {
+        await client.close()
+    }
+}
+
+export const updateUser = async (_id: ObjectId, data: Partial<UserInfoDB>) => {
+    try {
+        await client.connect()
+        const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
+        await usersCollection.updateOne(
+            { _id }, 
+            { $set: data }, 
+            { upsert: false }
+        )
+
+        const updatedUser: WithId<UserInfoDB> | null = await usersCollection.findOne({ _id })
+        return updatedUser
     } catch (err) {
         console.log(err)
     } finally {

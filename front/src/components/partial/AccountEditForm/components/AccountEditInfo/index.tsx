@@ -65,19 +65,19 @@ const AccountEditInfo: React.FC<Props> = ({
             />
             <TextField
                 label="Ник"
-                value={formData.nick}
-                onChange={handleChange('nick')}
-                onBlur={handleBlur('nick')}
-                error={!!(touched.nick && errors.nick)}
-                helperText={touched.nick && errors.nick}
+                value={formData.nickname}
+                onChange={handleChange('nickname')}
+                onBlur={handleBlur('nickname')}
+                error={!!(touched.nickname && errors.nickname)}
+                helperText={touched.nickname && errors.nickname}
             />
             <TextField
                 label="Кличка воина"
-                value={formData.cockatielNick}
-                onChange={handleChange('cockatielNick')}
-                onBlur={handleBlur('cockatielNick')}
-                error={!!(touched.cockatielNick && errors.cockatielNick)}
-                helperText={touched.cockatielNick && errors.cockatielNick}
+                value={formData.cockatielName}
+                onChange={handleChange('cockatielName')}
+                onBlur={handleBlur('cockatielName')}
+                error={!!(touched.cockatielName && errors.cockatielName)}
+                helperText={touched.cockatielName && errors.cockatielName}
             />
         </div>
     )

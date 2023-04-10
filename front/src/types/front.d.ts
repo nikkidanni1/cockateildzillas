@@ -9,8 +9,8 @@ declare type SignUpForm = {
 }
 
 declare type AccountEditFormFields = {
-    nick: string,
-    cockatielNick: string
+    nickname: string,
+    cockatielName: string
 }
 
 declare type TabItem<T> = {

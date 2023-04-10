@@ -4,6 +4,7 @@ interface IReducerState {
     musicVolume: number,
     soundVolume: number,
     appLoading: number,
+    initLoading: boolean,
     appConstants: AppConstants | null
 }
 

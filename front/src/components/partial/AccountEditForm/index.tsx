@@ -1,16 +1,18 @@
 import React from 'react'
 import { useCallback, useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { RootState } from 'store'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import type { AppDispatch } from 'store'
 import { createSubColors } from 'helpers/utils'
+import { getErrors, ButtonVariant } from 'helpers/enums'
+import { updateUserInfoThunk } from 'store/thunk'
 
 import Tabs from 'components/base/Tabs'
-import { getErrors } from 'helpers/enums'
 import AccountEditInfo from './components/AccountEditInfo'
 import AccountEditAppearance from './components/AccountEditAppearance'
 import Button from 'components/base/Button'
-import HelpPopover from 'components/view/HelpPopover'
-import { ButtonVariant } from 'helpers/enums'
+import HelpPopoverAppearanceTab from './components/HelpPopoverAppearanceTab'
 import styles from './AccountEditForm.module.scss'
 
 type Fields = keyof AccountEditFormFields
@@ -31,50 +33,30 @@ const tabs: Array<TabItem<TabValue>> = [
         label: (
             <span className={styles.tab_withIcon}>
                 Внешность
-                <HelpPopover
-                    popoverProps={{
-                        anchorOrigin: {
-                            vertical: 'bottom',
-                            horizontal: 'left',
-                        }
-                    }}
-                    paperClassName={styles.info__paper}
-                >
-                    <p className={styles.info__p}>
-                        Для изменения цвета клинуть на соответствующую часть тела.
-                    </p>
-                    <p className={styles.info__p}>
-                        Доступно к изменению:
-                    </p>
-                    <ul className={styles.info__list}>
-                        <li>Голова</li>
-                        <li>Щёки</li>
-                        <li>Туловище</li>
-                    </ul>
-                    <p className={styles.info__p}>
-                        Можно использовать цвет из палитры предложенных, либо нажать на элемент палитры "c" и выбрать любой другой.
-                    </p>
-                </HelpPopover>
+                <HelpPopoverAppearanceTab />
             </span>
         )
     }
 ]
 
 const AccountEditForm: React.FC = () => {
+    const dispatch: AppDispatch = useDispatch()
+    const navigate = useNavigate()
+
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
     const appConstants: AppConstants | null = useSelector((state: RootState) => state.appConstants)
 
     const [formData, setFormData] = useState<AccountEditFormFields>({
-        nick: "",
-        cockatielNick: ""
+        nickname: "",
+        cockatielName: ""
     })
     const [touched, setTouched] = useState<AccountEditTouched>({
-        nick: false,
-        cockatielNick: false
+        nickname: false,
+        cockatielName: false
     })
     const [errors, setErrors] = useState<AccountEditErrors>({
-        nick: getErrors().requiredField,
-        cockatielNick: getErrors().requiredField
+        nickname: getErrors().requiredField,
+        cockatielName: getErrors().requiredField
     })
     const [appearanceData, setAppearanceData] = useState<CockatielAppearanceData | null | undefined>()
     const [activeTab, setActiveTab] = useState<TabValue>(tabs[0].value)
@@ -82,16 +64,16 @@ const AccountEditForm: React.FC = () => {
     const reset = useCallback(() => {
         setAppearanceData(undefined)
         setFormData({
-            nick: "",
-            cockatielNick: ""
+            nickname: "",
+            cockatielName: ""
         })
         setErrors({
-            nick: getErrors().requiredField,
-            cockatielNick: getErrors().requiredField
+            nickname: getErrors().requiredField,
+            cockatielName: getErrors().requiredField
         })
         setTouched({
-            nick: false,
-            cockatielNick: false
+            nickname: false,
+            cockatielName: false
         })
     }, [])
 
@@ -104,18 +86,18 @@ const AccountEditForm: React.FC = () => {
     useEffect(() => {
         if (appConstants) {
             const formData: AccountEditFormFields = {
-                nick: "",
-                cockatielNick: ""
+                nickname: "",
+                cockatielName: ""
             }
-            
+
             let appearanceData: CockatielAppearanceData | null = null
 
-            if (userInfo?.nick) {
-                formData.nick = userInfo.nick
+            if (userInfo?.nickname) {
+                formData.nickname = userInfo.nickname
             }
 
             if (userInfo?.cockatiel) {
-                formData.cockatielNick = userInfo.cockatiel.name
+                formData.cockatielName = userInfo.cockatiel.name
 
                 appearanceData = appConstants.cockatielPartNames.reduce((result, part) => ({
                     ...result,
@@ -139,6 +121,7 @@ const AccountEditForm: React.FC = () => {
     }, [userInfo, appConstants])
 
     useEffect(() => {
+        // init appearance data if empty on server
         if (appConstants && appearanceData === null) {
             const processedAppearanceData: CockatielAppearanceData = { ...appConstants.cockatielAppearanceDataDefault }
             appConstants?.cockatielPartNames.forEach(part => {
@@ -155,7 +138,7 @@ const AccountEditForm: React.FC = () => {
         setActiveTab(value)
     }, [])
 
-    const validate = useCallback((field: string, value: string): void => {
+    const validate = useCallback((field: string, value: string): string => {
         const newErrors: AccountEditErrors = { ...errors }
         if (!value) {
             newErrors[field] = getErrors().requiredField
@@ -165,6 +148,7 @@ const AccountEditForm: React.FC = () => {
             newErrors[field] = ''
         }
         setErrors(newErrors)
+        return newErrors[field]
     }, [errors, appConstants])
 
     const handleChange = useCallback((field: string): React.ChangeEventHandler<HTMLInputElement> => (e) => {
@@ -200,6 +184,42 @@ const AccountEditForm: React.FC = () => {
         onChangeTab(e, TabValue.Appearance)
     }, [])
 
+    const onSubmit: React.MouseEventHandler = useCallback((e) => {
+        let hasError: boolean = false
+        const newTouched: AccountEditTouched = { ...touched }
+        Object.keys(formData).forEach(key => {
+            hasError = hasError || !!validate(key, formData[key])
+        })
+        Object.keys(newTouched).forEach(key => {
+            newTouched[key] = true
+        })
+        setTouched(newTouched)
+
+        if (hasError) {
+            onChangeTab(e, TabValue.Info)
+            return
+        } else if (appearanceData && appConstants) {
+            const appearanceDataForRequest: CockatielAppearanceData = { ...appearanceData }
+            appConstants.cockatielPartNames.forEach(name => {
+                appearanceDataForRequest[name] = {
+                    main_color: appearanceData[name].main_color
+                }
+            })
+            dispatch(
+                updateUserInfoThunk(
+                    {
+                        nickname: formData.nickname,
+                        cockatiel: {
+                            name: formData.cockatielName,
+                            appearanceData: appearanceDataForRequest
+                        }
+                    },
+                    navigate
+                )
+            )
+        }
+    }, [validate, touched, formData, appearanceData])
+
     return (
         <form className={styles.form}>
             <Tabs
@@ -227,6 +247,14 @@ const AccountEditForm: React.FC = () => {
                     onClick={onNext}
                 >
                     Далее
+                </Button>
+            )}
+            {activeTab === TabValue.Appearance && (
+                <Button
+                    variant={ButtonVariant.Secondary}
+                    onClick={onSubmit}
+                >
+                    Сохранить
                 </Button>
             )}
         </form>

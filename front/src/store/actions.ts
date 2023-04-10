@@ -42,6 +42,11 @@ export const removeAppLoading = (): Action => {
     }
 }
 
+export const disableInitLoading = (): Action => {
+    return {
+        type: TYPES.DISABLE_INIT_LOADING
+    }
+}
 
 export const setAppContants = (payload: AppConstants): ActionWithPayload<AppConstants> => {
     return {

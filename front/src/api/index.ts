@@ -65,3 +65,16 @@ export const getUserInfo = async () => (
         mode: 'cors',
     }).then(res => res.json())
 )
+
+export const updateUserInfo = async (userInfo: Partial<UserInfo>) => (
+    fetch(`${baseUrl}/api/userInfo`, {
+        method: 'PUT',
+        headers: new Headers({
+            'content-type': 'application/json', 
+            'authorization': localStorage.getItem('auth') ?? ''
+        }),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify(userInfo),
+    }).then(res => res.json())
+)

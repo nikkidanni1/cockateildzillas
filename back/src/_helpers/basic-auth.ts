@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express'
 import { getUserByAuth } from '_helpers/utils'
 import { getUser } from 'users/user.service'
 
-
 const basicAuth = async(req: Request, res: Response, next: NextFunction) => {
     // make authenticate path public
     if (!req.path.includes('/api/')) {
@@ -21,6 +20,10 @@ const basicAuth = async(req: Request, res: Response, next: NextFunction) => {
     
     if (!user) {
         return res.status(401).json({ responseBody: null, error: 'Invalid Authentication Credentials' })
+    }
+
+    if (!user.isActive) {
+        return res.status(401).json({ responseBody: null, error: 'User is inactive' })
     }
 
     next()

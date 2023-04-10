@@ -30,7 +30,7 @@ declare type UserInfo = {
     cockatiel: Cockatiel | null,
     email: string,
     isActive: boolean,
-    nick: string | null
+    nickname: string | null
 }
 
 declare type UserInfoDB = {
@@ -38,5 +38,5 @@ declare type UserInfoDB = {
     email: string,
     password?: string,
     isActive: boolean,
-    nick: string | null
+    nickname: string | null
 }

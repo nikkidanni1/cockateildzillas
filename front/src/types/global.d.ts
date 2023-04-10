@@ -14,6 +14,7 @@ declare type CockatielAppearanceData = (
 )
 
 declare type Cockatiel = {
+    _id?: string,
     appearanceData: CockatielAppearanceData,
     name: string
 } | null
@@ -23,7 +24,7 @@ declare type UserInfo = {
     cockatiel: Cockatiel,
     email: string,
     isActive: boolean,
-    nick: string | null
+    nickname: string | null
 } | null
 
 declare type CockatielPartInfoItem = {

@@ -9,8 +9,11 @@ type Props = {
 
 const PrivateRoute: React.FC<Props> = ({ element }) => {
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
+    const appLoading: number = useSelector((state: RootState) => state.appLoading)
+    const initLoading: boolean = useSelector((state: RootState) => state.initLoading)
+
     return (
-        userInfo ?
+        (appLoading !== 0 || initLoading || (appLoading === 0 && userInfo)) ?
             element : <Navigate to="/" />
     )
 }

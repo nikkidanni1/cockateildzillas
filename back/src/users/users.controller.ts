@@ -1,18 +1,20 @@
-import { ObjectId, WithId } from 'mongodb'
+import { WithId, ObjectId } from 'mongodb'
 import type { Request, Response, NextFunction } from 'express'
 import {
     addUser,
     activateUser as activateUserService,
-    getUser
+    getUser,
+    updateUser
 } from 'users/user.service'
-import { getCockatiel } from 'cockatiels/cockatiel.service'
+import { getCockatiel, updateCockatiel, addCockatiel } from 'cockatiels/cockatiel.service'
 import { getUserByAuth } from '_helpers/utils'
 import emailSender from '_helpers/email-sender'
+import { validateUpdateData } from './validation'
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: UserByAuth = getUserByAuth(req.body.auth)
-        const userFullInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email })
+        const userFullInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email, password: user.password })
 
         const response: ServerResponse<WithId<AuthResponse> | null> = { error: null, responseBody: null }
         if (userFullInfo) {
@@ -37,18 +39,53 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 export const getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: UserByAuth = getUserByAuth(req.headers.authorization ?? '')
-        const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email })
+        const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email, password: user.password })
         const response: ServerResponse<WithId<UserInfo> | null> = { responseBody: null, error: null }
 
-        if (userInfo && userInfo.isActive) {
+        if (userInfo?.isActive) {
             const { cockatielId, password, ...restUserInfo } = userInfo
             const cockatiel: Cockatiel | null = cockatielId ? await getCockatiel({ _id: cockatielId }) : null
             const resposeUserInfo: WithId<UserInfo> = { ...restUserInfo, cockatiel }
             response.responseBody = resposeUserInfo
-        } else if (userInfo && !userInfo.isActive) {
-            response.error = 'Пользователь неактивеный'
-        } else {
-            response.error = 'Пользователь не найден'
+        }
+
+        res.json(response)
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const updateUserInfo = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user: UserByAuth = getUserByAuth(req.headers.authorization ?? '')
+        const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email, password: user.password })
+        const response: ServerResponse<Partial<WithId<UserInfo>> | null> = { responseBody: null, error: null }
+        const data: Partial<UserInfo> = req.body;
+
+        if (userInfo) {
+            const error: string = validateUpdateData(data)
+            
+            if (!error) {
+                const cockatiel: WithId<Cockatiel> | null = userInfo.cockatielId ? await getCockatiel({ _id: userInfo.cockatielId }) : null
+                
+                let cockatielId: ObjectId | undefined
+                if (cockatiel) {
+                    await updateCockatiel(cockatiel._id, req.body.cockatiel)
+                    cockatielId = cockatiel._id
+                } else {
+                    const createdCoockatiel: WithId<Cockatiel> | null = await addCockatiel(req.body.cockatiel)
+                    cockatielId = createdCoockatiel?._id
+                }
+
+                if (cockatielId) {
+                    await updateUser(userInfo._id, { nickname: data.nickname ?? '', cockatielId })
+                    response.responseBody = { _id: userInfo._id }
+                } else {
+                    response.error = 'Cockatiel isn\'t created'
+                }
+            } else {
+                response.error = error
+            }
         }
 
         res.json(response)

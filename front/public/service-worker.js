@@ -1,15 +1,16 @@
 const addResourcesToCache = async (resources) => {
-  const cache = await caches.open('v1');
+  const cache = await caches.open('v2');
   await cache.addAll(resources);
 };
 
 const putInCache = async (request, response) => {
-  const cache = await caches.open('v1');
+  const cache = await caches.open('v2');
   await cache.put(request, response);
 }
 
 const cacheFirst = async ({ request, preloadResponsePromise }) => {
   const responseFromCache = await caches.match(request);
+
   if (responseFromCache) {
     return responseFromCache;
   }
@@ -39,10 +40,12 @@ const enableNavigationPreload = async () => {
 };
 
 self.addEventListener('activate', (event) => {
+  caches.delete('v1');
   event.waitUntil(enableNavigationPreload());
 });
 
 self.addEventListener('install', (event) => {
+  skipWaiting();
   event.waitUntil(
     addResourcesToCache([
       './index.html',
@@ -64,7 +67,7 @@ self.addEventListener('fetch', function (event) {
     && !/\/authenticate$/g.test(event.request.url)
     && !/\/api\//g.test(event.request.url)
     && !/(installHook|bundle.*|hot\-update)\.(js|json)/g.test(event.request.url
-  )
+    )
   event.respondWith(
     needCache ? cacheFirst({
       request: event.request,

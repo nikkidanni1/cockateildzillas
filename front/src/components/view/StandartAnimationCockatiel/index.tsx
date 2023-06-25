@@ -9,7 +9,7 @@ import styles from './StandartAnimationCockatiel.module.scss'
 type Props = {
     colors: CockatielAppearanceData,
     animationStoped?: boolean,
-    handleClick: React.MouseEventHandler
+    handleClick?: React.MouseEventHandler
 } & React.HTMLAttributes<HTMLDivElement>
 
 const orderAnimationFrames = [1, 2, 1, 2, 1, 2, 3, 4]

@@ -42,5 +42,5 @@ root.render(
   </Provider>
 )
 
-registerServiceWorker()
+// registerServiceWorker()
 reportWebVitals()

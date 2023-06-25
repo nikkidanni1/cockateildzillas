@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom'
 import type { RootState } from 'store'
 import { useSelector } from 'react-redux'
 import Box from 'components/base/Box'
-import styles from './Account.module.scss'
+import Account from 'components/partial/Account'
+import styles from './AccountPage.module.scss'
 
-const Account: React.FC = () => {
+const AccountPage: React.FC = () => {
     const navigate = useNavigate()
 
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
@@ -23,7 +24,7 @@ const Account: React.FC = () => {
             {
                 appLoading === 0 && (
                     <Box className={styles.box}>
-                        <div>Hello friend!</div>
+                        <Account />
                     </Box>
                 )
             }
@@ -32,4 +33,4 @@ const Account: React.FC = () => {
     )
 }
 
-export default Account
+export default AccountPage

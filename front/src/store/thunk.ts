@@ -11,41 +11,41 @@ import {
 export const loadAppDataThunk = () => async (dispatch: Dispatch) => {
     dispatch(addAppLoading())
 
-    type ResponseItem<T> = PromiseFulfilledResult<ServerResponse<T | undefined>> | PromiseRejectedResult
+    const appContantsResponse: ServerResponse<AppConstants> = await getAppContants()
+    const userResponse: ServerResponse<UserInfo> = await getUserInfo(appContantsResponse.responseBody)
 
-    const [
-        userResponse,
-        appContantsResponse
-    ]: [ResponseItem<UserInfo>, ResponseItem<AppConstants>] = await Promise.allSettled(
-        [
-            getUserInfo(),
-            getAppContants()
-        ]
-    )
-
-    if (appContantsResponse.status === 'rejected' || appContantsResponse.value?.error) {
+    if (appContantsResponse.error) {
         dispatch(addNotification({
             id: _.uniqueId(),
-            text: 'Fetch AppConstants failed',
+            text: appContantsResponse.error,
             mode: 'error'
         }))
     }
-    const user: UserInfo | undefined = userResponse.status === 'rejected' ? undefined : userResponse.value?.responseBody
 
-    const appConstants: AppConstants | undefined = appContantsResponse.status === 'rejected' ? undefined : appContantsResponse.value?.responseBody
-    if (user) {
-        dispatch(setUserInfo(user))
+    if (userResponse.error) {
+        dispatch(addNotification({
+            id: _.uniqueId(),
+            text: userResponse.error,
+            mode: 'error'
+        }))
     }
-    if (appConstants) {
-        dispatch(setAppContants(appConstants))
+
+    if (appContantsResponse.responseBody) {
+        dispatch(setAppContants(appContantsResponse.responseBody))
     }
+
+    if (userResponse.responseBody) {
+        dispatch(setUserInfo(userResponse.responseBody))
+    }
+
     dispatch(removeAppLoading())
 }
 
-export const loginThunk = (form: LoginForm, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
+export const loginThunk = (form: LoginForm, appConstants: AppConstants, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
     dispatch(addAppLoading())
     try {
         const authResponse: ServerResponse<AuthResponse> = await authenticate(form)
+
         if (authResponse.error) {
             dispatch(addNotification({ 
                 id: _.uniqueId(), 
@@ -53,9 +53,11 @@ export const loginThunk = (form: LoginForm, navigate: NavigateFunction) => async
                 mode: 'error'
             }))
         }
+
         if (authResponse.responseBody) {
             localStorage.setItem('auth', authResponse.responseBody.auth)
-            const userInfoResponse = await getUserInfo()
+            const userInfoResponse = await getUserInfo(appConstants)
+
             if (userInfoResponse.error) {
                 dispatch(addNotification({
                     id: _.uniqueId(),
@@ -63,6 +65,7 @@ export const loginThunk = (form: LoginForm, navigate: NavigateFunction) => async
                     mode: 'error'
                 }))
             }
+
             if (userInfoResponse.responseBody) {
                 dispatch(setUserInfo(userInfoResponse.responseBody))
             }
@@ -75,7 +78,7 @@ export const loginThunk = (form: LoginForm, navigate: NavigateFunction) => async
                 text: err.message,
                 mode: 'error'
             }))
-            console.log(err)
+            console.error(err)
         }
     }
     dispatch(removeAppLoading())
@@ -107,7 +110,7 @@ export const recoveryThunk = (email: string, navigate: NavigateFunction) => asyn
                 text: err.message,
                 mode: 'error'
             }))
-            console.log(err)
+            console.error(err)
         }
     }
     dispatch(removeAppLoading())
@@ -144,10 +147,10 @@ export const signUpThunk = (form: SignUpForm, navigate: NavigateFunction) => asy
     dispatch(removeAppLoading())
 }
 
-export const updateUserInfoThunk = (userInfo: Partial<UserInfo>, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
+export const updateUserInfoThunk = (userInfo: Partial<UserInfo>, appConstants: AppConstants, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
     dispatch(addAppLoading())
     try {
-        const res = await updateUserInfo(userInfo)
+        const res: ServerResponse<UserInfo> = await updateUserInfo(userInfo, appConstants)
         if (res.error) {
             dispatch(addNotification({
                 id: _.uniqueId(),
@@ -156,6 +159,7 @@ export const updateUserInfoThunk = (userInfo: Partial<UserInfo>, navigate: Navig
             }))
         }
         if (res.responseBody) {
+            dispatch(setUserInfo(res.responseBody))
             navigate('/account')
             dispatch(addNotification({
                 id: _.uniqueId(),

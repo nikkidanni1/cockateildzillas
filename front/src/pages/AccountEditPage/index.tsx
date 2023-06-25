@@ -3,9 +3,9 @@ import type { RootState } from 'store'
 import { useSelector } from 'react-redux'
 import Box from 'components/base/Box'
 import AccountEditForm from 'components/partial/AccountEditForm'
-import styles from './AccountEdit.module.scss'
+import styles from './AccountEditPage.module.scss'
 
-const AccountEdit: React.FC = () => {
+const AccountEditPage: React.FC = () => {
     const appLoading: number = useSelector((state: RootState) => state.appLoading)
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
 
@@ -25,4 +25,4 @@ const AccountEdit: React.FC = () => {
     )
 }
 
-export default AccountEdit
+export default AccountEditPage

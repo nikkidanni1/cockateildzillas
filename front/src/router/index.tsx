@@ -12,13 +12,13 @@ import { addAppLoading, removeAppLoading, disableInitLoading } from 'store/actio
 import Layout from 'components/partial/Layout'
 import PrivateRoute from './components/PrivateRoute'
 
-const Login = lazy(() => import('pages/Login'))
-const SignUp = lazy(() => import('pages/SignUp'))
-const ActivateAccount = lazy(() => import('pages/ActivateAccount'))
-const RecoveryPassword = lazy(() => import('pages/RecoveryPassword'))
-const Account = lazy(() => import('pages/Account'))
-const AccountEdit = lazy(() => import('pages/AccountEdit'))
-const NotFound = lazy(() => import('pages/NotFound'))
+const LoginPage = lazy(() => import('pages/LoginPage'))
+const SignUpPage = lazy(() => import('pages/SignUpPage'))
+const ActivateAccountPage = lazy(() => import('pages/ActivateAccountPage'))
+const RecoveryPasswordPage = lazy(() => import('pages/RecoveryPasswordPage'))
+const AccountPage = lazy(() => import('pages/AccountPage'))
+const AccountEditPage = lazy(() => import('pages/AccountEditPage'))
+const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 
 const Fallback = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -55,20 +55,20 @@ const Router: React.FC = () => {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Layout />}>
-                    <Route path="login" element={suspenseHOC(Login)} />
-                    <Route path="signup" element={suspenseHOC(SignUp)} />
-                    <Route path="activate/:id" element={suspenseHOC(ActivateAccount)} />
-                    <Route path="recovery" element={suspenseHOC(RecoveryPassword)} />
+                    <Route path="login" element={suspenseHOC(LoginPage)} />
+                    <Route path="signup" element={suspenseHOC(SignUpPage)} />
+                    <Route path="activate/:id" element={suspenseHOC(ActivateAccountPage)} />
+                    <Route path="recovery" element={suspenseHOC(RecoveryPasswordPage)} />
                     <Route
                         path="account/edit"
                         element={
-                            <PrivateRoute element={suspenseHOC(AccountEdit)} />
+                            <PrivateRoute element={suspenseHOC(AccountEditPage)} />
                         }
                     />
                     <Route
                         path="account"
                         element={
-                            <PrivateRoute element={suspenseHOC(Account)} />
+                            <PrivateRoute element={suspenseHOC(AccountPage)} />
                         }
                     />
                     {(!initLoading && appLoading === 0) && (
@@ -79,7 +79,7 @@ const Router: React.FC = () => {
                             }
                         />
                     )}
-                    <Route path='*' element={suspenseHOC(NotFound)} />
+                    <Route path='*' element={suspenseHOC(NotFoundPage)} />
                 </Route>
             </Routes>
         </BrowserRouter >

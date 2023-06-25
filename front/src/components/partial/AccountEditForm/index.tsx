@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import type { RootState } from 'store'
 import { useSelector, useDispatch } from 'react-redux'
 import type { AppDispatch } from 'store'
-import { createSubColors } from 'helpers/utils'
+import { createSubColors, addSubColorsToAppearanceData } from 'helpers/utils'
 import { getErrors, ButtonVariant } from 'helpers/enums'
 import { updateUserInfoThunk } from 'store/thunk'
 
@@ -98,14 +98,7 @@ const AccountEditForm: React.FC = () => {
 
             if (userInfo?.cockatiel) {
                 formData.cockatielName = userInfo.cockatiel.name
-
-                appearanceData = appConstants.cockatielPartNames.reduce((result, part) => ({
-                    ...result,
-                    [part]: {
-                        ...createSubColors(userInfo.cockatiel?.appearanceData[part].main_color, appConstants.cockatielPartInfo[part].shades),
-                        main_color: userInfo.cockatiel?.appearanceData[part].main_color
-                    }
-                }), {})
+                appearanceData = userInfo.cockatiel.appearanceData
             }
 
             Object.keys(formData).forEach(key => {
@@ -123,13 +116,10 @@ const AccountEditForm: React.FC = () => {
     useEffect(() => {
         // init appearance data if empty on server
         if (appConstants && appearanceData === null) {
-            const processedAppearanceData: CockatielAppearanceData = { ...appConstants.cockatielAppearanceDataDefault }
-            appConstants?.cockatielPartNames.forEach(part => {
-                processedAppearanceData[part] = {
-                    ...processedAppearanceData[part],
-                    ...createSubColors(appConstants.cockatielAppearanceDataDefault[part].main_color, appConstants.cockatielPartInfo[part].shades)
-                }
-            })
+            const processedAppearanceData: CockatielAppearanceData = addSubColorsToAppearanceData(
+                appConstants.cockatielAppearanceDataDefault, 
+                appConstants
+            )
             setAppearanceData(processedAppearanceData)
         }
     }, [appConstants, appearanceData])
@@ -221,14 +211,15 @@ const AccountEditForm: React.FC = () => {
                             appearanceData: appearanceDataForRequest
                         }
                     },
+                    appConstants,
                     navigate
                 )
             )
         }
-    }, [validate, touched, formData, appearanceData])
+    }, [validate, touched, formData, appearanceData, appConstants])
 
     return (
-        <form className={styles.form}>
+        <form>
             <Tabs
                 className={styles.tabs}
                 value={activeTab}

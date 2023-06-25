@@ -9,13 +9,13 @@ import TextField from 'components/base/TextField'
 import Button from 'components/base/Button'
 import { loginThunk } from 'store/thunk'
 import { getErrors, ButtonVariant } from 'helpers/enums'
-import styles from './Login.module.scss'
+import styles from './LoginPage.module.scss'
 
 type Fields = keyof LoginForm
 type LoginTouched = Record<Fields, boolean>
 type LoginErrors = Record<Fields, string>
 
-const Login: React.FC = () => {
+const LoginPage: React.FC = () => {
     const dispatch: AppDispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -82,7 +82,7 @@ const Login: React.FC = () => {
         })
 
         if (isValidForm && appConstants) {
-            dispatch(loginThunk(form, navigate))
+            dispatch(loginThunk(form, appConstants, navigate))
         }
     }, [errors, form, touched, dispatch, navigate, appConstants])
 
@@ -152,4 +152,4 @@ const Login: React.FC = () => {
     )
 }
 
-export default Login
+export default LoginPage

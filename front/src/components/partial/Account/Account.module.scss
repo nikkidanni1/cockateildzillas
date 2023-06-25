@@ -1,0 +1,13 @@
+.tabs {
+    margin-bottom: 16px;
+}
+
+.actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 8px;
+
+    button:nth-child(3n + 1) {
+        grid-column: 1 / 3;
+    }
+}

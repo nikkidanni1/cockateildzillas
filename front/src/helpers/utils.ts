@@ -48,16 +48,29 @@ export const createSubColors = (main_color: string, shades: Array<CockatielShade
                 break
             }
             case 'color_dark1': {
-                resultObject[shade] = `hsl(${hsl[0] - 15},${Math.round(hsl[1]) }%,${Math.round(hsl[2]) - 12}%)`
+                resultObject[shade] = `hsl(${hsl[0] - 15},${Math.round(hsl[1])}%,${Math.round(hsl[2]) - 12}%)`
                 break
             }
             case 'color_outline': {
                 resultObject[shade] = `hsl(${hsl[0] - 20},${Math.round(hsl[1]) + 10}%,${Math.round(hsl[2]) - 25}%)`
                 break
             }
-            default: {}
+            default: { }
         }
     })
-    
+
     return resultObject
+}
+
+export const addSubColorsToAppearanceData = (appearanceData: CockatielAppearanceData, appConstants: AppConstants): CockatielAppearanceData => {
+    return appConstants.cockatielPartNames.reduce((result, part) => ({
+        ...result,
+        [part]: {
+            ...createSubColors(
+                appearanceData[part].main_color,
+                appConstants.cockatielPartInfo[part].shades
+            ),
+            main_color: appearanceData[part].main_color
+        }
+    }), {})
 }

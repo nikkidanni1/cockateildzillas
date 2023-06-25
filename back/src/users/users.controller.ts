@@ -78,8 +78,17 @@ export const updateUserInfo = async (req: Request, res: Response, next: NextFunc
                 }
 
                 if (cockatielId) {
-                    await updateUser(userInfo._id, { nickname: data.nickname ?? '', cockatielId })
-                    response.responseBody = { _id: userInfo._id }
+                    const updatedUser: WithId<UserInfoDB> | null | undefined = await updateUser(
+                        userInfo._id, 
+                        { nickname: data.nickname ?? '', cockatielId }
+                    )
+
+                    if (updatedUser) {
+                        const { cockatielId, password, ...restUserInfo } = updatedUser
+                        const cockatiel: Cockatiel | null = cockatielId ? await getCockatiel({ _id: cockatielId }) : null
+                        const resposeUserInfo: WithId<UserInfo> = { ...restUserInfo, cockatiel }
+                        response.responseBody = resposeUserInfo
+                    }
                 } else {
                     response.error = 'Cockatiel isn\'t created'
                 }

@@ -10,7 +10,7 @@ import { getErrors } from 'helpers/enums'
 import Button from 'components/base/Button'
 import { ButtonVariant } from 'helpers/enums'
 import { signUpThunk } from 'store/thunk'
-import styles from './SignUp.module.scss'
+import styles from './SignUpPage.module.scss'
 
 type SignUpFormWithChecking = SignUpForm & {
     repeatPassword: string
@@ -27,7 +27,7 @@ type ValidatePassword = (
     }
 ) => Omit<SignUpErrors, 'email'>
 
-const SignUp: React.FC = () => {
+const SignUpPage: React.FC = () => {
     const dispatch: AppDispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -233,4 +233,4 @@ const SignUp: React.FC = () => {
     )
 }
 
-export default SignUp
+export default SignUpPage

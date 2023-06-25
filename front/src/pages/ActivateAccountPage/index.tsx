@@ -7,7 +7,7 @@ import _ from 'lodash'
 import { activateUser } from 'api'
 import { addNotification } from 'store/actions'
 
-const ActivateAccount: React.FC = () => {
+const ActivateAccountPage: React.FC = () => {
     const dispatch: AppDispatch = useDispatch()
     const navigate = useNavigate()
     const location = useLocation()
@@ -46,4 +46,4 @@ const ActivateAccount: React.FC = () => {
     )
 }
 
-export default ActivateAccount
+export default ActivateAccountPage

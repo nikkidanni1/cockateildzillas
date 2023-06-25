@@ -2,9 +2,9 @@ import React from 'react'
 import { useLocation } from 'react-router-dom'
 import type { RootState } from 'store'
 import { useSelector } from 'react-redux'
-import styles from './NotFound.module.scss'
+import styles from './NotFoundPage.module.scss'
 
-const NotFound: React.FC = () => {
+const NotFoundPage: React.FC = () => {
     const location = useLocation()
 
     const appLoading: number = useSelector((state: RootState) => state.appLoading)
@@ -21,4 +21,4 @@ const NotFound: React.FC = () => {
     )
 }
 
-export default NotFound
+export default NotFoundPage

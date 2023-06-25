@@ -9,13 +9,13 @@ import { getErrors } from 'helpers/enums'
 import Button from 'components/base/Button'
 import { ButtonVariant } from 'helpers/enums'
 import { recoveryThunk } from 'store/thunk'
-import styles from './RecoveryPassword.module.scss'
+import styles from './RecoveryPasswordPage.module.scss'
 
 type RecoveryPasswordForm = Record<'email', string>
 type RecoveryPasswordTouched = Record<'email', boolean>
 type RecoveryPasswordErrors = Record<'email', string>
 
-const RecoveryPassword: React.FC = () => {
+const RecoveryPasswordPage: React.FC = () => {
     const dispatch: AppDispatch = useDispatch()
     const navigate = useNavigate()
     const [form, setForm] = useState<RecoveryPasswordForm>({
@@ -110,4 +110,4 @@ const RecoveryPassword: React.FC = () => {
     )
 }
 
-export default RecoveryPassword
+export default RecoveryPasswordPage

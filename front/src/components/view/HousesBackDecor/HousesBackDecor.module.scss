@@ -3,7 +3,6 @@
     overflow: hidden;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(180deg, rgb(45, 50, 70) 20%, rgb(80, 50, 70) 80%);
 }
 
 .houses {
@@ -14,29 +13,33 @@
     height: 100vh;
 
     &_front {
-        z-index: 5;
+        z-index: 4;
         background-image: url('/assets/images/houses_front.png');
+        background-position-x: -150px;
     }
 
     &_back {
         z-index: 2;
         background-image: url('/assets/images/houses_back.png');
+        background-position-x: 170px;
     }
 }
 
 .housesLight {
     &_front {
-        z-index: 3;
+        z-index: 5;
         animation: flickerFront infinite;
         animation-duration: 7s;
         animation-fill-mode: forwards;
+        background-position-x: -150px;
     }
 
     &_back {
-        z-index: 1;
+        z-index: 3;
         animation: flickerBack infinite;
         animation-duration: 5s;
         animation-fill-mode: forwards;
+        background-position-x: 170px;
     }
 }
 
@@ -46,7 +49,7 @@
     }
 
     50% {
-        background-image: url('/assets/images/front_red.png');
+        background-image: url('/assets/images/front_dark.png');
     }
 
     100% {
@@ -59,7 +62,7 @@
       background-image: url('/assets/images/back_light.png')
     }
     50% {
-      background-image: url('/assets/images/back_red.png')
+      background-image: url('/assets/images/back_dark.png')
     }
     100% {
       background-image: url('/assets/images/back_light.png')

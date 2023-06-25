@@ -2,6 +2,21 @@
     position: relative;
     z-index: 6;
     overflow-x: hidden;
+    animation: rootBackground infinite;
+    animation-duration: 15s;
+    animation-timing-function: ease-in;
+    background: linear-gradient(180deg, rgb(45, 50, 70) 15%, rgb(106, 50, 45) 85%);
+
+    &::after {
+        position: absolute;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        content: '';
+        background-image: url('/assets/images/lines.png');
+        background-repeat: repeat;
+        background-blend-mode: multiply;
+    }
 
     &__children {
         position: relative;
@@ -30,7 +45,7 @@
     & > span {
         color: #0B2349;
         text-align: center;
-        background: linear-gradient(0deg, rgb(80, 40, 60) 5%, #fff 95%);
+        background: linear-gradient(0deg, rgb(106, 50, 45) 5%, #fff 95%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
@@ -71,4 +86,16 @@
 
 .snackError {
     background-color: rgb(255, 81, 81, 0.83);
+}
+
+@keyframes rootBackground {
+    0% {
+        background-size: 100% 130%;
+    }
+    50% {
+        background-size: 100% 100%;
+    }
+    100% {
+        background-size: 100% 130%;
+    }
 }

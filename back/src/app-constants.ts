@@ -7,22 +7,20 @@ const APP_CONSTANTS = {
             name: 'Тулувище воина',
             colorVariants: [
                 '#3c2020',
-                '#a79a91',
-                '#675b70'
             ],
             shades: ['main_color', 'color_light1', 'color_dark1', 'color_outline']
         },
         headCockatiel: {
             name: 'Голова воина',
             colorVariants: [
-                '#baa280',
+                '#af886c',
             ],
             shades: ['main_color', 'color_dark1', 'color_outline']
         },
         cheeksCockatiel: {
             name: 'Щеки воина',
             colorVariants: [
-                '#8c2a05',
+                '#9a3e28',
             ],
             shades: ['main_color', 'color_dark1']
         }

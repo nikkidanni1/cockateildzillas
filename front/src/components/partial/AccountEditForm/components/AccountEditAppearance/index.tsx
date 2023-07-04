@@ -32,11 +32,13 @@ const AccountEditAppearance: React.FC<Props> = ({ isShown, appearanceData, onCha
         >
             {(isShown && appearanceData) && (
                 <>
-                    <StandartAnimationCockatiel
-                        className={styles.animationFrame}
-                        colors={appearanceData}
-                        handleClick={handleClickAnimation}
-                    />
+                    <div className={styles.backgroundAnimation}>
+                        <StandartAnimationCockatiel
+                            className={styles.animationFrame}
+                            colors={appearanceData}
+                            handleClick={handleClickAnimation}
+                        />
+                    </div>
                     <ColorEdit
                         key="colorEdit"
                         part={selectedPart}

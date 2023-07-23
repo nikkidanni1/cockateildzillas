@@ -4,7 +4,8 @@ import {
     addUser,
     activateUser as activateUserService,
     getUser,
-    updateUser
+    updateUser,
+    deleteUser,
 } from 'users/user.service'
 import { getCockatiel, updateCockatiel, addCockatiel } from 'cockatiels/cockatiel.service'
 import { getUserByAuth } from '_helpers/utils'
@@ -14,7 +15,7 @@ import { validateUpdateData } from './validation'
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: UserByAuth = getUserByAuth(req.body.auth)
-        const userFullInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email, password: user.password })
+        const userFullInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email, password: user.password }, next)
 
         const response: ServerResponse<WithId<AuthResponse> | null> = { error: null, responseBody: null }
         if (userFullInfo) {
@@ -39,12 +40,12 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 export const getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: UserByAuth = getUserByAuth(req.headers.authorization ?? '')
-        const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email, password: user.password })
+        const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email, password: user.password }, next)
         const response: ServerResponse<WithId<UserInfo> | null> = { responseBody: null, error: null }
 
         if (userInfo?.isActive) {
             const { cockatielId, password, ...restUserInfo } = userInfo
-            const cockatiel: Cockatiel | null = cockatielId ? await getCockatiel({ _id: cockatielId }) : null
+            const cockatiel: Cockatiel | null = cockatielId ? await getCockatiel({ _id: cockatielId }, next) : null
             const resposeUserInfo: WithId<UserInfo> = { ...restUserInfo, cockatiel }
             response.responseBody = resposeUserInfo
         }
@@ -58,7 +59,7 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
 export const updateUserInfo = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: UserByAuth = getUserByAuth(req.headers.authorization ?? '')
-        const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email, password: user.password })
+        const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email, password: user.password }, next)
         const response: ServerResponse<Partial<WithId<UserInfo>> | null> = { responseBody: null, error: null }
         const data: Partial<UserInfo> = req.body;
 
@@ -66,26 +67,32 @@ export const updateUserInfo = async (req: Request, res: Response, next: NextFunc
             const error: string = validateUpdateData(data)
             
             if (!error) {
-                const cockatiel: WithId<Cockatiel> | null = userInfo.cockatielId ? await getCockatiel({ _id: userInfo.cockatielId }) : null
+                const cockatiel: WithId<Cockatiel> | null = userInfo.cockatielId ? await getCockatiel({ _id: userInfo.cockatielId }, next) : null
                 
                 let cockatielId: ObjectId | undefined
+                const cockatielData: Partial<Cockatiel> = {
+                    name: req.body.cockatiel.name,
+                    appearanceData: req.body.cockatiel.appearanceData
+                }
+                
                 if (cockatiel) {
-                    await updateCockatiel(cockatiel._id, req.body.cockatiel)
+                    await updateCockatiel(cockatiel._id, cockatielData, next)
                     cockatielId = cockatiel._id
                 } else {
-                    const createdCoockatiel: WithId<Cockatiel> | null = await addCockatiel(req.body.cockatiel)
+                    const createdCoockatiel: WithId<Cockatiel> | null = await addCockatiel(cockatielData, next)
                     cockatielId = createdCoockatiel?._id
                 }
 
                 if (cockatielId) {
                     const updatedUser: WithId<UserInfoDB> | null | undefined = await updateUser(
                         userInfo._id, 
-                        { nickname: data.nickname ?? '', cockatielId }
+                        { nickname: data.nickname ?? '', cockatielId },
+                        next
                     )
 
                     if (updatedUser) {
                         const { cockatielId, password, ...restUserInfo } = updatedUser
-                        const cockatiel: Cockatiel | null = cockatielId ? await getCockatiel({ _id: cockatielId }) : null
+                        const cockatiel: Cockatiel | null = cockatielId ? await getCockatiel({ _id: cockatielId }, next) : null
                         const resposeUserInfo: WithId<UserInfo> = { ...restUserInfo, cockatiel }
                         response.responseBody = resposeUserInfo
                     }
@@ -105,36 +112,43 @@ export const updateUserInfo = async (req: Request, res: Response, next: NextFunc
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: req.body.email })
+        const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: req.body.email }, next)
         let response: ServerResponse<string | null> = { error: null, responseBody: null }
 
         if (userInfo) {
             response.error = `Пользователь с почтой ${userInfo.email} уже существует`
             res.json(response)
+            return
         }
 
-        const createdUser: WithId<UserInfoDB> | null | undefined = await addUser(req.body)
+        const createdUser: WithId<UserInfoDB> | null | undefined = await addUser(req.body, next)
 
         if (createdUser) {
             const transporter: any = await emailSender()
             const activateURL: string = process.env.APP_MODE === 'production' ? 'https://cockatieldzillas.vercel.app' : 'http://127.0.0.1:3000'
 
-            await transporter.sendMail({
-                from: '"Cockatieldzillas 🦜" <cockatieldzillas@mail.ru>',
-                to: createdUser.email,
-                subject: "Активация аккаунта",
-                html: `
-                                    <a href=\"${activateURL}/activate/${createdUser._id.toString()}\">
-                                        ${activateURL}/activate/${createdUser._id.toString()}
-                                    </a>
-                                    <br/>
-                                    <p>
-                                        password: ${createdUser.password}
-                                    </p>
-                                `,
-            })
-            response.responseBody = createdUser._id.toString()
-            res.json(response)
+            try {
+                await transporter.sendMail({
+                    from: '"Cockatieldzillas 🦜" <cockatieldzillas@mail.ru>',
+                    to: createdUser.email,
+                    subject: "Активация аккаунта",
+                    html: `
+                                        <a href=\"${activateURL}/activate/${createdUser._id.toString()}\">
+                                            ${activateURL}/activate/${createdUser._id.toString()}
+                                        </a>
+                                        <br/>
+                                        <p>
+                                            password: ${createdUser.password}
+                                        </p>
+                                    `,
+                })
+                response.responseBody = createdUser._id.toString()
+                res.json(response)
+            } catch(err) {
+                await deleteUser(createdUser._id, next)
+                response.error = `Введенная почта ${req.body.email} не существует`
+                res.json(response)
+            }
         } else {
             res.status(500).json(response)
         }
@@ -146,7 +160,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
 export const activateUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const response: ServerResponse<{ _id: string } | null> = { responseBody: null, error: null }
-        const updateResult: boolean | undefined = await activateUserService(req.params.id)
+        const updateResult: boolean | undefined = await activateUserService(req.params.id, next)
 
         if (updateResult) {
             response.responseBody = {
@@ -162,7 +176,7 @@ export const activateUser = async (req: Request, res: Response, next: NextFuncti
 }
 
 export const recovery = async (req: Request, res: Response, next: NextFunction) => {
-    const user: WithId<UserInfoDB> | null | undefined = await getUser({ email: req.body.email })
+    const user: WithId<UserInfoDB> | null | undefined = await getUser({ email: req.body.email }, next)
     const response: ServerResponse<{ _id: string } | null> = { responseBody: null, error: null }
     if (user) {
         const transporter = await emailSender()

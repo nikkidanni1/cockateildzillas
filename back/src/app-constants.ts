@@ -30,13 +30,14 @@ const APP_CONSTANTS = {
             main_color: '#3c2020'
         },
         headCockatiel: {
-            main_color: '#baa280'
+            main_color: '#af886c'
         },
         cheeksCockatiel: {
-            main_color: '#8c2a05'
+            main_color: '#9a3e28'
         }
     },
-    cockatielPartNames: ['bodyCockatiel', 'headCockatiel', 'cheeksCockatiel']
+    cockatielPartNames: ['bodyCockatiel', 'headCockatiel', 'cheeksCockatiel'],
+    maxHealth: 100,
 }
 
 export default APP_CONSTANTS

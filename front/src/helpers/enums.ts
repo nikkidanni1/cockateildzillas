@@ -13,3 +13,5 @@ export enum ButtonVariant {
     Primary,
     Secondary
 }
+
+export const pathWithAuth = ['/account', '/account/edit', '/battlefield']

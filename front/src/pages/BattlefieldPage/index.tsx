@@ -1,13 +1,12 @@
 import React from 'react'
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import type { RootState } from 'store'
 import { useSelector } from 'react-redux'
-import Box from 'components/base/Box'
-import Account from 'components/partial/Account'
-import styles from './AccountPage.module.scss'
+import { useNavigate } from 'react-router-dom'
+import Battlefield from 'components/partial/Battlefield'
 
-const AccountPage: React.FC = () => {
+
+const ButtlefieldPage: React.FC = () => {
     const navigate = useNavigate()
 
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
@@ -25,10 +24,8 @@ const AccountPage: React.FC = () => {
     }
 
     return (
-        <Box className={styles.box}>
-            <Account />
-        </Box>
+        <Battlefield />
     )
 }
 
-export default AccountPage
+export default ButtlefieldPage

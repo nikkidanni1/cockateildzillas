@@ -1,21 +1,23 @@
-import type { Collection, WithId, UpdateResult, InsertOneResult } from 'mongodb'
+import type { Collection, WithId, UpdateResult, InsertOneResult, DeleteResult } from 'mongodb'
 import { ObjectId } from 'mongodb'
+import type { NextFunction } from 'express'
 import client from '_helpers/get-mongo'
 
-export const getUser = async (filter: Partial<UserInfoDB>) => {
+export const getUser = async (filter: Partial<UserInfoDB>, next: NextFunction) => {
     try {
         await client.connect()
         const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
         const response: WithId<UserInfoDB> | null = await usersCollection.findOne(filter)
         return response
     } catch (err) {
+        next(err)
         console.log(err)
     } finally {
         await client.close()
     }
 }
 
-export const addUser = async (user: UserByAuth) => {
+export const addUser = async (user: UserByAuth, next: NextFunction) => {
     try {
         await client.connect()
         const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
@@ -30,13 +32,14 @@ export const addUser = async (user: UserByAuth) => {
         const createdUser: WithId<UserInfoDB> | null = await usersCollection.findOne({ _id: result.insertedId })
         return createdUser
     } catch (err) {
+        next(err)
         console.log(err)
     } finally {
         await client.close()
     }
 }
 
-export const updateUser = async (_id: ObjectId, data: Partial<UserInfoDB>) => {
+export const updateUser = async (_id: ObjectId, data: Partial<UserInfoDB>, next: NextFunction) => {
     try {
         await client.connect()
         const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
@@ -49,13 +52,27 @@ export const updateUser = async (_id: ObjectId, data: Partial<UserInfoDB>) => {
         const updatedUser: WithId<UserInfoDB> | null = await usersCollection.findOne({ _id })
         return updatedUser
     } catch (err) {
+        next(err)
         console.log(err)
     } finally {
         await client.close()
     }
 }
 
-export const activateUser = async (id: string) => {
+export const deleteUser = async (_id: ObjectId, next: NextFunction) => {
+    try {
+        await client.connect()
+        const result: DeleteResult = await client.db('cockatieldzillas').collection('users').deleteOne({ _id })
+        return result.deletedCount > 0
+    } catch (err) {
+        next(err)
+        console.log(err)
+    } finally {
+        await client.close()
+    }
+}
+
+export const activateUser = async (id: string, next: NextFunction) => {
     try {
         await client.connect()
         const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
@@ -66,7 +83,7 @@ export const activateUser = async (id: string) => {
         )
 
         if (updateResult.modifiedCount === 0) {
-            throw (new Error('modifiedCount === 0'))
+            next(new Error('modifiedCount === 0'))
         }
 
         await client.close()
@@ -74,7 +91,7 @@ export const activateUser = async (id: string) => {
     } catch (err: unknown) {
         if (err instanceof Error) {
             if (err.message === 'Argument passed in must be a string of 12 bytes or a string of 24 hex characters' || err.message === '') {
-                throw (new Error('Некорректная ссылка'))
+                next(new Error('Некорректная ссылка'))
             }
             console.log(err.message)
         }

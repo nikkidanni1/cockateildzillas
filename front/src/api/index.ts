@@ -98,3 +98,46 @@ export const updateUserInfo = async (userInfo: Partial<UserInfo>, appConstants: 
 
     return response
 }
+
+export const getBattle = async () => {
+    const response: ServerResponse<Battle> = await fetch(`${baseUrl}/api/battle`, {
+        method: 'GET',
+        headers: new Headers({
+            'content-type': 'application/json',
+            'authorization': localStorage.getItem('auth') ?? ''
+        }),
+        credentials: 'include',
+        mode: 'cors',
+    }).then(res => res.json())
+
+    return response
+}
+
+export const moveBattle = async (hit: number) => {
+    const response: ServerResponse<Battle> = await fetch(`${baseUrl}/api/moveBattle`, {
+        method: 'POST',
+        headers: new Headers({
+            'content-type': 'application/json',
+            'authorization': localStorage.getItem('auth') ?? ''
+        }),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify({ hit })
+    }).then(res => res.json())
+
+    return response
+}
+
+export const recreateBattle = async () => {
+    const response: ServerResponse<Battle> = await fetch(`${baseUrl}/api/recreateBattle`, {
+        method: 'POST',
+        headers: new Headers({
+            'content-type': 'application/json',
+            'authorization': localStorage.getItem('auth') ?? ''
+        }),
+        credentials: 'include',
+        mode: 'cors',
+    }).then(res => res.json())
+
+    return response
+}

@@ -1,9 +1,14 @@
-.tabs {
-    margin-bottom: 16px;
+.content {
+    padding: 16px 24px 24px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(45, 50, 70, 0.75) 10%, rgba(80, 50, 70, 0.75) 80%, rgba(45, 50, 70, 0.75)) 2%;
+    
+    @media screen and (max-width: 480px) {
+        padding: 16px;
+    }
 }
 
 .animationFrame {
-    width: 336px;
+    width: 504px;
 }
 
 .actions {

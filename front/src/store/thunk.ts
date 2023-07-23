@@ -2,7 +2,7 @@ import type { Dispatch } from 'redux'
 import type { NavigateFunction } from 'react-router-dom'
 import _ from 'lodash'
 import { 
-    getUserInfo, getAppContants, authenticate, recovery, signup, updateUserInfo
+    getUserInfo, getAppContants, authenticate, recovery, signup, updateUserInfo,
 } from 'api'
 import {
     addAppLoading, removeAppLoading, setUserInfo, setAppContants, addNotification
@@ -11,34 +11,45 @@ import {
 export const loadAppDataThunk = () => async (dispatch: Dispatch) => {
     dispatch(addAppLoading())
 
-    const appContantsResponse: ServerResponse<AppConstants> = await getAppContants()
-    const userResponse: ServerResponse<UserInfo> = await getUserInfo(appContantsResponse.responseBody)
+    try {
+        const appContantsResponse: ServerResponse<AppConstants> = await getAppContants()
+        const userResponse: ServerResponse<UserInfo> = await getUserInfo(appContantsResponse.responseBody)
 
-    if (appContantsResponse.error) {
-        dispatch(addNotification({
-            id: _.uniqueId(),
-            text: appContantsResponse.error,
-            mode: 'error'
-        }))
+        if (appContantsResponse.error) {
+            dispatch(addNotification({
+                id: _.uniqueId(),
+                text: appContantsResponse.error,
+                mode: 'error'
+            }))
+        }
+
+        if (userResponse.error) {
+            dispatch(addNotification({
+                id: _.uniqueId(),
+                text: userResponse.error,
+                mode: 'error'
+            }))
+        }
+
+        if (appContantsResponse.responseBody) {
+            dispatch(setAppContants(appContantsResponse.responseBody))
+        }
+
+        if (userResponse.responseBody) {
+            dispatch(setUserInfo(userResponse.responseBody))
+        }
+    } catch (err) {
+        if (err instanceof Error) {
+            dispatch(addNotification({
+                id: _.uniqueId(),
+                text: err.message,
+                mode: 'error'
+            }))
+            console.error(err)
+        }
+    } finally {
+        dispatch(removeAppLoading())
     }
-
-    if (userResponse.error) {
-        dispatch(addNotification({
-            id: _.uniqueId(),
-            text: userResponse.error,
-            mode: 'error'
-        }))
-    }
-
-    if (appContantsResponse.responseBody) {
-        dispatch(setAppContants(appContantsResponse.responseBody))
-    }
-
-    if (userResponse.responseBody) {
-        dispatch(setUserInfo(userResponse.responseBody))
-    }
-
-    dispatch(removeAppLoading())
 }
 
 export const loginThunk = (form: LoginForm, appConstants: AppConstants, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
@@ -80,14 +91,16 @@ export const loginThunk = (form: LoginForm, appConstants: AppConstants, navigate
             }))
             console.error(err)
         }
+    } finally {
+        dispatch(removeAppLoading())
     }
-    dispatch(removeAppLoading())
 }
 
 export const recoveryThunk = (email: string, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
     dispatch(addAppLoading())
     try {
         const res: ServerResponse<RecoveryResponse> = await recovery({ email })
+
         if (res.error) {
             dispatch(addNotification({
                 id: _.uniqueId(),
@@ -95,6 +108,7 @@ export const recoveryThunk = (email: string, navigate: NavigateFunction) => asyn
                 mode: 'error'
             }))
         }
+
         if (res.responseBody) {
             navigate('/login')
             dispatch(addNotification({
@@ -112,14 +126,16 @@ export const recoveryThunk = (email: string, navigate: NavigateFunction) => asyn
             }))
             console.error(err)
         }
+    } finally {
+        dispatch(removeAppLoading())
     }
-    dispatch(removeAppLoading())
 }
 
 export const signUpThunk = (form: SignUpForm, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
     dispatch(addAppLoading())
     try {
         const res = await signup({ email: form.email, password: form.password })
+
         if (res.error) {
             dispatch(addNotification({
                 id: _.uniqueId(),
@@ -127,6 +143,7 @@ export const signUpThunk = (form: SignUpForm, navigate: NavigateFunction) => asy
                 mode: 'error'
             }))
         }
+
         if (res.responseBody) {
             navigate('/login')
             dispatch(addNotification({
@@ -143,14 +160,17 @@ export const signUpThunk = (form: SignUpForm, navigate: NavigateFunction) => asy
                 mode: 'error'
             }))
         }
+    } finally {
+        dispatch(removeAppLoading())
     }
-    dispatch(removeAppLoading())
 }
 
 export const updateUserInfoThunk = (userInfo: Partial<UserInfo>, appConstants: AppConstants, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
     dispatch(addAppLoading())
+
     try {
         const res: ServerResponse<UserInfo> = await updateUserInfo(userInfo, appConstants)
+
         if (res.error) {
             dispatch(addNotification({
                 id: _.uniqueId(),
@@ -158,14 +178,9 @@ export const updateUserInfoThunk = (userInfo: Partial<UserInfo>, appConstants: A
                 mode: 'error'
             }))
         }
+
         if (res.responseBody) {
             dispatch(setUserInfo(res.responseBody))
-            navigate('/account')
-            dispatch(addNotification({
-                id: _.uniqueId(),
-                text: 'Изменения успешно сохранены',
-                mode: 'info'
-            }))
         }
     } catch (err) {
         if (err instanceof Error) {
@@ -175,6 +190,7 @@ export const updateUserInfoThunk = (userInfo: Partial<UserInfo>, appConstants: A
                 mode: 'error'
             }))
         }
+    } finally {
+        dispatch(removeAppLoading())
     }
-    dispatch(removeAppLoading())
 }

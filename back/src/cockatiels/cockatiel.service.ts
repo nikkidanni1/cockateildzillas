@@ -1,13 +1,15 @@
-import type { Collection, WithId, ObjectId, UpdateResult, InsertOneResult } from 'mongodb'
+import type { Collection, WithId, ObjectId, InsertOneResult } from 'mongodb'
+import type { NextFunction } from 'express'
 import client from '_helpers/get-mongo'
 
-export const getCockatiel = async (filter: Partial<WithId<Cockatiel>>) => {
+export const getCockatiel = async (filter: Partial<WithId<Cockatiel>>, next: NextFunction) => {
     try {
         await client.connect()
         const cockatiels: Collection<WithId<Cockatiel>> = client.db('cockatieldzillas').collection('cockatiels')
         const response: WithId<Cockatiel> | null = await cockatiels.findOne(filter)
         return response
     } catch (err) {
+        next(err)
         console.log(err)
         return null
     } finally {
@@ -15,7 +17,7 @@ export const getCockatiel = async (filter: Partial<WithId<Cockatiel>>) => {
     }
 }
 
-export const updateCockatiel = async (_id: ObjectId, data: Partial<Cockatiel>) => {
+export const updateCockatiel = async (_id: ObjectId, data: Partial<Cockatiel>, next: NextFunction) => {
     try {
         await client.connect()
         const cockatiels: Collection<WithId<Cockatiel>> = client.db('cockatieldzillas').collection('cockatiels')
@@ -28,6 +30,7 @@ export const updateCockatiel = async (_id: ObjectId, data: Partial<Cockatiel>) =
         const updatedCockatiel: WithId<Cockatiel> | null = await cockatiels.findOne({ _id })
         return updatedCockatiel
     } catch (err) {
+        next(err)
         console.log(err)
         return null
     } finally {
@@ -35,7 +38,7 @@ export const updateCockatiel = async (_id: ObjectId, data: Partial<Cockatiel>) =
     }
 }
 
-export const addCockatiel = async (data: Cockatiel) => {
+export const addCockatiel = async (data: Partial<Cockatiel>, next: NextFunction) => {
     try {
         await client.connect()
         const cockatiels: Collection<WithId<Cockatiel>> = client.db('cockatieldzillas').collection('cockatiels')
@@ -44,6 +47,7 @@ export const addCockatiel = async (data: Cockatiel) => {
         const createdCoockatiel: WithId<Cockatiel> | null = await cockatiels.findOne({ _id: result.insertedId })
         return createdCoockatiel
     } catch (err) {
+        next(err)
         console.log(err)
         return null
     } finally {

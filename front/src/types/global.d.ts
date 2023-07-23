@@ -40,7 +40,8 @@ declare type AppConstants = {
     maxName: number,
     cockatielPartInfo: CockatielPartInfo,
     cockatielAppearanceDataDefault: CockatielAppearanceData,
-    cockatielPartNames: Array<CockatielPartsNames>
+    cockatielPartNames: Array<CockatielPartsNames>,
+    maxHealth: number,
 }
 
 declare type RecoveryResponse = {
@@ -50,4 +51,11 @@ declare type RecoveryResponse = {
 declare type AuthResponse = {
     _id: string,
     auth: string
+}
+
+declare type Battle = {
+    _id: string,
+    cockatielId: string,
+    health: number,
+    healthAdversary: number
 }

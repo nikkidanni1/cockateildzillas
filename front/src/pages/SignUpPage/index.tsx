@@ -3,7 +3,6 @@ import { useCallback, useState } from 'react'
 import type { RootState, AppDispatch } from 'store'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { CircularProgress } from '@mui/material'
 import Box from 'components/base/Box'
 import TextField from 'components/base/TextField'
 import { getErrors } from 'helpers/enums'
@@ -33,6 +32,7 @@ const SignUpPage: React.FC = () => {
 
     const appConstants: AppConstants | null = useSelector((state: RootState) => state.appConstants)
     const appLoading: number = useSelector((state: RootState) => state.appLoading)
+    const initLoading: boolean = useSelector((state: RootState) => state.initLoading)
 
     const [form, setForm] = useState<SignUpFormWithChecking>({
         email: '',
@@ -75,7 +75,7 @@ const SignUpPage: React.FC = () => {
                 passwordErrors.password = getErrors().passwordWithNums
             } else if (password.search(/[A-Za-z]/) === -1) {
                 passwordErrors.password = getErrors().passwordWithLetter
-            } else if (password.search(/[^A-Za-z1-9_]/) !== -1) {
+            } else if (password.search(/[^A-Za-z0-9_]/) !== -1) {
                 passwordErrors.password = getErrors().invalidСharacters
             } else {
                 passwordErrors.password = ''
@@ -210,8 +210,7 @@ const SignUpPage: React.FC = () => {
                     <Button
                         variant={ButtonVariant.Primary}
                         onClick={onSignUp}
-                        disabled={appLoading !== 0}
-                        startIcon={appLoading !== 0 ? <CircularProgress size={16} /> : ''}
+                        disabled={initLoading || appLoading !== 0}
                     >
                         Регистрация
                     </Button>
@@ -221,8 +220,6 @@ const SignUpPage: React.FC = () => {
                     >
                         <Button
                             variant={ButtonVariant.Secondary}
-                            disabled={appLoading !== 0}
-                            startIcon={appLoading !== 0 ? <CircularProgress size={16} /> : ''}
                         >
                             Назад
                         </Button>

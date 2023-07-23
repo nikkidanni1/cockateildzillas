@@ -16,7 +16,7 @@ const basicAuth = async(req: Request, res: Response, next: NextFunction) => {
     // verify auth credentials
     const userAuth = getUserByAuth(req.headers.authorization)
 
-    const user = await getUser(userAuth)
+    const user = await getUser(userAuth, next)
     
     if (!user) {
         return res.status(401).json({ responseBody: null, error: 'Invalid Authentication Credentials' })

@@ -10,7 +10,6 @@ import {
 import type { RootState, AppDispatch } from 'store'
 import { addAppLoading, removeAppLoading, disableInitLoading } from 'store/actions'
 import Layout from 'components/partial/Layout'
-import PrivateRoute from './components/PrivateRoute'
 
 const LoginPage = lazy(() => import('pages/LoginPage'))
 const SignUpPage = lazy(() => import('pages/SignUpPage'))
@@ -19,6 +18,7 @@ const RecoveryPasswordPage = lazy(() => import('pages/RecoveryPasswordPage'))
 const AccountPage = lazy(() => import('pages/AccountPage'))
 const AccountEditPage = lazy(() => import('pages/AccountEditPage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
+const BattlefieldPage = lazy(() => import('pages/BattlefieldPage'))
 
 const Fallback = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -59,18 +59,9 @@ const Router: React.FC = () => {
                     <Route path="signup" element={suspenseHOC(SignUpPage)} />
                     <Route path="activate/:id" element={suspenseHOC(ActivateAccountPage)} />
                     <Route path="recovery" element={suspenseHOC(RecoveryPasswordPage)} />
-                    <Route
-                        path="account/edit"
-                        element={
-                            <PrivateRoute element={suspenseHOC(AccountEditPage)} />
-                        }
-                    />
-                    <Route
-                        path="account"
-                        element={
-                            <PrivateRoute element={suspenseHOC(AccountPage)} />
-                        }
-                    />
+                    <Route path="account/edit" element={suspenseHOC(AccountEditPage)} />
+                    <Route path="account" element={suspenseHOC(AccountPage)} />
+                    <Route path="battlefield" element={suspenseHOC(BattlefieldPage)} />
                     {(!initLoading && appLoading === 0) && (
                         <Route
                             path="/"

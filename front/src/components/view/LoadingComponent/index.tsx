@@ -17,7 +17,7 @@ const LoadingComponent: React.FC = () => {
             const chunks: number = Math.trunc((widthLoadingProgress - 10) / (10 + columntGapLoadingProgress) + 1)
             setCapacityChuncks(chunks)
         }
-    }, [loadingProgressRef.current])
+    }, [])
 
     const animateDrawProgress = useCallback((timeFraction: number) => {
         const visibleChunks = Math.trunc(timeFraction * (capacityChuncks))
@@ -34,7 +34,7 @@ const LoadingComponent: React.FC = () => {
                 childElem.style.opacity = '0'
             }
         }
-    }, [capacityChuncks, loadingProgressRef.current])
+    }, [capacityChuncks])
 
     const animate = useCallback((
         start: number,
@@ -60,7 +60,7 @@ const LoadingComponent: React.FC = () => {
             let start = performance.now()
             animationProgressId.current = requestAnimationFrame(animate(start, 3000, animateDrawProgress, animationProgressId))
         }
-    }, [loadingProgressRef.current, capacityChuncks])
+    }, [animate, animateDrawProgress, capacityChuncks])
 
     const animateDrawDots = useCallback((timeFraction: number) => {
         if (loadingDotsRef.current === null) {
@@ -68,14 +68,14 @@ const LoadingComponent: React.FC = () => {
         }
         const dotsQuantity: number = 3
         loadingDotsRef.current.textContent = '.'.repeat(Math.round(dotsQuantity * timeFraction))
-    }, [loadingDotsRef.current])
+    }, [])
 
     useEffect(() => {
         if (loadingDotsRef.current && capacityChuncks !== 0) {
             let start = performance.now()
             animationDotsId.current = requestAnimationFrame(animate(start, 1000, animateDrawDots, animationDotsId))
         }
-    }, [loadingDotsRef.current])
+    }, [])
 
     useEffect(() => {
         return () => {

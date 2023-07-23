@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState, useCallback } from 'react'
-import { useNavigate, Outlet } from 'react-router-dom'
+import { useNavigate, Outlet, useLocation } from 'react-router-dom'
 import type { RootState, AppDispatch } from 'store'
 import { useDispatch, useSelector } from 'react-redux'
 import MusicOff from '@mui/icons-material/MusicOff'
@@ -9,7 +9,7 @@ import LogoutIcon from '@mui/icons-material/ExitToApp'
 import HousesBackDecor from 'components/view/HousesBackDecor'
 import FlyingBirds from 'components/view/FlyingBirds'
 import IconButton from 'components/base/IconButton'
-import { ButtonVariant } from 'helpers/enums'
+import { ButtonVariant, pathWithAuth } from 'helpers/enums'
 import AppSettingsModal from 'components/partial/AppSettingsModal'
 import { setMusicVolume, setUserInfo } from 'store/actions'
 import LoadingComponent from 'components/view/LoadingComponent'
@@ -22,9 +22,11 @@ const audioUrl: string = '/sounds/cockatieldzillas-main.mp3'
 const Layout: React.FC = () => {
     const dispatch: AppDispatch = useDispatch()
     const navigate = useNavigate()
+    const location = useLocation()
 
     const volume: number = useSelector((state: RootState) => state.musicVolume)
     const appLoading: number = useSelector((state: RootState) => state.appLoading)
+    const initLoading: boolean = useSelector((state: RootState) => state.initLoading)
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
 
     const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
@@ -37,13 +39,21 @@ const Layout: React.FC = () => {
         if (audio) {
             audio.loop = true
             audio.volume = volume
-            audio.play()
         }
     }, [audio, volume])
+    
+    useEffect(() => {
+        const isNeedElAuth = pathWithAuth.includes(location.pathname)
+
+        if (!initLoading && appLoading === 0 && isNeedElAuth && !userInfo) {
+            navigate('/login')
+        }
+    }, [initLoading, appLoading, location, userInfo, navigate])
 
     const toggleMusic = useCallback(() => {
         dispatch(setMusicVolume(volume !== 0 ? 0 : 0.5))
-    }, [volume, dispatch])
+        audio?.play()
+    }, [volume, dispatch, audio])
 
     const onLogout = useCallback(() => {
         localStorage.removeItem('auth')
@@ -53,7 +63,7 @@ const Layout: React.FC = () => {
 
     return (
         <div className={styles.root}>
-            {appLoading !== 0 && (
+            {(appLoading !== 0 || initLoading) && (
                 <LoadingComponent />
             )}
             <HousesBackDecor />
@@ -73,7 +83,7 @@ const Layout: React.FC = () => {
                 >
                     {volume === 0 ? <MusicOff /> : <MusicNote />}
                 </IconButton>
-                {((appLoading === 0) && userInfo) && (
+                {userInfo && (
                     <IconButton
                         variant={ButtonVariant.Secondary}
                         onClick={onLogout}

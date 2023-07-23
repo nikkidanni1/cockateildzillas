@@ -1,0 +1,39 @@
+.battlefield {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1440px;
+}
+
+.animationFrame__user {
+    width: 504px;
+    transform: scale(-1, 1);
+}
+
+.animationFrame__adversary {
+    width: 504px;
+}
+
+.box {
+    position: absolute;
+    bottom: -80px;
+    left: 50%;
+    width: 360px;
+    transform: translate(-50%, 50%);
+}
+
+.slider__wrapper {
+    display: flex;
+    column-gap: 20px;
+}
+
+.powerIcon {
+    transform: rotate(180deg);
+}
+
+.popoverPaper {
+    font-family: Fifaks10Dev1, monospace;
+    font-size: 18px;
+    text-transform: uppercase;
+}

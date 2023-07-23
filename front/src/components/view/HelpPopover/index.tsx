@@ -7,18 +7,18 @@ import styles from './HelpPopover.module.scss'
 interface IProps {
     popoverProps?: Partial<React.ComponentProps<typeof Popover>>,
     paperClassName?: string,
-    children: React.ReactNode
+    children: React.ReactNode,
 }
 
 const HelpPopover: React.FC<IProps> = ({ popoverProps, paperClassName, children }) => {
-    const [anchorEl, setAnchorEl] = useState<SVGElement | null>(null);
+    const [anchorEl, setAnchorEl] = useState<SVGElement | null>(null)
 
     const handleClick = useCallback((event: React.MouseEvent<SVGElement>) => {
-        setAnchorEl(event.currentTarget);
+        setAnchorEl(event.currentTarget)
     }, [])
 
     const handleClose = () => {
-        setAnchorEl(null);
+        setAnchorEl(null)
     };
     return (
         <>

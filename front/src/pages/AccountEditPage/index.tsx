@@ -6,22 +6,20 @@ import AccountEditForm from 'components/partial/AccountEditForm'
 import styles from './AccountEditPage.module.scss'
 
 const AccountEditPage: React.FC = () => {
-    const appLoading: number = useSelector((state: RootState) => state.appLoading)
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
+    const appLoading: number = useSelector((state: RootState) => state.appLoading)
+    const initLoading: boolean = useSelector((state: RootState) => state.initLoading)
+
+    if ((appLoading !== 0 || initLoading) || (appLoading === 0 && !initLoading && !userInfo)) {
+        return <></>
+    }
 
     return (
-        <>
-            {
-                (appLoading === 0 || userInfo) && (
-                    <Box className={styles.box}>
-                        <div>
-                            <AccountEditForm />
-                        </div>
-                    </Box>
-                )
-            }
-        </>
-
+        <Box className={styles.box}>
+            <div>
+                <AccountEditForm />
+            </div>
+        </Box>
     )
 }
 

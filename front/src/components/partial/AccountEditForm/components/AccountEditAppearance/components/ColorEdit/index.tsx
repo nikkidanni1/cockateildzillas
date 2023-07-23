@@ -6,7 +6,7 @@ import Button from 'components/base/Button'
 import { ButtonVariant } from 'helpers/enums'
 import DraggablePopover from 'components/view/DraggablePopover'
 import ColorPaletteItem from 'assets/images/ColorPaletteItem'
-import CustomColorPicker from './components/CustomColorPicker'
+import CustomColorPicker from '../CustomColorPicker'
 import styles from './ColorEdit.module.scss'
 import { PopoverPosition } from '@mui/material/Popover/Popover'
 

@@ -33,7 +33,7 @@ type Props = {
 }
 
 const CustomColorPicker: React.FC<Props> = ({ customColor, setCustomColor, onChangeAppearanceData }) => {
-    const onChangeSlider = useCallback((channel: string) => (e, value) => {
+    const onChangeSlider = useCallback((channel: string) => (e: Event, value: number | number[]) => {
         let newColor: string = ''
         switch (channel) {
             case 'red': {

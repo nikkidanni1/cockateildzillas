@@ -134,7 +134,7 @@ const Battlefield: React.FC<IProps> = ({ isVisible }) => {
                             colors={adversaryAppearanceData}
                         />
                     )}
-                    <Box className={styles.box}>
+                    <Box className={styles.battleBox}>
                         <div className={styles.slider__wrapper}>
                             <IconHoverPopover 
                                 Icon={DodgeIcon}

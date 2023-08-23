@@ -153,7 +153,6 @@ export const updateUserInfoThunk = (userInfo: Partial<UserInfo>, appConstants: A
             navigate('/account')
         }
     }, dispatch)
-    dispatch(addAppLoading())
 }
 
 export const getBattleThunk = () => async (dispatch: Dispatch) => {

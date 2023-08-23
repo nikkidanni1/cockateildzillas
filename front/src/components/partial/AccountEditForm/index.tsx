@@ -19,14 +19,14 @@ type Fields = keyof AccountEditFormFields
 type AccountEditTouched = Record<Fields, boolean>
 type AccountEditErrors = Record<Fields, string>
 enum TabValue {
-    Info = "INFO",
+    Info = 'INFO',
     Appearance = 'APPEARANCE'
 }
 
 const tabs: Array<TabItem<TabValue>> = [
     {
         value: TabValue.Info,
-        label: "Информация"
+        label: 'Информация',
     },
     {
         value: TabValue.Appearance,

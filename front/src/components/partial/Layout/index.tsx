@@ -14,10 +14,11 @@ import AppSettingsModal from 'components/partial/AppSettingsModal'
 import { setMusicVolume, setUserInfo } from 'store/actions'
 import LoadingComponent from 'components/view/LoadingComponent'
 import Notifications from 'components/partial/Notifications'
+import mainTheme from 'assets/sounds/main_theme.ogg'
 
 import styles from './Layout.module.scss'
 
-const audioUrl: string = '/sounds/cockatieldzillas-main.mp3'
+const actx = new AudioContext()
 
 const Layout: React.FC = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -28,19 +29,50 @@ const Layout: React.FC = () => {
     const appLoading: number = useSelector((state: RootState) => state.appLoading)
     const initLoading: boolean = useSelector((state: RootState) => state.initLoading)
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
+    
+    const [audioData, setAudioData] = useState<AudioBuffer | null>(null)
+    const [srcNode, setSrcNode] = useState<AudioBufferSourceNode | null>(null)
+    const [gainNode, setGainNode] = useState<GainNode| null>(null)
 
-    const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
+    const playLoop = useCallback((abuffer) => {
+        const newSrcNode = actx.createBufferSource()
+        newSrcNode.buffer = abuffer
+        const newGainNode = actx.createGain()
+        newSrcNode.connect(newGainNode)
+        newGainNode.connect(actx.destination)
+        newSrcNode.loop = true
+        newSrcNode.start()
+        setSrcNode(newSrcNode)
+        setGainNode(newGainNode)
+    }, [])
 
-    useEffect(() => {
-        setAudio(new Audio(audioUrl))
+    const getAudioData = useCallback(async () => {
+        const result = await fetch(mainTheme)
+        const buffer = await result.arrayBuffer()
+        actx.decodeAudioData(buffer, (abuffer) => {
+            setAudioData(abuffer)
+        })
     }, [])
 
     useEffect(() => {
-        if (audio) {
-            audio.loop = true
-            audio.volume = volume
+        getAudioData()
+    }, [])
+
+    useEffect(() => {
+        if (gainNode) {
+            gainNode.gain.value = volume
+
+            if (srcNode && volume === 0) {
+                srcNode?.stop(0)
+                setSrcNode(null)
+                setGainNode(null)
+            }
         }
-    }, [audio, volume])
+
+        if (!srcNode && volume !== 0 && audioData) {
+            playLoop(audioData)
+        }
+    }, [volume, gainNode, srcNode, audioData])
     
     useEffect(() => {
         const isNeedElAuth = pathWithAuth.includes(location.pathname)
@@ -51,9 +83,16 @@ const Layout: React.FC = () => {
     }, [initLoading, appLoading, location, userInfo, navigate])
 
     const toggleMusic = useCallback(() => {
+        if (volume) {
+            srcNode?.stop(0)
+            setSrcNode(null)
+            setGainNode(null)
+        } else {
+            playLoop(audioData)
+        }
         dispatch(setMusicVolume(volume !== 0 ? 0 : 0.5))
-        audio?.play()
-    }, [volume, dispatch, audio])
+        
+    }, [volume, dispatch, srcNode, audioData])
 
     const onLogout = useCallback(() => {
         localStorage.removeItem('auth')

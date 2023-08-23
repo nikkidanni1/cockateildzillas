@@ -51,7 +51,7 @@ self.addEventListener('install', (event) => {
       './index.html',
       './sounds/button-sound-primary.mp3',
       './sounds/button-sound-secondary.mp3',
-      './sounds/cockatieldzillas-main.mp3',
+      './sounds/cockatieldzillas-main.ogg',
       './favicon-32x32.png',
       './favicon-16x16.png',
       './android-chrome-192x192.png',

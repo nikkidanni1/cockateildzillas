@@ -184,6 +184,7 @@ const AccountEditForm: React.FC = () => {
     const onSubmit: React.MouseEventHandler = useCallback((e) => {
         let hasError: boolean = false
         const newTouched: AccountEditTouched = { ...touched }
+
         Object.keys(formData).forEach(key => {
             hasError = hasError || !!validate(key, formData[key])
         })

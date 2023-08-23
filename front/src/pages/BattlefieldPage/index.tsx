@@ -19,12 +19,8 @@ const ButtlefieldPage: React.FC = () => {
         }
     }, [userInfo, navigate])
 
-    if ((appLoading !== 0 || initLoading) || (appLoading === 0 && !initLoading && !userInfo)) {
-        return <></>
-    }
-
     return (
-        <Battlefield />
+        <Battlefield isVisible={!((appLoading !== 0 || initLoading) || (appLoading === 0 && !initLoading && !userInfo))} />
     )
 }
 

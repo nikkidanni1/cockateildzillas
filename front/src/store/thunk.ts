@@ -2,16 +2,33 @@ import type { Dispatch } from 'redux'
 import type { NavigateFunction } from 'react-router-dom'
 import _ from 'lodash'
 import { 
-    getUserInfo, getAppContants, authenticate, recovery, signup, updateUserInfo,
+    getUserInfo, getAppContants, authenticate, recovery, signup, updateUserInfo, getBattle
 } from 'api'
 import {
-    addAppLoading, removeAppLoading, setUserInfo, setAppContants, addNotification
+    addAppLoading, removeAppLoading, setUserInfo, setAppContants, addNotification, setActiveBattle
 } from './actions'
 
-export const loadAppDataThunk = () => async (dispatch: Dispatch) => {
+const thunkWrapper = async (func: () => Promise<void>, dispatch: Dispatch) => {
     dispatch(addAppLoading())
 
     try {
+        await func()
+    } catch (err) {
+        if (err instanceof Error) {
+            dispatch(addNotification({
+                id: _.uniqueId(),
+                text: err.message,
+                mode: 'error'
+            }))
+            console.error(err)
+        }
+    } finally {
+        dispatch(removeAppLoading())
+    }
+}
+
+export const loadAppDataThunk = () => async (dispatch: Dispatch) => {
+    thunkWrapper(async () => {
         const appContantsResponse: ServerResponse<AppConstants> = await getAppContants()
         const userResponse: ServerResponse<UserInfo> = await getUserInfo(appContantsResponse.responseBody)
 
@@ -38,23 +55,11 @@ export const loadAppDataThunk = () => async (dispatch: Dispatch) => {
         if (userResponse.responseBody) {
             dispatch(setUserInfo(userResponse.responseBody))
         }
-    } catch (err) {
-        if (err instanceof Error) {
-            dispatch(addNotification({
-                id: _.uniqueId(),
-                text: err.message,
-                mode: 'error'
-            }))
-            console.error(err)
-        }
-    } finally {
-        dispatch(removeAppLoading())
-    }
+    }, dispatch)
 }
 
 export const loginThunk = (form: LoginForm, appConstants: AppConstants, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
-    dispatch(addAppLoading())
-    try {
+    thunkWrapper(async () => {
         const authResponse: ServerResponse<AuthResponse> = await authenticate(form)
 
         if (authResponse.error) {
@@ -82,23 +87,11 @@ export const loginThunk = (form: LoginForm, appConstants: AppConstants, navigate
             }
             navigate('/account')
         }
-    } catch (err) {
-        if (err instanceof Error) {
-            dispatch(addNotification({
-                id: _.uniqueId(),
-                text: err.message,
-                mode: 'error'
-            }))
-            console.error(err)
-        }
-    } finally {
-        dispatch(removeAppLoading())
-    }
+    }, dispatch)
 }
 
 export const recoveryThunk = (email: string, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
-    dispatch(addAppLoading())
-    try {
+    thunkWrapper(async () => {
         const res: ServerResponse<RecoveryResponse> = await recovery({ email })
 
         if (res.error) {
@@ -117,23 +110,11 @@ export const recoveryThunk = (email: string, navigate: NavigateFunction) => asyn
                 mode: 'info'
             }))
         }
-    } catch (err) {
-        if (err instanceof Error) {
-            dispatch(addNotification({
-                id: _.uniqueId(),
-                text: err.message,
-                mode: 'error'
-            }))
-            console.error(err)
-        }
-    } finally {
-        dispatch(removeAppLoading())
-    }
+    }, dispatch)
 }
 
 export const signUpThunk = (form: SignUpForm, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
-    dispatch(addAppLoading())
-    try {
+    thunkWrapper(async () => {
         const res = await signup({ email: form.email, password: form.password })
 
         if (res.error) {
@@ -152,23 +133,11 @@ export const signUpThunk = (form: SignUpForm, navigate: NavigateFunction) => asy
                 mode: 'info'
             }))
         }
-    } catch (err) {
-        if (err instanceof Error) {
-            dispatch(addNotification({
-                id: _.uniqueId(),
-                text: err.message,
-                mode: 'error'
-            }))
-        }
-    } finally {
-        dispatch(removeAppLoading())
-    }
+    }, dispatch)
 }
 
 export const updateUserInfoThunk = (userInfo: Partial<UserInfo>, appConstants: AppConstants, navigate: NavigateFunction) => async (dispatch: Dispatch) => {
-    dispatch(addAppLoading())
-
-    try {
+    thunkWrapper(async () => {
         const res: ServerResponse<UserInfo> = await updateUserInfo(userInfo, appConstants)
 
         if (res.error) {
@@ -181,16 +150,27 @@ export const updateUserInfoThunk = (userInfo: Partial<UserInfo>, appConstants: A
 
         if (res.responseBody) {
             dispatch(setUserInfo(res.responseBody))
+            navigate('/account')
         }
-    } catch (err) {
-        if (err instanceof Error) {
+    }, dispatch)
+    dispatch(addAppLoading())
+}
+
+export const getBattleThunk = () => async (dispatch: Dispatch) => {
+    thunkWrapper(async () => {
+        const res: ServerResponse<Battle> = await getBattle()
+
+        if (res.error) {
             dispatch(addNotification({
                 id: _.uniqueId(),
-                text: err.message,
+                text: res.error,
                 mode: 'error'
             }))
+            return
         }
-    } finally {
-        dispatch(removeAppLoading())
-    }
+
+        if (res.responseBody) {
+            dispatch(setActiveBattle(res.responseBody))
+        }
+    }, dispatch)
 }

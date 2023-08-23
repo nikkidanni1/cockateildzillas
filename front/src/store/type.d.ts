@@ -5,7 +5,8 @@ interface IReducerState {
     soundVolume: number,
     appLoading: number,
     initLoading: boolean,
-    appConstants: AppConstants | null
+    appConstants: AppConstants | null,
+    activeBattle: Battle
 }
 
 type ActionWithPayload<T> = {

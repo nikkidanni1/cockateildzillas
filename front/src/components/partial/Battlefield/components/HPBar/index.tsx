@@ -1,24 +1,26 @@
 import React from 'react'
-import type { RootState } from 'store'
-import { useSelector } from 'react-redux'
+import { useMemo } from 'react'
 import styles from './HPBar.module.scss'
 
 interface IProps {
     maxhealth: number,
     health: number,
+    isAdversary: boolean,
 }
 
-const HPBar: React.FC<IProps> = () => {
-    const appConstants: AppConstants | null = useSelector((state: RootState) => state.appConstants)
+const HPBar: React.FC<IProps> = ({ health, maxhealth, isAdversary }) => {
+    const hp = useMemo(() => (
+        health * (maxhealth / 100)
+    ), [health, maxhealth])
 
     return (
-        <div>
-            <p>HP</p>
-           <div className={styles.hpBar}>
-                <div className={styles.hpBar__inner} />
-            </div> 
+        <div className={`${styles.hp} ${isAdversary ? styles.hp_adversary : ''}`}>
+            <p className={`${styles.hp__title} ${isAdversary ? styles.hp__title_adversary : ''}`}>HP</p>
+            <div className={styles.hpBar}>
+                <div className={`${styles.hpBar__inner} ${isAdversary ? styles.hpBar__inner_adversary : '' }`} style={{ width: `${hp}%` }} />
+                <span className={styles.hpBar__text}>{`${health} / ${maxhealth}`}</span>
+            </div>
         </div>
-        
     )
 }
 

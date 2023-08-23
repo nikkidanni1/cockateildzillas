@@ -9,7 +9,8 @@ const initState: IReducerState = {
     soundVolume: 0.5,
     appLoading: 0,
     initLoading: true,
-    appConstants: null
+    appConstants: null,
+    activeBattle: null
 }
 
 function reducer(state: IReducerState = initState, action) {
@@ -43,6 +44,9 @@ function reducer(state: IReducerState = initState, action) {
         }
         case TYPES.SET_APP_CONTANTS: {
             return { ...state, appConstants: action.payload }
+        }
+        case TYPES.SET_ACTIVE_BATTLE: {
+            return { ...state, activeBattle: action.payload }
         }
         default: {
             return state

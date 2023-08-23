@@ -2,7 +2,7 @@
     position: relative;
     box-sizing: border-box;
     width: max-content;
-    padding: 24px;
+    padding: 1.5rem;
     background-color: rgba(45, 50, 70, .87);
     box-shadow: calc(-1 * var(--border-width)) 0 0 0 black,
         var(--border-width) 0 0 0 black,
@@ -10,8 +10,8 @@
         0 var(--border-width) 0 0 black;
 
     @media screen and (max-width: 600px) {
-        width: calc(100% - 32px) !important;
-        padding: 16px;
+        width: calc(100% - 2rem);
+        padding: 1rem;
     }
 
     @media screen and (max-width: 600px) and (max-height: 700px) {
@@ -21,7 +21,7 @@
     &__title {
         font-family: MultiTypePixel, sans-serif;
         color: rgba(255, 255, 255, 0.53);
-        font-size: 32px;
+        font-size: 2rem;
         margin-bottom: 16px;
     }
 }

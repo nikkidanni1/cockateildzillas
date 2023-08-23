@@ -28,3 +28,5 @@ interface NotificationMessage {
     text: string,
     mode: 'error' | 'info'
 }
+
+declare module '*.ogg';

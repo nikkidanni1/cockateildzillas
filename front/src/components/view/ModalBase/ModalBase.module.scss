@@ -10,6 +10,7 @@
 }
 
 .title {
+    padding: 1.25rem 1.5rem 1rem;
     font-family: MultiTypePixel, sans-serif;
     font-size: 2rem;
     color: rgba(255, 255, 255, 0.53);
@@ -17,8 +18,9 @@
 
 .content {
     overflow-y: unset;
+    padding: 0 1.5rem 1.25rem;
 }
 
 .actions {
-    padding: 0 24px 16px;
+    padding: 0 1.5rem 1rem;
 }

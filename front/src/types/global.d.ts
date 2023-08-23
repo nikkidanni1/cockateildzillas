@@ -58,4 +58,4 @@ declare type Battle = {
     cockatielId: string,
     health: number,
     healthAdversary: number
-}
+} | null

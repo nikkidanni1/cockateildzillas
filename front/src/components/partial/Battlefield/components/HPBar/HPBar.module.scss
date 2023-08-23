@@ -1,20 +1,108 @@
 .hpBar {
-    position: absolute;
+    z-index: 1;
+    position: relative;
     display: flex;
     align-items: center;
     width: 200px;
-    height: 18px;
-    padding: 4px;
-    margin-left: 20px;
+    height: 1.125rem;
+    padding: 0.25rem;
     box-shadow:
         calc(-1 * var(--border-width) / 2) 0 0 0 rgba(255, 255, 255, 0.87),
         calc(var(--border-width) / 2) 0 0 0 rgba(255, 255, 255, 0.87),
         0 calc(-1 * var(--border-width) / 2) 0 0 rgba(255, 255, 255, 0.87),
         0 calc(var(--border-width) / 2) 0 0 rgba(255, 255, 255, 0.87);
+    background-color: rgba(0,0,0,.2);
 
     &__inner {
-        width: 100%;
         height: 100%;
         background-color: rgba(175, 45, 45, 0.83);
+        &_adversary {
+            margin-left: auto;
+        }
+    }
+
+    &__text {
+        position: absolute;
+        left: 50%;
+        font-family: 'Fifaks10Dev1', monospace;
+        font-size: 1.125rem;
+        white-space: nowrap;
+        color: #fff;
+        transform: translate(-50%, 0);
+    }
+
+    @media screen and (max-width: 900px) {
+        width: 140px;
+    }
+
+    @media screen and (max-width: 480px) {
+        width: 120px;
+    }
+}
+
+.hp {
+    position: absolute;
+    left: var(--border-width);
+    transform: translate(0, -100%);
+
+    &__title {
+        margin-bottom: 4px;
+        font-family: 'Fifaks10Dev1', monospace;
+        font-size: 2rem;
+        color: #fff;
+
+        &_adversary {
+            text-align: end;
+        }
+    }
+
+    &_adversary {
+        left: unset;
+        right: var(--border-width);
+    }
+
+    @media screen and (max-width: 1536px) {
+        left: 32px;
+
+        &_adversary {
+            left: unset;
+            right: 32px;
+        }
+    }
+
+    @media screen and (max-width: 1200px) {
+        left: 122px;
+
+        &_adversary {
+            left: unset;
+            right: 122px;
+        }
+    }
+
+    @media screen and (max-width: 900px) {
+        left: 82px;
+
+        &_adversary {
+            left: unset;
+            right: 82px;
+        }
+    }
+
+    @media screen and (max-width: 600px) {
+        left: 118px;
+
+        &_adversary {
+            left: unset;
+            right: 118px;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        left: 168px;
+
+        &_adversary {
+            left: unset;
+            right: 168px;
+        }
     }
 }

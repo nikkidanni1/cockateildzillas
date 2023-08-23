@@ -1,17 +1,23 @@
-    .sliderWrapper {
-        display: grid;
-        grid-template-columns: 2.25rem 1fr 2.75rem;
-        column-gap: 0.5rem;
-        align-items: center;
-        margin-bottom: 16px;
+.sliderWrapper {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr 2.75rem;
+    column-gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
 
-        & svg {
-            width: 2rem;
-            height: 2rem;
-            color: rgba(255, 255, 255, 0.53);
-        }
-
-        &:last-child {
-            margin-bottom: 0;
-        }
+    & svg {
+        width: 2rem;
+        height: 2rem;
+        color: rgba(255, 255, 255, 0.53);
     }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .sliderWrapper {
+        margin-bottom: 0.5rem;
+    }
+}

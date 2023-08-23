@@ -53,3 +53,9 @@ export const setAppContants = (payload: AppConstants): ActionWithPayload<AppCons
         type: TYPES.SET_APP_CONTANTS, payload
     }
 }
+
+export const setActiveBattle = (payload: Battle): ActionWithPayload<Battle> => {
+    return {
+        type: TYPES.SET_ACTIVE_BATTLE, payload
+    }
+}

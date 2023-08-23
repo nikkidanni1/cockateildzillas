@@ -4,15 +4,44 @@
     justify-content: space-between;
     width: 100%;
     max-width: 1440px;
+
+    @media screen and (max-width: 1200px) {
+        min-width: calc(100% + 180px);
+        max-width: unset;
+    }
+
+    @media screen and (max-width: 900px) {
+        min-width: calc(100% + 100px);
+    }
+
+    @media screen and (max-width: 600px) {
+        min-width: calc(100% + 200px);
+    }
+
+    @media screen and (max-width: 480px) {
+        min-width: calc(100% + 300px);
+    }
 }
 
-.animationFrame__user {
-    width: 504px;
-    transform: scale(-1, 1);
-}
+.animationFrame {
+    &__user {
+        width: 504px;
+        transform: scale(-1, 1);
+    }
 
-.animationFrame__adversary {
-    width: 504px;
+    &__adversary {
+        width: 504px;
+    }
+
+    @media screen and (max-width: 900px) {
+        &__user {
+            width: 336px;
+        }
+    
+        &__adversary {
+            width: 336px;
+        }
+    }
 }
 
 .box {
@@ -21,11 +50,20 @@
     left: 50%;
     width: 360px;
     transform: translate(-50%, 50%);
+
+    @media screen and (max-width: 600px) {
+        width: calc(100% - 244px);
+    }
+
+    @media screen and (max-width: 480px) {
+        width: calc(100% - 344px);
+    }
 }
 
 .slider__wrapper {
     display: flex;
     column-gap: 20px;
+    margin-bottom: 8px;
 }
 
 .powerIcon {

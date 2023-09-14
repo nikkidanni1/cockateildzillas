@@ -11,7 +11,7 @@ export const getBattle = async (filter: Partial<WithId<Battle>>, next: NextFunct
         return response
     } catch (err) {
         next(err)
-        console.log(err)
+        console.error(err)
     } finally {
         await client.close()
     }
@@ -31,7 +31,7 @@ export const updateBattle = async (_id: ObjectId, data: Partial<Battle>, next: N
         return updatedBattle
     } catch (err) {
         next(err)
-        console.log(err)
+        console.error(err)
     } finally {
         await client.close()
     }
@@ -51,7 +51,7 @@ export const addBattle = async (cockatielId: ObjectId, next: NextFunction) => {
         return createdBattle
     } catch (err) {
         next(err)
-        console.log(err)
+        console.error(err)
     } finally {
         await client.close()
     }
@@ -64,7 +64,7 @@ export const deleteBattle = async (_id: ObjectId, next: NextFunction) => {
         return result.deletedCount > 0
     } catch (err) {
         next(err)
-        console.log(err)
+        console.error(err)
     } finally {
         await client.close()
     }

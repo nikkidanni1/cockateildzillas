@@ -10,7 +10,7 @@ export const getCockatiel = async (filter: Partial<WithId<Cockatiel>>, next: Nex
         return response
     } catch (err) {
         next(err)
-        console.log(err)
+        console.error(err)
         return null
     } finally {
         await client.close()
@@ -31,7 +31,7 @@ export const updateCockatiel = async (_id: ObjectId, data: Partial<Cockatiel>, n
         return updatedCockatiel
     } catch (err) {
         next(err)
-        console.log(err)
+        console.error(err)
         return null
     } finally {
         await client.close()
@@ -48,7 +48,7 @@ export const addCockatiel = async (data: Partial<Cockatiel>, next: NextFunction)
         return createdCoockatiel
     } catch (err) {
         next(err)
-        console.log(err)
+        console.error(err)
         return null
     } finally {
         await client.close()

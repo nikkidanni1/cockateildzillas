@@ -11,7 +11,7 @@ export const getUser = async (filter: Partial<UserInfoDB>, next: NextFunction) =
         return response
     } catch (err) {
         next(err)
-        console.log(err)
+        console.error(err)
     } finally {
         await client.close()
     }
@@ -33,7 +33,7 @@ export const addUser = async (user: UserByAuth, next: NextFunction) => {
         return createdUser
     } catch (err) {
         next(err)
-        console.log(err)
+        console.error(err)
     } finally {
         await client.close()
     }
@@ -53,7 +53,7 @@ export const updateUser = async (_id: ObjectId, data: Partial<UserInfoDB>, next:
         return updatedUser
     } catch (err) {
         next(err)
-        console.log(err)
+        console.error(err)
     } finally {
         await client.close()
     }
@@ -66,7 +66,7 @@ export const deleteUser = async (_id: ObjectId, next: NextFunction) => {
         return result.deletedCount > 0
     } catch (err) {
         next(err)
-        console.log(err)
+        console.error(err)
     } finally {
         await client.close()
     }
@@ -93,7 +93,7 @@ export const activateUser = async (id: string, next: NextFunction) => {
             if (err.message === 'Argument passed in must be a string of 12 bytes or a string of 24 hex characters' || err.message === '') {
                 next(new Error('Некорректная ссылка'))
             }
-            console.log(err.message)
+            console.error(err.message)
         }
     } finally {
         await client.close()

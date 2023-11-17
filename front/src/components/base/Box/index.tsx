@@ -13,7 +13,7 @@ const BoxComponent: React.FC<Props> = ({ children, className, title, classNameTi
     return (
         <div
             {...props}
-            className={`${styles.box} ${className}`}
+            className={`${className} ${styles.box}`}
             ref={ref}
         >
             {title && (

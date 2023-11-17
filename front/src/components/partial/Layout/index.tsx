@@ -117,7 +117,7 @@ const Layout: React.FC = () => {
             <div className={styles.settings}>
                 <AppSettingsModal />
                 <IconButton
-                    variant={volume !== 0 ? ButtonVariant.Primary : ButtonVariant.Secondary}
+                    variant={volume === 0 ? ButtonVariant.Primary : ButtonVariant.Secondary}
                     onClick={toggleMusic}
                 >
                     {volume === 0 ? <MusicOff /> : <MusicNote />}

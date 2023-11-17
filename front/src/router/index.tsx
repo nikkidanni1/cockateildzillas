@@ -19,6 +19,7 @@ const AccountPage = lazy(() => import('pages/AccountPage'))
 const AccountEditPage = lazy(() => import('pages/AccountEditPage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 const BattlefieldPage = lazy(() => import('pages/BattlefieldPage'))
+const UserListPage = lazy(() => import('pages/UserListPage'))
 
 const Fallback = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -62,6 +63,7 @@ const Router: React.FC = () => {
                     <Route path="account/edit" element={suspenseHOC(AccountEditPage)} />
                     <Route path="account" element={suspenseHOC(AccountPage)} />
                     <Route path="battlefield" element={suspenseHOC(BattlefieldPage)} />
+                    <Route path="users" element={suspenseHOC(UserListPage)} />
                     {(!initLoading && appLoading === 0) && (
                         <Route
                             path="/"

@@ -1,6 +1,6 @@
 import { WithId, ObjectId } from 'mongodb'
 import type { Request, Response, NextFunction } from 'express'
-import { getUser } from 'users/user.service'
+import { getUser, increaseBattleCount } from 'users/user.service'
 import { getBattle as getBattleService, addBattle, updateBattle, deleteBattle } from 'battles/battle.service'
 import { getUserByAuth } from '_helpers/utils'
 
@@ -61,6 +61,15 @@ export const moveBattle = async (req: Request, res: Response, next: NextFunction
                 if (!isDodgedAdversary && response.responseBody.health !== 0) {
                     response.responseBody.healthAdversary = battle.healthAdversary - Math.floor(userForce * (Math.floor(Math.random() * 50.5) / 200))
                     response.responseBody.healthAdversary = response.responseBody.healthAdversary > 0 ? response.responseBody.healthAdversary : 0
+                }
+
+                if (response.responseBody.health === 0 || response.responseBody.healthAdversary === 0) {
+                    let isWin = false
+                    if (response.responseBody.health !== 0) {
+                        isWin = true
+                    }
+
+                    await increaseBattleCount(userFullInfo._id, isWin, next);
                 }
 
                 await updateBattle(battle._id, response.responseBody, next)

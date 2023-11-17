@@ -24,7 +24,9 @@ declare type UserInfo = {
     cockatiel: Cockatiel,
     email: string,
     isActive: boolean,
-    nickname: string | null
+    nickname: string | null,
+    battleCounter: number,
+    winCounter: number,
 } | null
 
 declare type CockatielPartInfoItem = {

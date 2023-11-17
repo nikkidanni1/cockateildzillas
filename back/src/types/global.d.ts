@@ -33,7 +33,9 @@ declare global {
         cockatiel: Cockatiel | null,
         email: string,
         isActive: boolean,
-        nickname: string | null
+        nickname: string | null,
+        battleCounter: number,
+        winCounter: number,
     }
 
     declare type UserInfoDB = {
@@ -41,7 +43,9 @@ declare global {
         email: string,
         password?: string,
         isActive: boolean,
-        nickname: string | null
+        nickname: string | null,
+        battleCounter: number,
+        winCounter: number,
     }
 
     declare type Battle = {

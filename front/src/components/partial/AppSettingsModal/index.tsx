@@ -103,7 +103,7 @@ const AppSettingsModal: React.FC = () => {
             </ModalBase>
             <IconButton
                 onClick={toggleModal}
-                variant={isOpen ? ButtonVariant.Primary : ButtonVariant.Secondary}
+                variant={ButtonVariant.Primary}
             >
                 <Settings />
             </IconButton>

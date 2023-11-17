@@ -26,7 +26,9 @@ export const addUser = async (user: UserByAuth, next: NextFunction) => {
             password: Buffer.from(user.password, 'base64').toString(),
             isActive: false,
             cockatielId: null,
-            nickname: null
+            nickname: null,
+            battleCounter: 0,
+            winCounter: 0,
         })
 
         const createdUser: WithId<UserInfoDB> | null = await usersCollection.findOne({ _id: result.insertedId })
@@ -88,6 +90,41 @@ export const activateUser = async (id: string, next: NextFunction) => {
 
         await client.close()
         return !!updateResult.modifiedCount
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            if (err.message === 'Argument passed in must be a string of 12 bytes or a string of 24 hex characters' || err.message === '') {
+                next(new Error('Некорректная ссылка'))
+            }
+            console.error(err.message)
+        }
+    } finally {
+        await client.close()
+    }
+}
+
+export const increaseBattleCount = async (_id: ObjectId, isWin: boolean, next: NextFunction) => {
+    try {
+        await client.connect()
+        const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
+        const userInfo: WithId<UserInfoDB> | null = await usersCollection.findOne({ _id })
+        let wasIncreased = false
+
+        if (userInfo) {
+            const data = {
+                battleCounter: ++userInfo.battleCounter,
+                ...(isWin && { winCounter: ++userInfo.winCounter })
+            }
+            const updateResult = await usersCollection.updateOne(
+                { _id }, 
+                { $set: data }, 
+                { upsert: false }
+            )
+
+            wasIncreased = !updateResult.modifiedCount
+        }
+              
+        return wasIncreased
+
     } catch (err: unknown) {
         if (err instanceof Error) {
             if (err.message === 'Argument passed in must be a string of 12 bytes or a string of 24 hex characters' || err.message === '') {

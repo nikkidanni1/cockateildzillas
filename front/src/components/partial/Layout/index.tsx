@@ -132,6 +132,7 @@ const Layout: React.FC = () => {
                 )}
             </div>
             <Notifications />
+            <div className={styles.bg} />
         </div>
     )
 }

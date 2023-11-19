@@ -1,0 +1,31 @@
+.infoBlock {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    p {
+        display: flex;
+        align-items: center;
+        font-family: 'Fifaks10Dev1';
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.5);
+
+        b {
+            color: rgba(255, 255, 255, 0.7);
+        }
+    }
+
+    &_button {
+        align-self: flex-end;
+        margin-top: 0.25rem;
+        margin-bottom: 0.625rem;
+        max-width: 175px;
+        height: 2rem;
+        font-size: 0.75rem;
+    }
+
+    &_copyIcon {
+        margin-left: 0.25rem;
+        color: rgba(255,255,255,0.53);
+    }
+}

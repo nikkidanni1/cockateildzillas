@@ -1,9 +1,11 @@
 import React from 'react'
 import { useCallback } from 'react'
-import type { RootState } from 'store'
-import { useSelector } from 'react-redux'
-import { TextField as MTextField, InputAdornment } from '@mui/material'
+import type { RootState, AppDispatch } from 'store'
+import { useSelector, useDispatch } from 'react-redux'
+import _ from 'lodash'
+import { InputAdornment } from '@mui/material'
 import CopyIcon from '@mui/icons-material/FilterNone'
+import { addNotification } from 'store/actions'
 import TextField from 'components/base/TextField'
 import IconButton from 'components/base/IconButton'
 import { ButtonVariant } from 'helpers/enums'
@@ -30,11 +32,17 @@ const AccountEditInfo: React.FC<Props> = ({
     touched,
     errors
 }) => {
+    const dispatch: AppDispatch = useDispatch()
     const userInfo: UserInfo = useSelector((state: RootState) => state.userInfo)
 
     const onCopyID: React.MouseEventHandler = useCallback(() => {
         if (navigator) {
             navigator.clipboard.writeText(userInfo?._id ?? '')
+            dispatch(addNotification({
+                id: _.uniqueId(),
+                text: 'СКОПИРОВАНО',
+                mode: 'info'
+            }))
         }
     }, [userInfo])
 

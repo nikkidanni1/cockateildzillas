@@ -1,10 +1,10 @@
 const addResourcesToCache = async (resources) => {
-  const cache = await caches.open('v1');
+  const cache = await caches.open('v3');
   await cache.addAll(resources);
 };
 
 const putInCache = async (request, response) => {
-  const cache = await caches.open('v1');
+  const cache = await caches.open('v3');
   await cache.put(request, response);
 }
 
@@ -40,7 +40,8 @@ const enableNavigationPreload = async () => {
 };
 
 self.addEventListener('activate', (event) => {
-  // caches.delete('v1');
+  caches.delete('v1');
+  caches.delete('v2');
   event.waitUntil(enableNavigationPreload());
 });
 

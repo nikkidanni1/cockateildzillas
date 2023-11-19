@@ -1,8 +1,12 @@
 import React from 'react'
+import Box from 'components/base/Box'
+import styles from './UserListPage.module.scss'
 
 const UserListPage: React.FC = () => {
     return (
-        <div></div>
+        <Box className={styles.box}>
+            1
+        </Box>
     )
 }
 

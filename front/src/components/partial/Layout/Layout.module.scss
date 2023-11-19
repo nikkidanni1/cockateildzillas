@@ -2,10 +2,6 @@
     position: relative;
     z-index: 6;
     overflow-x: hidden;
-    animation: rootBackground infinite;
-    animation-duration: 15s;
-    animation-timing-function: ease-in;
-    background: linear-gradient(180deg, rgb(45, 50, 70) 15%, rgb(106, 50, 45) 85%);
 
     &::after {
         position: absolute;
@@ -28,6 +24,22 @@
         width: 100%;
         min-height: 100vh;
         padding: 86px 0 64px;
+
+        @media screen and (max-height: 740px) {
+            padding: 0 0 56px;
+        }
+    }
+
+    .bg {
+        position: fixed;
+        top: 0;
+        z-index: -1;
+        width: 100vw;
+        height: 100vh;
+        animation: rootBackground infinite;
+        animation-duration: 15s;
+        animation-timing-function: ease-in;
+        background: linear-gradient(180deg, rgb(45, 50, 70) 15%, rgb(106, 50, 45) 85%);
     }
 }
 
@@ -79,6 +91,10 @@
         color: rgba(255,255,255,0.83);
     }
 
+    @media screen and (max-height: 740px) {
+        position: relative;
+        margin-top: -40.5px;
+    }
 }
 
 .snackError {

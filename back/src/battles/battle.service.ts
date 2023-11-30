@@ -5,22 +5,20 @@ import client from '_helpers/get-mongo'
 
 export const getBattle = async (filter: Partial<WithId<Battle>>, next: NextFunction) => {
     try {
-        await client.connect()
-        const battles: Collection<WithId<Battle>> = client.db('cockatieldzillas').collection('battles')
+        const connectedClient = await client
+        const battles: Collection<WithId<Battle>> = connectedClient.db('cockatieldzillas').collection('battles')
         const response: WithId<Battle> | null = await battles.findOne(filter)
         return response
     } catch (err) {
         next(err)
         console.error(err)
-    } finally {
-        await client.close()
     }
 }
 
 export const updateBattle = async (_id: ObjectId, data: Partial<Battle>, next: NextFunction) => {
     try {
-        await client.connect()
-        const battles: Collection<WithId<Battle>> = client.db('cockatieldzillas').collection('battles')
+        const connectedClient = await client
+        const battles: Collection<WithId<Battle>> = connectedClient.db('cockatieldzillas').collection('battles')
         await battles.updateOne(
             { _id }, 
             { $set: data }, 
@@ -32,16 +30,14 @@ export const updateBattle = async (_id: ObjectId, data: Partial<Battle>, next: N
     } catch (err) {
         next(err)
         console.error(err)
-    } finally {
-        await client.close()
     }
 }
 
 export const addBattle = async (cockatielId: ObjectId, next: NextFunction) => {
     try {
-        await client.connect()
-        const battles: Collection<WithId<Battle>> = client.db('cockatieldzillas').collection('battles')
-        const result: InsertOneResult = await client.db('cockatieldzillas').collection('battles').insertOne({ 
+        const connectedClient = await client
+        const battles: Collection<WithId<Battle>> = connectedClient.db('cockatieldzillas').collection('battles')
+        const result: InsertOneResult = await connectedClient.db('cockatieldzillas').collection('battles').insertOne({ 
             cockatielId, 
             health: APP_CONSTANTS.maxHealth, 
             healthAdversary: APP_CONSTANTS.maxHealth,
@@ -52,20 +48,16 @@ export const addBattle = async (cockatielId: ObjectId, next: NextFunction) => {
     } catch (err) {
         next(err)
         console.error(err)
-    } finally {
-        await client.close()
     }
 }
 
 export const deleteBattle = async (_id: ObjectId, next: NextFunction) => {
     try {
-        await client.connect()
-        const result: DeleteResult = await client.db('cockatieldzillas').collection('battles').deleteOne({ _id })
+        const connectedClient = await client
+        const result: DeleteResult = await connectedClient.db('cockatieldzillas').collection('battles').deleteOne({ _id })
         return result.deletedCount > 0
     } catch (err) {
         next(err)
         console.error(err)
-    } finally {
-        await client.close()
     }
 }

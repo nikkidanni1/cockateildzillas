@@ -2,26 +2,61 @@ import type { Collection, WithId, UpdateResult, InsertOneResult, DeleteResult } 
 import { ObjectId } from 'mongodb'
 import type { NextFunction } from 'express'
 import client from '_helpers/get-mongo'
+import { getCockatiel } from 'cockatiels/cockatiel.service'
 
 export const getUser = async (filter: Partial<UserInfoDB>, next: NextFunction) => {
     try {
-        await client.connect()
-        const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
+        const connectedClient = await client
+        const usersCollection: Collection<WithId<UserInfoDB>> = connectedClient.db('cockatieldzillas').collection('users')
         const response: WithId<UserInfoDB> | null = await usersCollection.findOne(filter)
         return response
     } catch (err) {
         next(err)
         console.error(err)
-    } finally {
-        await client.close()
+    }
+}
+
+export const getUserInfo = async (filter: Partial<UserInfoDB>, next: NextFunction) => {
+    try {
+        const connectedClient = await client
+        const usersCollection: Collection<WithId<UserInfoDB>> = connectedClient.db('cockatieldzillas').collection('users')
+        let response: WithId<UserInfoDB> | WithId<UserInfo> | null = await usersCollection.findOne(filter)
+
+        if (response) {
+            const { cockatielId, password, ...restUserInfo } = response
+            const cockatiel: Cockatiel | null = cockatielId ? await getCockatiel({ _id: cockatielId }, next) : null
+            const resposeUserInfo: WithId<UserInfo> = { ...restUserInfo, cockatiel }
+            response = resposeUserInfo
+        }
+
+        return response
+    } catch (err) {
+        next(err)
+        console.error(err)
+    }
+}
+
+export const getUsers = async (skip: number, limit: number, next: NextFunction) => {
+    try {
+        console.log('here1')
+        const connectedClient = await client
+        const usersCollection: Collection<WithId<UserInfoDB>> = connectedClient.db('cockatieldzillas').collection('users')
+        const count = await usersCollection.countDocuments({});
+        // let response = await usersCollection.find().skip(skip).limit(limit)
+        console.log(count)
+
+        // return count
+    } catch (err) {
+        next(err)
+        console.error(err)
     }
 }
 
 export const addUser = async (user: UserByAuth, next: NextFunction) => {
     try {
-        await client.connect()
-        const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
-        const result: InsertOneResult = await client.db('cockatieldzillas').collection('users').insertOne({
+        const connectedClient = await client
+        const usersCollection: Collection<WithId<UserInfoDB>> = connectedClient.db('cockatieldzillas').collection('users')
+        const result: InsertOneResult = await connectedClient.db('cockatieldzillas').collection('users').insertOne({
             email: user.email,
             password: Buffer.from(user.password, 'base64').toString(),
             isActive: false,
@@ -36,15 +71,13 @@ export const addUser = async (user: UserByAuth, next: NextFunction) => {
     } catch (err) {
         next(err)
         console.error(err)
-    } finally {
-        await client.close()
     }
 }
 
 export const updateUser = async (_id: ObjectId, data: Partial<UserInfoDB>, next: NextFunction) => {
     try {
-        await client.connect()
-        const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
+        const connectedClient = await client
+        const usersCollection: Collection<WithId<UserInfoDB>> = connectedClient.db('cockatieldzillas').collection('users')
         await usersCollection.updateOne(
             { _id }, 
             { $set: data }, 
@@ -56,28 +89,24 @@ export const updateUser = async (_id: ObjectId, data: Partial<UserInfoDB>, next:
     } catch (err) {
         next(err)
         console.error(err)
-    } finally {
-        await client.close()
     }
 }
 
 export const deleteUser = async (_id: ObjectId, next: NextFunction) => {
     try {
-        await client.connect()
-        const result: DeleteResult = await client.db('cockatieldzillas').collection('users').deleteOne({ _id })
+        const connectedClient = await client
+        const result: DeleteResult = await connectedClient.db('cockatieldzillas').collection('users').deleteOne({ _id })
         return result.deletedCount > 0
     } catch (err) {
         next(err)
         console.error(err)
-    } finally {
-        await client.close()
     }
 }
 
 export const activateUser = async (id: string, next: NextFunction) => {
     try {
-        await client.connect()
-        const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
+        const connectedClient = await client
+        const usersCollection: Collection<WithId<UserInfoDB>> = connectedClient.db('cockatieldzillas').collection('users')
         const updateResult: UpdateResult = await usersCollection.updateOne(
             { _id: new ObjectId(id) },
             { $set: { "isActive": true } },
@@ -88,7 +117,6 @@ export const activateUser = async (id: string, next: NextFunction) => {
             next(new Error('modifiedCount === 0'))
         }
 
-        await client.close()
         return !!updateResult.modifiedCount
     } catch (err: unknown) {
         if (err instanceof Error) {
@@ -97,15 +125,13 @@ export const activateUser = async (id: string, next: NextFunction) => {
             }
             console.error(err.message)
         }
-    } finally {
-        await client.close()
     }
 }
 
 export const increaseBattleCount = async (_id: ObjectId, isWin: boolean, next: NextFunction) => {
     try {
-        await client.connect()
-        const usersCollection: Collection<WithId<UserInfoDB>> = client.db('cockatieldzillas').collection('users')
+        const connectedClient = await client
+        const usersCollection: Collection<WithId<UserInfoDB>> = connectedClient.db('cockatieldzillas').collection('users')
         const userInfo: WithId<UserInfoDB> | null = await usersCollection.findOne({ _id })
         let wasIncreased = false
 
@@ -132,8 +158,6 @@ export const increaseBattleCount = async (_id: ObjectId, isWin: boolean, next: N
             }
             console.error(err.message)
         }
-    } finally {
-        await client.close()
     }
 }
 // dGVzdDp1bmRlZmluZWQ%3D

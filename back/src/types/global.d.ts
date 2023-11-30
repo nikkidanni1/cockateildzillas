@@ -6,6 +6,11 @@ declare global {
         responseBody: T
     }
 
+    declare type ListResponse<T> = {
+        count: number,
+        data: T
+    }
+
     declare type UserByAuth = {
         email: string,
         password: string,

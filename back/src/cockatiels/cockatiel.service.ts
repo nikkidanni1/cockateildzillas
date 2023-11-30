@@ -4,23 +4,21 @@ import client from '_helpers/get-mongo'
 
 export const getCockatiel = async (filter: Partial<WithId<Cockatiel>>, next: NextFunction) => {
     try {
-        await client.connect()
-        const cockatiels: Collection<WithId<Cockatiel>> = client.db('cockatieldzillas').collection('cockatiels')
+        const connectedClient = await client
+        const cockatiels: Collection<WithId<Cockatiel>> = connectedClient.db('cockatieldzillas').collection('cockatiels')
         const response: WithId<Cockatiel> | null = await cockatiels.findOne(filter)
         return response
     } catch (err) {
         next(err)
         console.error(err)
         return null
-    } finally {
-        await client.close()
     }
 }
 
 export const updateCockatiel = async (_id: ObjectId, data: Partial<Cockatiel>, next: NextFunction) => {
     try {
-        await client.connect()
-        const cockatiels: Collection<WithId<Cockatiel>> = client.db('cockatieldzillas').collection('cockatiels')
+        const connectedClient = await client
+        const cockatiels: Collection<WithId<Cockatiel>> = connectedClient.db('cockatieldzillas').collection('cockatiels')
         await cockatiels.updateOne(
             { _id }, 
             { $set: data }, 
@@ -33,16 +31,14 @@ export const updateCockatiel = async (_id: ObjectId, data: Partial<Cockatiel>, n
         next(err)
         console.error(err)
         return null
-    } finally {
-        await client.close()
     }
 }
 
 export const addCockatiel = async (data: Partial<Cockatiel>, next: NextFunction) => {
     try {
-        await client.connect()
-        const cockatiels: Collection<WithId<Cockatiel>> = client.db('cockatieldzillas').collection('cockatiels')
-        const result: InsertOneResult = await client.db('cockatieldzillas').collection('cockatiels').insertOne(data)
+        const connectedClient = await client
+        const cockatiels: Collection<WithId<Cockatiel>> = connectedClient.db('cockatieldzillas').collection('cockatiels')
+        const result: InsertOneResult = await connectedClient.db('cockatieldzillas').collection('cockatiels').insertOne(data)
 
         const createdCoockatiel: WithId<Cockatiel> | null = await cockatiels.findOne({ _id: result.insertedId })
         return createdCoockatiel
@@ -50,7 +46,5 @@ export const addCockatiel = async (data: Partial<Cockatiel>, next: NextFunction)
         next(err)
         console.error(err)
         return null
-    } finally {
-        await client.close()
     }
 }

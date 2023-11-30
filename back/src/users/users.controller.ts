@@ -4,6 +4,8 @@ import {
     addUser,
     activateUser as activateUserService,
     getUser,
+    getUserInfo as getUserInfoService,
+    getUsers as getUsersService,
     updateUser,
     deleteUser,
 } from 'users/user.service'
@@ -40,15 +42,31 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 export const getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: UserByAuth = getUserByAuth(req.headers.authorization ?? '')
-        const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email, password: user.password }, next)
+        const userInfo: WithId<UserInfo> | null | undefined = await getUserInfoService({ email: user.email, password: user.password }, next)
         const response: ServerResponse<WithId<UserInfo> | null> = { responseBody: null, error: null }
 
         if (userInfo?.isActive) {
-            const { cockatielId, password, ...restUserInfo } = userInfo
-            const cockatiel: Cockatiel | null = cockatielId ? await getCockatiel({ _id: cockatielId }, next) : null
-            const resposeUserInfo: WithId<UserInfo> = { ...restUserInfo, cockatiel }
-            response.responseBody = resposeUserInfo
+            response.responseBody = userInfo
         }
+
+        res.json(response)
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email, password: user.password }, next)
+        const response: ServerResponse<WithId<UserInfo> | null> = { responseBody: null, error: null }
+        await getUsersService(0, 100, next)
+        // getUsersService
+        // if (userInfo?.isActive) {
+        //     const { cockatielId, password, ...restUserInfo } = userInfo
+        //     const cockatiel: Cockatiel | null = cockatielId ? await getCockatiel({ _id: cockatielId }, next) : null
+        //     const resposeUserInfo: WithId<UserInfo> = { ...restUserInfo, cockatiel }
+        //     response.responseBody = resposeUserInfo
+        // }
 
         res.json(response)
     } catch (err) {

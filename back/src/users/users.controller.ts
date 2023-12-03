@@ -57,16 +57,15 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        // const userInfo: WithId<UserInfoDB> | null | undefined = await getUser({ email: user.email, password: user.password }, next)
-        const response: ServerResponse<WithId<UserInfo> | null> = { responseBody: null, error: null }
-        await getUsersService(0, 100, next)
-        // getUsersService
-        // if (userInfo?.isActive) {
-        //     const { cockatielId, password, ...restUserInfo } = userInfo
-        //     const cockatiel: Cockatiel | null = cockatielId ? await getCockatiel({ _id: cockatielId }, next) : null
-        //     const resposeUserInfo: WithId<UserInfo> = { ...restUserInfo, cockatiel }
-        //     response.responseBody = resposeUserInfo
-        // }
+        const response: ServerResponse<ListResponse<WithId<UserInfo>> | null> = { responseBody: null, error: null }
+        const usersList: ListResponse<WithId<UserInfo>> | undefined = await getUsersService(parseInt(req.body.skip), parseInt(req.body.limit), next)
+
+        if (usersList) {
+            usersList.data = usersList.data.filter(user => user.cockatiel)
+            response.responseBody = usersList
+        } else {
+            response.error = 'Not found users'
+        }
 
         res.json(response)
     } catch (err) {

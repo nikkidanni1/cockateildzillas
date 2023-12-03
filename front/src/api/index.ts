@@ -77,6 +77,20 @@ export const getUserInfo = async (appConstants: AppConstants | null) => {
     return response
 }
 
+export const getUsers = async (skip: number, limit: number) => {
+    const response: ServerResponse<UserInfo[]> = await fetch(`${baseUrl}/api/users?${new URLSearchParams({ skip: skip.toString(), limit: limit.toString() })}`, {
+        method: 'GET',
+        headers: new Headers({
+            'content-type': 'application/json',
+            'authorization': localStorage.getItem('auth') ?? ''
+        }),
+        credentials: 'include',
+        mode: 'cors',
+    }).then(res => res.json())
+    console.log(response)
+    return response
+}
+
 export const updateUserInfo = async (userInfo: Partial<UserInfo>, appConstants: AppConstants) => {
     const response: ServerResponse<UserInfo> = await fetch(`${baseUrl}/api/userInfo`, {
         method: 'PUT',

@@ -38,14 +38,21 @@ export const getUserInfo = async (filter: Partial<UserInfoDB>, next: NextFunctio
 
 export const getUsers = async (skip: number, limit: number, next: NextFunction) => {
     try {
-        console.log('here1')
         const connectedClient = await client
         const usersCollection: Collection<WithId<UserInfoDB>> = connectedClient.db('cockatieldzillas').collection('users')
         const count = await usersCollection.countDocuments({});
-        // let response = await usersCollection.find().skip(skip).limit(limit)
-        console.log(count)
+        const users: WithId<UserInfoDB>[] = await usersCollection.find().skip(skip).limit(limit).toArray()
+        const data: WithId<UserInfo>[] = await Promise.all(users.map(async user => {
+            const { cockatielId, password, ...restUser } = user
+            const cockatiel: Cockatiel | null = cockatielId ? await getCockatiel({ _id: cockatielId }, next) : null
+            return { ...restUser, cockatiel }
+        }))
+        const result: ListResponse<WithId<UserInfo>> = {
+            data,
+            count,
+        }
 
-        // return count
+        return result
     } catch (err) {
         next(err)
         console.error(err)

@@ -3,6 +3,11 @@ declare type ServerResponse<T> = {
     responseBody: T
 }
 
+declare type ListResponse<T> = {
+    count: number,
+    data: T
+}
+
 declare type CockatielPartNames = 'bodyCockatiel' | 'headCockatiel' | 'cheeksCockatiel'
 declare type CockatielShades = 'main_color' | 'color_light1' | 'color_dark1' | 'color_outline'
 declare type CockatielAppearancePart = Partial<Omit<Record<CockatielShades, string>, 'main_color'>> & { main_color: string }

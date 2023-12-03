@@ -8,7 +8,7 @@ declare global {
 
     declare type ListResponse<T> = {
         count: number,
-        data: T
+        data: T[]
     }
 
     declare type UserByAuth = {

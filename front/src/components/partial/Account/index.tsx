@@ -29,6 +29,7 @@ const Account: React.FC = () => {
                     colors={userInfo.cockatiel.appearanceData}
                 />
             )}
+            <div className={styles.account_stage} />
             <Box className={styles.account_box}>
                 <InfoBlock userInfo={userInfo} />
                 <Button

@@ -68,12 +68,11 @@ p {
 }
 
 :root {
-  --border-width: 6px;
+  --border-width: 4px;
 }
 
 @media screen and (max-width: 900px) {
   :root {
-    --border-width: 4px;
     font-size: 14px;
   }
 }
